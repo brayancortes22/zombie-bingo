@@ -1,0 +1,106 @@
+.container-fluid{
+    background-color: black;
+    height: 100vh;
+    display: flex;
+}
+.cuadro{
+    border: solid 6px #6a5303; 
+    height: 80%;
+    width: 50%;
+    margin-left: 24%;
+    border-radius: 30px;
+    background-color: #384639;
+    box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
+    margin-top: 4%;
+    
+}
+.titulo{
+    font-size: 30px;
+    text-align: center;
+    color: white;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.texto{
+    height: 49%;
+    width: 50%;
+    font-size: 23px;
+    margin-left: 40%;
+    margin-top: 4%;
+    color:#26c218
+}
+.ingresar{
+    color:#26c218;
+    height: 10%;
+    width: 100%;
+    text-align: center;
+    font-size: 25px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.tx{
+    height: 10%;
+    width: 60%;
+    margin-left: 20%;
+    border-radius: 50px;
+    filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+}
+.largo{
+    display: flex;
+    flex-direction: row;
+    height: 8%;
+    position: absolute;
+    width: 50%;
+    margin-top: 1%;
+}
+.cancelar{
+    width: 20%;
+    border-radius: 30px;
+    background-color: red;
+    margin-left: 120px;
+    filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
+
+ }
+.Aceptar{
+    width: 20%;
+    margin-left: 22%;
+    border-radius: 30px;
+    background-color: #26c218;
+    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
+}
+.btn{
+    border: none;
+    height: 100%;
+    width: 100%;
+    border-radius: 30px ;
+}
+.zombie{
+    position: absolute;
+    top: -700%;
+    left: 10%;
+    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
+}
+img{
+    height: 100%;
+    width: 160px;
+}
+.zombie2{
+    position: absolute;
+    top: 7%;
+    left: 0%;
+    height: 50px;
+    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
+}
+.tamaño{
+    height: 1000%;
+    width: 300px;
+}
+.zombie3{
+    position: absolute;
+    top: -2%;
+    left: 80%;
+    height: 60px;
+    filter: drop-shadow(0px 0px 12px rgb(64, 157, 201));
+}
+.tamaño3{
+    height: 1000%;
+    width: 200px;
+}

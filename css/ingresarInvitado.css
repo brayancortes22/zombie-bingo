@@ -1,0 +1,123 @@
+.container-fluid{
+    background-color: black;
+    height: 100vh;
+    display: flex;
+}
+.cuadro{
+    border: solid 6px #6a5303; 
+    height: 80%;
+    width: 50%;
+    margin-left: 24%;
+    border-radius: 30px;
+    background-color: #384639;
+    box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
+    margin-top: 4%;
+    
+}
+input{
+    text-align: center;
+    justify-content: center;
+}
+.invitado{
+    
+    height: 52%;
+    position: absolute;
+    width: 24%;
+    top: 15%;
+    right: 28%;
+
+}
+.tela{
+    align-content: center;
+    width: 100%;
+    height: 400px;
+}
+iframe{
+    width: 60%;
+    height: 560px;
+    position: absolute;
+    left: 30px;
+    margin-top: -18%;
+    margin-left: 15%;
+    border: none;
+}
+.texto{ 
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    
+}
+
+p{
+    font-size: 20px;
+}
+.formulario{
+    display: flex;
+    flex-direction: column;
+}
+input{
+    height: 38px;
+    border-radius: 60px;
+    filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+    
+
+}
+label{
+    color: #26c218;
+    font-size: 18px;
+    text-align: center;
+    margin-top: -4%;
+
+}
+.recomendaciones{
+    color : #26c218;
+    font-size: 15px;
+    line-height: 30px;
+
+}
+.largo{
+    display: flex;
+    flex-direction: row;
+    height: 10%;
+    position: absolute;
+    width: 50%;
+    
+}
+.cancelar{
+    width: 20%;
+    border-radius: 30px;
+    background-color: red;
+    margin-left: 120px;
+    filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
+
+ }
+.Aceptar{
+    width: 20%;
+    margin-left: 24%;
+    border-radius: 30px;
+    background-color: #26c218;
+    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
+}
+button{
+    height: 100%;
+    width: 100%;
+}
+.zombi{
+    position: absolute;
+    bottom: 29%;
+    left: 26%;
+    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
+}
+.tumba{
+    
+    margin-left: 73%;
+    height: 100%;
+    width: 3px;
+    position: absolute;
+    
+}.el{
+    height: 80%;
+    width: 320px;
+    margin-top: 38px;
+}
