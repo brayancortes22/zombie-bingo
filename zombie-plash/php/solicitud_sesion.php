@@ -5,22 +5,21 @@ if (isset($_POST['nombre']) && isset($_POST['contraseña'])) {
     $usuario = $_POST['nombre'];
     $contraseña = $_POST['contraseña'];
 
-    // Verificar si el usuario existe y si la contraseña es correcta
-    $checkQuery = "SELECT * FROM registro_usuarios WHERE (usuario='$usuario' OR correo='$usuario') AND contraseña='$contraseña'";
-    $result = $conn->query($checkQuery);
-
-    header('Content-Type: application/json'); // Añadir este encabezado
+    // Prepare SQL query with parameterized queries
+    $stmt = $conn->prepare("SELECT * FROM registro_usuarios WHERE (usuario=? OR correo=?) AND contraseña=?");
+    $stmt->bind_param("sss", $usuario, $usuario, $contraseña);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        // El usuario existe y la contraseña es correcta
-        echo json_encode(['existe' => true]);
+        // Login successful, return success message
+        echo "exito";
     } else {
-        // El usuario no existe o la contraseña es incorrecta
-        echo json_encode(['existe' => false]);
+        // Login failed, return error message
+        echo "Error: usuario o contraseña incorrectos.";
     }
 
     $conn->close();
 } else {
-    echo json_encode(['error' => 'No se enviaron todos los datos.']);
+    echo "Por favor, complete todos los campos del formulario.";
 }
-?>

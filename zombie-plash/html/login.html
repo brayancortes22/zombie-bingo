@@ -22,31 +22,32 @@
                     </a>
                 </div>
             </div>
-            <div class="texto"><strong>Iniciar sesión</strong></div>
-            <div class="zombie2">
-                <img src="../img/image-removebg-preview.png" alt="">
-            </div>
-            <div class="form">
-                <label for="fname"><strong>Usuario o correo electronico</strong></label>
-                <input type="text" class="redondeo">
-            </div>
-            <div class="form2">
-                <label for="fname"><strong>Contraseña</strong></label>
-                <input type="password"  class="redondeo">
-            </div>
-            <div class="iniciar">
-                <a href="./inicio_juego.html">
-                    <button class="btn success"><strong>Iniciar sesión</strong></button>
-                </a>
-            </div>
-            <div class="olvidado">
-                <a href="./restablecimientoContra.html">
-                    <strong>¿Olvidaste tu contraseña?</strong>
-                </a>
-            </div>
-            <div class="zombie">
-                <iframe src="https://lottie.host/embed/39fb0ebe-f2f7-49aa-9987-6535a7ecec25/4pmyl5JGpr.json"></iframe>  
-            </div>
+            <form id="formulario" method="post">
+                <div class="texto"><strong>Iniciar sesión</strong></div>
+                <div class="zombie2">
+                    <img src="../img/image-removebg-preview.png" alt="">
+                </div>
+                <div class="form1">
+                    <label for="fname"><strong>Usuario o correo electronico</strong></label>
+                    <input type="text" class="redondeo" name="nombre" id="nombre" placeholder="nombre">
+                </div>
+                <div class="form2">
+                    <label for="fname"><strong>Contraseña</strong></label>
+                    <input type="password"  class="redondeo"  name="contraseña" id="contraseña" placeholder="contraseña">
+                </div>
+                <div class="iniciar">
+                        <button class="btn success" type="submit"><strong>Iniciar sesión</strong></button>
+                </div>
+                <div id="mensaje" style="margin-top: 20px;">holaaaaaaaaaaa</div>
+                <div class="olvidado">
+                    <a href="./restablecimientoContra.html">
+                        <strong>¿Olvidaste tu contraseña?</strong>
+                    </a>
+                </div>
+                <div class="zombie">
+                    <iframe src="https://lottie.host/embed/39fb0ebe-f2f7-49aa-9987-6535a7ecec25/4pmyl5JGpr.json"></iframe>  
+                </div>
+            </form>
         </div>
         <div class="fantasma1">
             <iframe src="https://lottie.host/embed/5c760837-4a83-446f-a2ff-cfc525075cb6/soZSyQTDo9.json"></iframe>
@@ -55,5 +56,8 @@
             <iframe src="https://lottie.host/embed/5c760837-4a83-446f-a2ff-cfc525075cb6/soZSyQTDo9.json"></iframe>
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="../js/verificacion_de_sesion.js"></script>
 </body>
 </html> 

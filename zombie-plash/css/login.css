@@ -57,7 +57,10 @@
     background-color: #29b513;
     box-shadow: 10px 3px 10px rgb(31, 153, 19); /* sombra en la derecha y parte inferior */
 }
-.form{              /*usuario o correo electronico*/
+form{
+    height: 90%;
+}
+.form1{              /*usuario o correo electronico*/
     height: 40%;
     width: 40%;
     align-items: center;
@@ -131,7 +134,7 @@
 .zombie{
     position:absolute;
     top: 34%;
-    right: 2%;
+    right: 22%;
 
 
 }
