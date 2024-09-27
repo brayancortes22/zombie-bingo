@@ -131,13 +131,15 @@
 .zombie{
     position:absolute;
     top: 34%;
-    right: 22%;
+    right: 2%;
 
 
 }
+
 input{
     justify-content: center;
     text-align: center;
+    
 }
 a{
     color: white;

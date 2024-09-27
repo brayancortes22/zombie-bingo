@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="../css/registrate.css">
     <link rel="icon" href="../img/image-removebg-preview.png" type="image/png">    
     <title>registrate</title>
+    
+
 </head>
 <body>
     <div class="container-fluid">
@@ -16,15 +18,15 @@
             <div class="row registrate">
                 <strong>Registrate</strong>
             </div>
-            <form action="../php/registro.php" id="formulario" method="post">
-                <div class="formularios" >
+            <form id="formulario" method="post">
+                <div class="formularios">
                     <div class="row filas">
-                        <label for="name"><strong>Usuario</strong></label>
+                        <label for="nombre"><strong>Usuario</strong></label>
                         <input type="text" class="redondeo" id="nombre" name="nombre" required>
                     </div>
                     <div class="row filas">
-                        <label for="correo"><strong>Correo electronico </strong></label>
-                        <input type="text" class="redondeo" id="correo" name="correo" required>
+                        <label for="correo"><strong>Correo electrónico</strong></label>
+                        <input type="email" class="redondeo" id="correo" name="correo" required>
                     </div>
                     <div class="row filas">
                         <label for="contraseña"><strong>Ingrese una Contraseña</strong></label>
@@ -35,14 +37,16 @@
                         <input type="password" class="redondeo" id="confirmar_contraseña" name="confirmar_contraseña" required>
                     </div>
                 </div><br><br>
-                <div class="largo">
-                    <div class="boton1">
-                        <a href="./login.html">                        
-                            <button class="btn success" type="button"><strong>Cancelar</strong></button></div>
-                        </a>
-                        <div class="boton2"><button class="btn success" type="submit"><strong>Aceptar</strong></button></div>
-                    </div>
+                <a style="text-decoration: none;" href="./login.html">
+                <button type="button"class="boton1">
+                        <strong>Cancelar</strong>
+                    </button>
+                </a>                    
+                <button type="submit" class="boton2" id="registrar"><strong>Aceptar</strong></button>
+                
             </form>
+            <div id="mensaje" style="margin-top: 20px;"></div>
+            
                 <div class="img">
                     <img src="../img/image-removebg-preview.png" alt="" height="70%">
                 </div>
@@ -53,7 +57,10 @@
                         <iframe src="https://lottie.host/embed/c36330ae-bc3e-4702-ab19-41d5a9de9823/trxwXV7Tcg.json"></iframe>
                     </div>
                 </div>
+                    
     <!-- <script src="js/campos_completos.js"></script> -->
+     <script src="../js/registro-error-correcto.js"></script>
 
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </body>
 </html> 

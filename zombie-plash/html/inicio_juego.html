@@ -1,12 +1,227 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="./img/image-removebg-preview.png" type="image/png">    
-    <title>Zombie plash</title>
-</head>
-<body>
-    
-</body>
+<html>
+ <head>
+  <title>
+   Bingo Game
+  </title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <style>
+   body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image:url('../img/image-removebg-preview.png');
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+            background-color: #7b1e1e;
+        }
+        .header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .header .logout {
+            display: flex;
+            align-items: center;
+            color: #ff0000;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .header .logout i {
+            margin-left: 5px;
+        }
+        .main-content {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 20px;
+        }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #7b1e1e;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .sidebar button {
+            background-color: #7b1e1e;
+            border: none;
+            color: white;
+            font-size: 24px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+        .sidebar button i {
+            margin-right: 10px;
+        }
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #7b1e1e;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .game-area img {
+            width: 300px;
+            height: 300px;
+        }
+        .game-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .game-buttons button {
+            background-color: #7b1e1e;
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        .game-buttons button:nth-child(1) {
+            background-color: #a64ca6;
+        }
+        .game-buttons button:nth-child(2) {
+            background-color: #4ca6a6;
+        }
+        .game-buttons button:nth-child(3) {
+            background-color: #a64ca6;
+        }
+        .friends-list {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #7b1e1e;
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .friend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+        .friend img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        .friend span {
+            color: #ffcc00;
+            font-size: 14px;
+        }
+        .add-friend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .add-friend i {
+            font-size: 24px;
+            color: #ffcc00;
+        }
+        .add-friend span {
+            color: #ffcc00;
+            font-size: 14px;
+        }
+  </style>
+ </head>
+ <body>
+  <div class="container">
+   <div class="header">
+    <img alt="User avatar" height="50" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-sSGCNnEqn2fRndcB482xYemC.png?st=2024-09-27T02%3A36%3A57Z&amp;se=2024-09-27T04%3A36%3A57Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-26T23%3A11%3A13Z&amp;ske=2024-09-27T23%3A11%3A13Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=q2u81ZYfggAy/L8wYrizZ/nqwboc8iwR2o7sZPTqo90%3D" width="50"/>
+    <div class="logout">
+     <span>
+      Salir de la cuenta
+     </span>
+     <i class="fas fa-sign-out-alt">
+     </i>
+    </div>
+   </div>
+   <div class="main-content">
+    <div class="sidebar">
+     <button>
+      <i class="fas fa-volume-up">
+      </i>
+     </button>
+     <button>
+      <i class="fas fa-share-alt">
+      </i>
+     </button>
+     <button>
+      <i class="fas fa-flask">
+      </i>
+     </button>
+    </div>
+    <img alt="Zombie holding bingo cards" height="300" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-xD6Omg1M7jbmcTOrXBRfE19c.png?st=2024-09-27T02%3A37%3A01Z&amp;se=2024-09-27T04%3A37%3A01Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-26T23%3A07%3A50Z&amp;ske=2024-09-27T23%3A07%3A50Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=aYLeW95szoR47Cwez3DiOIuT%2B9MvwEfmwoO9oWu/jZ8%3D" width="300"/>
+    <div class="game-area">
+     <div class="game-buttons">
+      <button>
+       <i class="fas fa-users">
+       </i>
+       Crear sala
+      </button>
+      <button>
+       <i class="fas fa-heart">
+       </i>
+       Unirse a una sala
+      </button>
+      <button>
+       <i class="fas fa-user">
+       </i>
+       Jugar en solitario
+      </button>
+     </div>
+    </div>
+   </div>
+   <div class="friends-list">
+    <div class="friend">
+     <img alt="Friend avatar" height="50" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-PutfIk9FBaJI8MSZCQrroY6X.png?st=2024-09-27T02%3A36%3A58Z&amp;se=2024-09-27T04%3A36%3A58Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-26T23%3A10%3A43Z&amp;ske=2024-09-27T23%3A10%3A43Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=YYPvnG%2BdI045FKZsY7kQIvdI2xuu2lIILWbVlrIkhMk%3D" width="50"/>
+     <span>
+      Usuario-1
+     </span>
+    </div>
+    <div class="friend">
+     <img alt="Friend avatar" height="50" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-PutfIk9FBaJI8MSZCQrroY6X.png?st=2024-09-27T02%3A36%3A58Z&amp;se=2024-09-27T04%3A36%3A58Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-26T23%3A10%3A43Z&amp;ske=2024-09-27T23%3A10%3A43Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=YYPvnG%2BdI045FKZsY7kQIvdI2xuu2lIILWbVlrIkhMk%3D" width="50"/>
+     <span>
+      Usuario-1
+     </span>
+    </div>
+    <div class="friend">
+     <img alt="Friend avatar" height="50" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-PutfIk9FBaJI8MSZCQrroY6X.png?st=2024-09-27T02%3A36%3A58Z&amp;se=2024-09-27T04%3A36%3A58Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-26T23%3A10%3A43Z&amp;ske=2024-09-27T23%3A10%3A43Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=YYPvnG%2BdI045FKZsY7kQIvdI2xuu2lIILWbVlrIkhMk%3D" width="50"/>
+     <span>
+      Usuario-1
+     </span>
+    </div>
+    <div class="friend">
+     <img alt="Friend avatar" height="50" src="https://oaidalleapiprodscus.blob.core.windows.net/private/org-RcpoXHkzChYnDbFAyeQ8tamr/user-ehrvabJ3DufsCu8YJ7PqY5gl/img-PutfIk9FBaJI8MSZCQrroY6X.png?st=2024-09-27T02%3A36%3A58Z&amp;se=2024-09-27T04%3A36%3A58Z&amp;sp=r&amp;sv=2024-08-04&amp;sr=b&amp;rscd=inline&amp;rsct=image/png&amp;skoid=d505667d-d6c1-4a0a-bac7-5c84a87759f8&amp;sktid=a48cca56-e6da-484e-a814-9c849652bcb3&amp;skt=2024-09-26T23%3A10%3A43Z&amp;ske=2024-09-27T23%3A10%3A43Z&amp;sks=b&amp;skv=2024-08-04&amp;sig=YYPvnG%2BdI045FKZsY7kQIvdI2xuu2lIILWbVlrIkhMk%3D" width="50"/>
+     <span>
+      Usuario-1
+     </span>
+    </div>
+    <div class="add-friend">
+     <i class="fas fa-user-plus">
+     </i>
+     <span>
+      Agregar amigos
+     </span>
+    </div>
+   </div>
+  </div>
+ </body>
 </html>
