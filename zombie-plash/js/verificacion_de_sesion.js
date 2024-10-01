@@ -3,8 +3,8 @@ $(document).ready(function() {
         event.preventDefault(); // Prevent default form submission
 
         // Get form data
-        var nombre = $('#nombre').val();
-        var contraseña = $('#contraseña').val();
+        var nombre = $('#nombre_usu').val();
+        var contraseña = $('#contraseña_usu').val();
 
         // Send AJAX request to PHP script
         $.ajax({
@@ -20,8 +20,8 @@ $(document).ready(function() {
 
                 // Redirect to game page if login is successful
                 if (response.includes("exito")) {
-                    alert('holaaaaaaaaaa');
-                    window.location.href = '../h/iniciojuego.html';
+                    // alert('holaaaaaaaaaa');
+                    // window.location.href = '../html/inicio_juego.html';
                 }
             },
             error: function(xhr, status, error) {
