@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+    <h2>Unirse a una Sala</h2>
+    <input type="text" id="nombreJugador" placeholder="Tu nombre">
+    <input type="text" id="codigoUnirse" placeholder="Código de la sala">
+    <button id="btnUnirseSala">Unirse a la Sala</button>
+    <div id="mensajeUnirse"></div>
+    <script>
+        
+        // Unirse a una sala con el código
+        $('#btnUnirseSala').click(function() {
+            var nombreJugador = $('#nombreJugador').val();
+            var codigoSala = $('#codigoUnirse').val();
+            if (nombreJugador.trim() !== "" && codigoSala.trim() !== "") {
+                $.ajax({
+                    url: 'unirse.php',
+                    type: 'POST',
+                    data: { nombre: nombreJugador, codigo: codigoSala },
+                    success: function(response) {
+                        var data = JSON.parse(response);
+                        if (data.success) {
+                            $('#mensajeUnirse').html("<p>Te has unido a la sala correctamente.</p>");
+                        } else {
+                            $('#mensajeUnirse').html("<p>Error: " + data.message + "</p>");
+                        }
+                    }
+                });
+            } else {
+                alert("Por favor completa ambos campos");
+            }
+        });
+    </script>
+</body>
+</html>

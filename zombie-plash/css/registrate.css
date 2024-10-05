@@ -55,8 +55,12 @@
         border-radius: 30px;
         background-color: red;
         margin-left: 120px;
+      }
+      a{
 
-     }
+        text-decoration: none;
+      }
+     
     .boton2{
         width: 20%;
         margin-left: 24%;
