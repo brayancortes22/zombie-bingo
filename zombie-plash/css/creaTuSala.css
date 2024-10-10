@@ -43,12 +43,13 @@
         bottom: 0;
         background-color: rgba(0, 0, 0, 0.3); /* Negro con 30% de transparencia */
     }
+    
     .cajita{
-        height: 60%;
+        height: 50%;
         width: 60%;
         display: flex;
         flex-direction: column;
-        margin-top: 10%;
+        margin-top: 15%;
         margin-left: 20%;
         position: absolute;
         
@@ -62,7 +63,7 @@
     .redondeo{
         border-radius: 20px;
         width: 100%;
-        height: 15%;
+        height: 35%;
         text-align: center;
         background-color: #d19797;
         font-size: 30px;

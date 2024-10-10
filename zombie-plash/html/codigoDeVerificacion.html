@@ -37,23 +37,28 @@
         <div class="ingresar">
           <strong>Ingresa el codigo de verificación</strong>
         </div>
-        <div class="fila">
-            <div class="col"> <input type="text" class="cua" maxlength="1"></div>
-            <div class="col"> <input type="text" class="cua" maxlength="1"></div>
-            <div class="col"> <input type="text" class="cua" maxlength="1"></div>
-            <div class="col"> <input type="text" class="cua" maxlength="1"></div>
-        </div>
-        <div class="largo">
-          <br />
-          <div class="cancelar"  >
-            <a href="./restablecimientoContra.html">
-                <button  class="btn success">
-                  <strong>Cancelar</strong></button>
-            </a>
+        <form action="../php/verificarCodigo.php" method="post" onsubmit="return concatenarCodigo()">
+          <div class="fila">
+              <div class="col"><input type="text" id="digit1" class="cua" maxlength="1" required></div>
+              <div class="col"><input type="text" id="digit2" class="cua" maxlength="1" required></div>
+              <div class="col"><input type="text" id="digit3" class="cua" maxlength="1" required></div>
+              <div class="col"><input type="text" id="digit4" class="cua" maxlength="1" required></div>
           </div>
-          <div class="Aceptar">
-            <button class="btn success"><strong>Aceptar</strong></button>
+          <input type="hidden" id="codigo" name="codigo">
+          <div class="largo">
+              <br />
+              <div class="cancelar">
+                  <a href="./restablecimientoContra.html">
+                      <button class="btn success" type="button">
+                          <strong>Cancelar</strong>
+                      </button>
+                  </a>
+              </div>
+              <div class="Aceptar">
+                  <button class="btn success" type="submit"><strong>Aceptar</strong></button>
+              </div>
           </div>
+      </form>
           <div class="zombie">
             <img src="../img/image-removebg-preview.png" alt="" />
           </div>
@@ -73,5 +78,32 @@
         </div>  
     </div>
 </div>
+
+<script>
+  function concatenarCodigo() {
+      const digit1 = document.getElementById('digit1').value;
+      const digit2 = document.getElementById('digit2').value;
+      const digit3 = document.getElementById('digit3').value;
+      const digit4 = document.getElementById('digit4').value;
+      
+      const codigoCompleto = digit1 + digit2 + digit3 + digit4;
+      document.getElementById('codigo').value = codigoCompleto;
+  
+      fetch('../php/verificarCodigo.php', {
+          method: 'POST',
+          body: new FormData(document.querySelector('form'))
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              window.location.href = 'restablecimientoContra2.html';
+          } else {
+              alert(data.message);
+          }
+      });
+  
+      return false; // Previene el envío del formulario
+  }
+  </script>
   </body>
 </html>

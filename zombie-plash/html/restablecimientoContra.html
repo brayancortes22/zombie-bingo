@@ -23,19 +23,23 @@
                  un codigo de verificacion y continuar con el restableci-
                  <br>miento de su contraseña.</strong></p>
            </div>
-           <div class="ingresar"><strong>Ingresa el correo electronico</strong></div>
-                <input type="text" class="tx">
-                    <div class="largo"><br>
-                        
-                        <div class="cancelar">
-                            <a href="./login.html">
-                                <button class="btn success"><strong>Cancelar</strong></button>
-                            </a>
-                        </div>
-                    <div class="Aceptar">
-                        <a href="./codigoDeVerificacion.html">                            
-                            <button class="btn success"><strong>Aceptar</strong></button></div>
-                        </a>
+           <form action="../php/enviarCodigo.php" method="post">
+
+                <div class="ingresar"><strong>Ingresa el correo electronico</strong></div>
+                <input type="email" name="email" class="tx" required>
+                <div class="largo"><br>
+                
+                <div class="cancelar">
+                    <a href="./login.html">
+                        <button class="btn success"><strong>Cancelar</strong></button>
+                    </a>
+                </div>
+                <div class="Aceptar">
+                                              
+                        <button class="btn success" type="submit"><strong>Aceptar</strong></button></div>
+                    
+                
+            </form>
                         <div class="zombie">
                             <img src="../img/image-removebg-preview.png" alt="">
                         </div>
@@ -48,5 +52,25 @@
             <iframe src="https://lottie.host/embed/39fb0ebe-f2f7-49aa-9987-6535a7ecec25/4pmyl5JGpr.json" class="tamaño3"></iframe>
         </div>
     </div>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            fetch('../php/enviarCodigo.php', {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    window.location.href = 'codigoDeVerificacion.html';
+                } else {
+                    alert(data.message);
+                }
+            });
+        });
+        </script>
 </body>
 </html> 

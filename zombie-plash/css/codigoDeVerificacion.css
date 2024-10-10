@@ -3,6 +3,9 @@
     height: 100vh;
     display: flex;
 }
+form{
+    height: 200px;
+}
 .cuadro{
     border: solid 6px #6a5303; 
     height: 80%;
