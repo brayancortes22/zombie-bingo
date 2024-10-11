@@ -1,0 +1,165 @@
+.container-fluid{
+    margin: 0% !important;
+    padding: 0% !important;
+    user-select: none;
+    height: 100vh;
+    display: flex;
+}
+.imagen{
+    background-image: url('../img/jugadoresSala.jpeg');
+    background-size: cover; /* Hace que la imagen cubra toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
+    height: 100vh; /* Hace que ocupe la altura completa de la ventana */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white; /* Cambia el color del texto para que sea visible */
+    width: 100%;
+    z-index: 1;
+}
+.cuadro{
+    border: #ce7c00 solid 5px;
+    height: 90vh;
+    width: 90%;
+    background-color: rgba(14, 85, 87, 0.5); /* Azul con 50% de transparencia */
+    border-radius: 30px;
+    position: absolute;
+    filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+    display: flex;
+    flex-direction: column;
+}
+.largo{
+    width: 100%;
+    height: 10vh;   
+    display: flex;
+}
+.equis{
+    
+    width: 8%;
+    height: 10vh;
+  
+    margin-right: 27%;
+}
+.titulo{
+    width: 30%;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    color: red;
+}
+.grandote{
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+}
+.izquierda{
+    
+    width: 25%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.derecha{
+    
+    width: 75%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.centro{
+    width: 80%;
+    height: 90%;
+    margin-bottom:7% ;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.jugador{
+    width: 100%;
+    height: 8vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+
+}
+.inpu{
+    border: none;
+    width: 80%;
+    height: 5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    margin-top: 10px;
+    
+}
+.redondeo{
+    border-radius: 20px;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(250, 160, 140, 0.671);
+    border: none;
+}
+.boton{
+    width: 50%;
+    border: solid white 2px;
+    margin-top: 30px;
+    background-color: chartreuse;
+    border-radius: 20px;
+}
+.btn{
+    border-radius: 20px;
+    height: 100%;
+    width: 100%;
+    background-color: chartreuse;
+}
+.fila{
+    border: solid white 2px;
+    height: 18vh;
+    width: 100%;
+    display: flex;
+}
+.fila2{
+    border: solid white 2px;
+    height: 18vh;
+    width: 100%;
+    display: flex;
+}
+.fila3{
+    border: solid white 2px;
+    height: 18vh;
+    width: 100%;
+    display: flex;
+}
+.cuadrito{
+    border: solid rgb(177, 29, 29) 2px;
+    height: 100%;
+    width: 90%;
+    background-color: aquamarine;
+}
+.filita{
+    border: solid white 2px;
+    height: 5vh;
+    width: 100%;
+    display: flex;
+}
+.filita1{
+    border: solid white 2px;
+    height: 5vh;
+    width: 100%;
+    display: flex;
+}
+.filita2{
+    border: solid white 2px;
+    height: 5vh;
+    width: 100%;
+    display: flex;
+}
