@@ -13,7 +13,7 @@
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
-    height: 200vh; /* Hace que ocupe la altura completa de la ventana */
+    height: 125vh; /* Hace que ocupe la altura completa de la ventana */
     display: flex;
     flex-direction: column;
     color: white; /* Cambia el color del texto para que sea visible */

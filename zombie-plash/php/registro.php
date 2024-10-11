@@ -16,13 +16,15 @@ if (isset($_POST['nombre']) && isset($_POST['correo']) && isset($_POST['contrase
     if ($contraseña !== $confirmar_contraseña) {
         $response['errors']['confirmar_contraseña'] = 'Las contraseñas no coinciden';
     } else {
-        $checkQuery = "SELECT * FROM registro_usuarios WHERE usuario='$usuario' OR correo='$correo'";
+        $checkQuery = "SELECT * FROM registro_usuarios WHERE nombre='$usuario' OR correo='$correo'";
         $result = $conn->query($checkQuery);
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
-            if ($row['usuario'] == $usuario) {
+            if ($row['nombre'] == $usuario) {
                 $response['errors']['nombre'] = 'El nombre de usuario ya está registrado.';
+            }else{
+                $response['errors']['nombre_corecto'] = 'verificado';
             }
             if ($row['correo'] == $correo) {
                 $response['errors']['correo'] = 'El correo ya está registrado.';
@@ -30,7 +32,7 @@ if (isset($_POST['nombre']) && isset($_POST['correo']) && isset($_POST['contrase
         } else {
             // Aquí deberías usar password_hash() para la contraseña
             $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO registro_usuarios(usuario, correo, contraseña) VALUES ('$usuario', '$correo', '$hashed_password')";
+            $sql = "INSERT INTO registro_usuarios(nombre, correo, contraseña) VALUES ('$usuario', '$correo', '$hashed_password')";
             if ($conn->query($sql) === TRUE) {
                 $response['success'] = true;
             } else {
@@ -46,4 +48,3 @@ if (isset($_POST['nombre']) && isset($_POST['correo']) && isset($_POST['contrase
 }
 
 echo json_encode($response);
-?>

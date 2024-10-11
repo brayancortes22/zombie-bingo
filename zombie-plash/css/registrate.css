@@ -104,6 +104,9 @@
     height: 400px; /* ajusta la altura */
     
   }
-  span{
+  .erro{
     color: red;
+}
+.correcto{
+  color:#26c218;
 }

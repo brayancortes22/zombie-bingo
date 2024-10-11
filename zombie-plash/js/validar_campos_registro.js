@@ -22,6 +22,7 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
     })
     .then(response => response.json())
     .then(data => {
+        console.log(data);  
         if (data.success) {
             alert('Registro exitoso');
             window.location.href = '../html/login.html';
@@ -29,6 +30,7 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
             // Mostrar errores específicos
             if (data.errors.nombre) {
                 document.getElementById('nombreError').textContent = data.errors.nombre;
+            
             }
             if (data.errors.correo) {
                 document.getElementById('correoError').textContent = data.errors.correo;
@@ -37,7 +39,7 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
                 document.getElementById('contraseñaError').textContent = data.errors.contraseña;
             }
             if (data.errors.confirmar_contraseña) {
-                document.getElementById('confirmarContraseñaError').textContent = data.errors.confirmar_contraseña;
+                document.getElementById('confirmar_ContraseñaError').textContent = data.errors.confirmar_contraseña;
             }
         }
     })
