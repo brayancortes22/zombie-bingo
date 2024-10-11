@@ -1,45 +1,41 @@
 <?php
-// invitado.php
-include ('../setting/conexion-base-datos.php');
+include_once ('../setting/conexion-base-datos.php'); 
 
-// Obtener el apodo del formulario
-$apodo = $_POST['apodo'];
+header('Content-Type: application/json');
 
-// Validar y sanear los datos de entrada
-$apodo = trim($apodo);
-$apodo = filter_var($apodo, FILTER_SANITIZE_STRING);
+$response = ['success' => false, 'errors' => []];
 
-// Verificar si el apodo ya existe en la base de datos
-$sql_check = "SELECT * FROM invitados WHERE apodo = '$apodo'";
-$result_check = $conn->query($sql_check);
+if (isset($_POST['apodo'])) {
+    
+    $apodo = $_POST['apodo'];
 
-if ($result_check->num_rows > 0) {
-    echo '
-    <script>
-    alert("apodo en uso prueba con otro");
-    window.location = "../html/ingresarInvitado.html";
-    </script>
-    ';
-    exit;
-}
+    // Verifica si el apodo ya existe en la base de datos
+    $checkQuery = "SELECT * FROM invitados WHERE apodo = ?"; 
+    $stmt = $conn->prepare($checkQuery);
+    $stmt->bind_param("s", $apodo); // Evita inyecciones SQL 
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-// Insertar el apodo en una base de datos o realizar cualquier otra acción deseada
-// Por ejemplo, utilizando MySQLi:
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+    if ($result->num_rows > 0) { 
+        $response['errors']['apodo'] = 'El apodo ya está registrado.';
+    } else {
 
-$sql = "INSERT INTO invitados (apodo) VALUES ('$apodo')";
-if ($conn->query($sql) === TRUE) {
-    echo '
-    <script>
-    alert("inicio de sesion exitoso");
-    window.location = "../html/inicio.html";
-    </script>
-    ';
+        // El apodo no existe, procede a insertar en la base de datos
+        $insertQuery = "INSERT INTO invitados(apodo) VALUES (?)";
+        $stmt = $conn->prepare($insertQuery);
+        $stmt->bind_param("s", $apodo); 
+        if ($stmt->execute()) {
+            $response['success'] = true;
+        } else {
+            $response['errors']['general'] = 'Error al crear el registro: ' . $conn->error;
+        }
+    }
+    $stmt->close();
+    $conn->close();
+
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+    $response['errors']['general'] = 'Por favor, complete todos los campos del formulario.';
 }
+echo json_encode($response);
 
-$conn->close();
 ?>

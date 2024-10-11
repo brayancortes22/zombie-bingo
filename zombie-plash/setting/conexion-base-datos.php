@@ -3,7 +3,7 @@
 $host = 'localhost';
 $usuario = 'root';
 $contraseña = '';
-$base_de_datos = 'Zombie_plash';
+$base_de_datos = 'Zombie_plash_bd';
 
 // Conexión a la base de datos
 $conn = new mysqli($host, $usuario, $contraseña, $base_de_datos);
@@ -14,4 +14,3 @@ $conn = new mysqli($host, $usuario, $contraseña, $base_de_datos);
 // }else{
 //     echo("conexion exitosa");
 // }
-?>
