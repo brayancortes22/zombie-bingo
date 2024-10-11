@@ -9,6 +9,8 @@ function cambiarPagina(pagina) {
     window.location.href = pagina;
 }
 
+
+
 // En la nueva página, comprueba si el audio debe seguir reproduciéndose
 window.addEventListener('load', function() {
     if (localStorage.getItem('audioPlaying')) {
