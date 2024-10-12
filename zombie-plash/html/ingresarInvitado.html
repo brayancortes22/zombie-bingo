@@ -20,7 +20,6 @@
 <body>
     <div class="container-fluid">
         <div class="cuadro">
-
             <div class="tela">
                 <iframe src="https://lottie.host/embed/b0276faa-8f53-47c7-bd90-1057c9c316c5/z4mjK0L7A8.lottie"></iframe>
             </div>
@@ -30,41 +29,36 @@
                 </div>
                 <form id="formulario" action="../php/invitado.php" method="post">
                     <div class="formulario"><br><br>
-                        <label for="fname"><strong>Apodo del jugador</strong></label>
+                        <label for="fname"><strong>Apodo del jugador</strong></label><br>
                         <input type="text" id="apodo" name="apodo" type="submit" maxlength="12" required>
                         <span id="apodoError" class="error"></span>
                     </div><br>
                     <div class="recomendaciones">
-
                         <ol>
                             <p> <strong> Recomendaciones:</strong>
                                 <li><strong>No tener ningun tipo de apodo ofensivo</strong></li>
                                 <li><strong>Tienes una cantidad de 12 caracteres para crear tu apodo.</strong></li>
+                            </p>
                         </ol>
-                        </p>
                     </div>
+                    <div class="largo">
+                        <div class="Aceptar">
+                            <a href="./login.html">
+                                <button class="btn success"><strong>Aceptar</strong></button>
+                        </div>
+                        </a>
             </div>
-            <div class="largo">
-                <div class="cancelar">
-                    <a href="./login.html">
-                        <button class="btn success"><strong>Cancelar</strong></button>
-                </div>
-                </a>
-                <div class="Aceptar">
-
-                    <button class="btn success"><strong>Aceptar</strong></button>
-                </div>
 
             </div>
             </form>
-            <div class="zombi">
+            <!-- <div class="zombi">
                 <img src="../img/image-removebg-preview.png" alt="">
-            </div>
+            </div> -->
         </div>
-        <div class="tumba">
+        <!-- <div class="tumba">
             <iframe src="https://lottie.host/embed/756ff78d-97f5-42f4-a17a-55b0e14447e7/epa3x7GHDM.json"
                 class="el"></iframe>
-        </div>
+        </div> -->
     </div>
     <script src="../js/validar_campos_invitado.js"></script>
 </body>

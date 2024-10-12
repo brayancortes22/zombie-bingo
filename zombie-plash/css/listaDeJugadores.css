@@ -54,7 +54,7 @@
 .grandote{
     height: 100%;
     width: 100%;
-
+    margin-top: -1%;
     display: flex;
 }
 .izquierda{
@@ -72,14 +72,16 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    margin-right: 4%;
 }
 .centro{
-    width: 80%;
+    width: 90%;
     height: 90%;
     margin-bottom:7% ;
     display: flex;
     align-items: center;
     flex-direction: column;
+    border: solid white 2px;
 }
 .jugador{
     width: 100%;
@@ -88,12 +90,13 @@
     justify-content: center;
     align-items: center;
     color: red;
+    font-size: 27px;
 
 }
 .inpu{
     border: none;
-    width: 80%;
-    height: 5vh;
+    width: 100%;
+    height: 6vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -107,6 +110,9 @@
     width: 100%;
     background-color: rgba(250, 160, 140, 0.671);
     border: none;
+    color: white;
+    text-align: center;
+    font-size: 20px;
 }
 .boton{
     width: 50%;
@@ -122,44 +128,84 @@
     background-color: chartreuse;
 }
 .fila{
-    border: solid white 2px;
     height: 18vh;
     width: 100%;
     display: flex;
+    
 }
 .fila2{
-    border: solid white 2px;
     height: 18vh;
     width: 100%;
     display: flex;
 }
 .fila3{
-    border: solid white 2px;
     height: 18vh;
     width: 100%;
     display: flex;
+    
 }
 .cuadrito{
     border: solid rgb(177, 29, 29) 2px;
     height: 100%;
     width: 90%;
-    background-color: aquamarine;
+    background-color: #ce7c00;
+    margin-left: 2%;
+    margin-right: 2%;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+   
+}
+.cuadritos{
+    border: solid rgb(177, 29, 29) 2px;
+    height: 100%;
+    width: 90%;
+    background-color: #ce7c00;
+    margin-left: 2%;
+    margin-right: 2%;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    color: rgba(154, 255, 2, 0.931);
+    font-size: 20px;
+    
+   
 }
 .filita{
-    border: solid white 2px;
+    
     height: 5vh;
     width: 100%;
     display: flex;
+    margin-top: 1%;
 }
 .filita1{
-    border: solid white 2px;
+    
     height: 5vh;
     width: 100%;
     display: flex;
+    margin-top: 1%;
 }
 .filita2{
-    border: solid white 2px;
+    
     height: 5vh;
     width: 100%;
     display: flex;
+    margin-top: 1%;
+}
+.circulo{
+     
+    background-image: url('../img/jugadoresSala.jpeg');
+    background-size: cover; /* Ajusta la imagen para cubrir todo el div */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* No repetir la imagen */
+    position: relative; /* Puedes cambiar a fixed o absolute si lo deseas fijo en la pantalla */
+    border-radius: 50%;
+    width: 48%;
+    height: 72%;
+    border: black solid 4px ;
+    filter: drop-shadow(0px 0px 12px rgb(0, 0, 0));
+    margin-left: 3%;
+
 }
