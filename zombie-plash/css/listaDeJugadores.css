@@ -153,7 +153,8 @@
     margin-right: 2%;
     border-radius: 20px;
     display: flex;
-    align-items: center;
+    align-items: start;
+    justify-content: start;
    
 }
 .cuadritos{
@@ -207,5 +208,16 @@
     border: black solid 4px ;
     filter: drop-shadow(0px 0px 12px rgb(0, 0, 0));
     margin-left: 3%;
+    margin-top: 4%;
 
+}
+.bi{
+    font-size: 60px;
+    width: 3%;
+    margin-left: 120%;
+}
+.bo{
+    font-size: 60px;
+    width: 3%;
+    margin-left: 12%;
 }
