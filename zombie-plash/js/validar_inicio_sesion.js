@@ -10,18 +10,16 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
 
     fetch('../php/inicio_sesion.php', {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'include' // Asegura que las cookies de sesión se envíen
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Error en la respuesta del servidor');
-        }
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
+        console.log('Respuesta completa del servidor:', data);
         if (data.success) {
-            console.log('Inicio de sesión exitoso, redirigiendo...');
-            window.location.href = './inicio.php'; // Asegúrate de que esta ruta sea correcta
+            console.log('Inicio de sesión exitoso:', data.session_info);
+            alert('Inicio de sesión exitoso. Redirigiendo...');
+            window.location.href = '../html/inicio.php'; // Asegúrate de que esta ruta sea correcta
         } else {
             // Mostrar error general
             if (data.errors && data.errors.general) {
@@ -29,6 +27,9 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
             } else {
                 document.getElementById('generalError').textContent = 'Ocurrió un error desconocido';
             }
+        }
+        if (data.debug) {
+            console.log('Información de depuración:', data.debug);
         }
     })
     .catch(error => {

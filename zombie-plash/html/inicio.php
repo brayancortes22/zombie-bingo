@@ -1,29 +1,17 @@
 <?php
 session_start();
 
-// Función para verificar si el usuario ha iniciado sesión
-function verificarSesion() {
-    if (!isset($_SESSION['username'])) {
-        // Si no hay sesión activa, redirigir al login
-        header("Location: login.php");
-        exit();
-    }
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['id_usuario'])) {
+    // Si no hay sesión activa, redirigir al login
+    header("Location: login.php");
+    exit();
 }
 
-// Verificar la sesión al cargar la página
-verificarSesion();
-
-// Obtener el nombre de usuario de forma segura
-$username = $_SESSION['username'];
-
-// Añade esto para depuración
-error_log("Sesión en inicio.php: " . print_r($_SESSION, true));
-
-// El usuario ha iniciado sesión, mostrar la página de inicio
+// Resto del código de inicio.php
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -41,7 +29,8 @@ error_log("Sesión en inicio.php: " . print_r($_SESSION, true));
     <title>Zombie plash</title>
 </head>
 <body>
-    <h1>Bienvenido, <?php echo htmlspecialchars($username); ?>!</h1>
+    <h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?>!</h1>
+    <!-- Resto del contenido de la página de inicio -->
     <div class="container-fluid">
         <div class="imagen">
             <div class="primera">
