@@ -1,32 +1,68 @@
+<?php
+session_start();
+
+// Función para verificar si el usuario ha iniciado sesión
+function verificarSesion() {
+    if (!isset($_SESSION['username'])) {
+        // Si no hay sesión activa, redirigir al login
+        header("Location: login.php");
+        exit();
+    }
+}
+
+// Verificar la sesión al cargar la página
+verificarSesion();
+
+// Obtener el nombre de usuario de forma segura
+$username = $_SESSION['username'];
+
+// Añade esto para depuración
+error_log("Sesión en inicio.php: " . print_r($_SESSION, true));
+
+// El usuario ha iniciado sesión, mostrar la página de inicio
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <script src="../js/cancelarLetra.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/inicio.css"><link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+        crossorigin="anonymous"
     />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     
 
-    <script src="../js/inicio.js"></script>
-    <title>Crea tu sala</title>
+    <script src=""></script>
+    <title>Zombie plash</title>
 </head>
 <body>
+    <h1>Bienvenido, <?php echo htmlspecialchars($username); ?>!</h1>
     <div class="container-fluid">
         <div class="imagen">
             <div class="primera">
                 <a href="./perfiljugador.html">
                     <div class="circulop1"> 
-            </div>
-              </a>
-                <button class="circulop2" onclick="window.location.href='./login.html'">
+                    </div>
+                </a>
+                <button class="circulop2 cerrar-sesion" onclick="cerrarSesion()">
+                    <div class="circulo-contenido">
+                        <img src="../img/salirse.png" alt="Icono cerrar sesión">
+                        <span>Cerrar sesión</span>
+                    </div>
                 </button>
+        
+<script>
+function cerrarSesion() {
+    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+        window.location.href = '../php/cerrar_sesion.php';
+    }
+}
+</script>
              
             </div>
             <div class="izquierda">

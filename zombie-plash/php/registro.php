@@ -1,4 +1,5 @@
-<?php
+<?php 
+session_start();
 include_once ('../setting/conexion-base-datos.php');
 
 header('Content-Type: application/json');

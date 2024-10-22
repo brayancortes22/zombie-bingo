@@ -35,14 +35,44 @@
     display: flex;
 
 }
-.circulop2{
+.circulop2 {
+
     border: none;
     height: 100%;
     width: 130px;
     margin-left: 3%;
     border-radius: 50%;
-    background-color: red;
+    background-color: red;   
+    
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    
 }
+
+.circulo-contenido {
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.circulo-contenido img {
+max-width: 50%;
+max-height: 50%;
+object-fit: contain;
+}
+
+.circulo-contenido span {
+font-size: 12px;
+margin-top: 5px;
+text-align: center;
+}
+
 .izquierda{
     height: 370px;
     width: 100%;
