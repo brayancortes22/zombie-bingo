@@ -10,7 +10,7 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
  var confirmPassword = document.getElementById('confirmar_contraseña').value;
 
  if (password !== confirmPassword) {
-     document.getElementById('confirmar_ContraseñaError').textContent = 'Las contraseñas no coinciden';
+    document.getElementById('confirmar_ContraseñaError').textContent = 'Las contraseñas no coinciden';
      return; // Detener el envío del formulario
  }
     // Realizar la validación mediante AJAX

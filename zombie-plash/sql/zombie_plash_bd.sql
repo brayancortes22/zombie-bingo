@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-10-2024 a las 17:33:36
+-- Tiempo de generación: 15-10-2024 a las 22:34:08
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -55,6 +55,18 @@ CREATE TABLE `invitados` (
   `id_invitado` int(11) NOT NULL,
   `apodo` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `invitados`
+--
+
+INSERT INTO `invitados` (`id_invitado`, `apodo`) VALUES
+(1, 'hola'),
+(3, 'helou'),
+(5, 'j'),
+(6, 'holajj'),
+(7, 'holaaaa'),
+(8, 'Cata');
 
 -- --------------------------------------------------------
 
@@ -160,6 +172,28 @@ CREATE TABLE `rol_jugador` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `salas`
+--
+
+CREATE TABLE `salas` (
+  `id_sala` int(11) NOT NULL,
+  `id_creador` int(11) DEFAULT NULL,
+  `contraseña` varchar(255) DEFAULT NULL,
+  `max_jugadores` int(11) DEFAULT NULL,
+  `jugadores_unidos` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `salas`
+--
+
+INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`) VALUES
+(5, NULL, '', 0, NULL),
+(6, NULL, '', 0, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tipo_seleccion`
 --
 
@@ -239,6 +273,13 @@ ALTER TABLE `rol_jugador`
   ADD KEY `fk_id_participacion` (`id_participacion`);
 
 --
+-- Indices de la tabla `salas`
+--
+ALTER TABLE `salas`
+  ADD PRIMARY KEY (`id_sala`),
+  ADD KEY `id_creador` (`id_creador`);
+
+--
 -- Indices de la tabla `tipo_seleccion`
 --
 ALTER TABLE `tipo_seleccion`
@@ -254,13 +295,19 @@ ALTER TABLE `tipo_seleccion`
 -- AUTO_INCREMENT de la tabla `invitados`
 --
 ALTER TABLE `invitados`
-  MODIFY `id_invitado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_invitado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
 --
 ALTER TABLE `registro_usuarios`
   MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `salas`
+--
+ALTER TABLE `salas`
+  MODIFY `id_sala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Restricciones para tablas volcadas
@@ -284,6 +331,12 @@ ALTER TABLE `recuperar_contraseña`
 --
 ALTER TABLE `rol_jugador`
   ADD CONSTRAINT `fk_id_participacion` FOREIGN KEY (`id_participacion`) REFERENCES `partida` (`id_partida`);
+
+--
+-- Filtros para la tabla `salas`
+--
+ALTER TABLE `salas`
+  ADD CONSTRAINT `fk_id_creador` FOREIGN KEY (`id_creador`) REFERENCES `jugador` (`id_jugador`);
 
 --
 -- Filtros para la tabla `tipo_seleccion`

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include_once ('../setting/conexion-base-datos.php'); 
 
 header('Content-Type: application/json');
@@ -26,6 +27,7 @@ if (isset($_POST['apodo'])) {
         $stmt->bind_param("s", $apodo); 
         if ($stmt->execute()) {
             $response['success'] = true;
+            $_SESSION['apodo'] = $apodo;
         } else {
             $response['errors']['general'] = 'Error al crear el registro: ' . $conn->error;
         }
