@@ -15,11 +15,13 @@ document.getElementById('crearSalaForm').addEventListener('submit', function(eve
   })
   .then(data => {
       if (data.success) {
-          document.getElementById('mensaje').textContent = 'Sala creada exitosamente. Redirigiendo...';
-          // Redirigir a la sala inmediatamente
-          window.location.href = 'sala.php';
+          // Guardar los datos en el almacenamiento local
+          localStorage.setItem('datosSala', JSON.stringify(data));
+          
+          // Redirigir a la página de jugadores en sala
+          window.location.href = 'jugadoresSala.html';
       } else {
-          document.getElementById('mensaje').textContent = 'Error: ' + data.message;
+          alert('Error al crear la sala: ' + data.message);
       }
   })
   .catch(error => {

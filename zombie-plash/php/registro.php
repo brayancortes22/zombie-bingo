@@ -17,32 +17,34 @@ if (isset($_POST['nombre']) && isset($_POST['correo']) && isset($_POST['contrase
     if ($contraseña !== $confirmar_contraseña) {
         $response['errors']['confirmar_contraseña'] = 'Las contraseñas no coinciden';
     } else {
-        $checkQuery = "SELECT * FROM registro_usuarios WHERE nombre='$usuario' OR correo='$correo'";
-        $result = $conn->query($checkQuery);
+        $checkQuery = "SELECT * FROM registro_usuarios WHERE nombre=? OR correo=?";
+        $stmt = $conexion->prepare($checkQuery);
+        $stmt->bind_param("ss", $usuario, $correo);
+        $stmt->execute();
+        $result = $stmt->get_result();
 
         if ($result->num_rows > 0) {
             $row = $result->fetch_assoc();
             if ($row['nombre'] == $usuario) {
                 $response['errors']['nombre'] = 'El nombre de usuario ya está registrado.';
-            }else{
-                $response['errors']['nombre_corecto'] = 'verificado';
             }
             if ($row['correo'] == $correo) {
                 $response['errors']['correo'] = 'El correo ya está registrado.';
             }
         } else {
-            // Aquí deberías usar password_hash() para la contraseña
             $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO registro_usuarios(nombre, correo, contraseña) VALUES ('$usuario', '$correo', '$hashed_password')";
-            if ($conn->query($sql) === TRUE) {
+            $sql = "INSERT INTO registro_usuarios(nombre, correo, contraseña) VALUES (?, ?, ?)";
+            $stmt = $conexion->prepare($sql);
+            $stmt->bind_param("sss", $usuario, $correo, $hashed_password);
+            if ($stmt->execute()) {
                 $response['success'] = true;
             } else {
-                $response['errors']['general'] = 'Error al crear el registro: ' . $conn->error;
+                $response['errors']['general'] = 'Error al crear el registro: ' . $conexion->error;
             }
         }
     }
 
-    $conn->close();
+    $conexion->close();
 
 } else {
     $response['errors']['general'] = 'Por favor, complete todos los campos del formulario.';

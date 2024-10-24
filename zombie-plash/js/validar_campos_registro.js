@@ -5,14 +5,16 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
     document.querySelectorAll('.error').forEach(function(el) {
         el.textContent = '';
     });
- // Verificar que las contraseñas coincidan
- var password = document.getElementById('contraseña').value;
- var confirmPassword = document.getElementById('confirmar_contraseña').value;
 
- if (password !== confirmPassword) {
-    document.getElementById('confirmar_ContraseñaError').textContent = 'Las contraseñas no coinciden';
-     return; // Detener el envío del formulario
- }
+    // Verificar que las contraseñas coincidan
+    var password = document.getElementById('contraseña').value;
+    var confirmPassword = document.getElementById('confirmar_contraseña').value;
+
+    if (password !== confirmPassword) {
+        document.getElementById('confirmar_ContraseñaError').textContent = 'Las contraseñas no coinciden';
+        return; // Detener el envío del formulario
+    }
+
     // Realizar la validación mediante AJAX
     var formData = new FormData(this);
 
@@ -22,15 +24,14 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);  
+        console.log(data);
         if (data.success) {
             alert('Registro exitoso');
-            window.location.href = '../html/login.html';
+            window.location.href = '../html/login.php';
         } else {
             // Mostrar errores específicos
             if (data.errors.nombre) {
                 document.getElementById('nombreError').textContent = data.errors.nombre;
-            
             }
             if (data.errors.correo) {
                 document.getElementById('correoError').textContent = data.errors.correo;
