@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <script src="../js/cancelarLetra.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/creaTuSala.css"><link
-    
+    <link rel="stylesheet" href="../css/creaTuSala.css">
+    <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
@@ -14,28 +14,44 @@
     <title>Crea tu sala</title>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="imagen">
-            <div class="cuadro">
-                <h1 class="titulo">Crea tu sala</h1>
-                <div class="cajita">
-                  <label for="name" class="contra">Contraseña</label>
-                  <input type="password" name="Contraseña" id="" class="redondeo"><br>
-                  <label for="" class="contra">Numero de jugadores</label>
-                  <input type="number" name="Contraseña" id="Numero" class="redondeo" onkeydown="cancelarLetras(event)"><br>
-                  
-                </div>
-                <div class="largo">
-                    <br />
-                    <div class="cancelar">
-                      <button class="btn success" onclick="window.location.href='./inicio.html'"><strong>Cancelar</strong></button>
+    <script>
+        // Verificar si el usuario ha iniciado sesión
+        fetch('../php/verificar_sesion.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.autenticado) {
+                    alert('Debes iniciar sesión para crear una sala');
+                    window.location.href = './login.php';
+                }
+            });
+    </script>
+    <div class="imagen">
+        <div class="cuadro">
+            <h1 class="titulo">Crea tu sala</h1>
+            <div class="cajita">
+                <form id="crearSalaForm">
+                    <label for="nombreSala" class="contra">Nombre de la sala</label>
+                    <input type="text" id="nombreSala" name="nombreSala" class="redondeo" required>
+                    
+                    <label for="contraseñaSala" class="contra">Contraseña</label>
+                    <input type="password" id="contraseñaSala" name="contraseñaSala" class="redondeo" required>
+                    
+                    <label for="maxJugadores" class="contra">Número de jugadores</label>
+                    <input type="number" id="maxJugadores" name="maxJugadores" class="redondeo" onkeydown="cancelarLetras(event)" required>
+                    
+                    <div class="botones">
+                        <div class="Aceptar">
+                            <button class="btn success" type="submit"><strong>Aceptar</strong></button>
+                        </div>
+                        <div class="cancelar">
+                            <button class="btn success" type="button" onclick="window.location.href='./inicio.php'"><strong>Cancelar</strong></button>
+                        </div>
                     </div>
-                    <div class="Aceptar">
-                      <button class="btn success"><strong>Aceptar</strong></button>
-                    </div>
+                </form>
+                <div id="mensaje"></div>
             </div>
         </div>
-      
     </div>
+    <script src="../js/creaTuSala.js"></script>
 </body>
 </html>
