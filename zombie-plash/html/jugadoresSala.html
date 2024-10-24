@@ -19,9 +19,9 @@
             <div class="cuadro">
                 <div class="row">
                     <div class="col linia">ID Sala</div>
-                    <div class="col contenedor"></div>
-                    <div class="col linia">Numero jugadores</div>
-                    <div class="col contenedor"></div>
+                    <div class="col contenedor" id="idSala"></div>
+                    <div class="col linia">Jugadores conectados</div>
+                    <div class="col contenedor" id="jugadoresConectados"></div>
                     <div class="col">
                         <button type="button" class="boton"><strong>Jugar</strong></button>
                     </div>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col contenedor quitar"></div>
                     <div class="col linia">Contraseña</div>
-                    <div class="col contenedor"></div>
+                    <div class="col contenedor" id="contraseñaSala"></div>
                     <div class="col">
                         <button type="button" class="botonrojo"><strong>Cancelar sala</strong></button>
                     </div>
@@ -99,5 +99,32 @@
             </div>
         </div>
     </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener los datos de la sala desde el almacenamiento local
+        const datosSala = JSON.parse(localStorage.getItem('datosSala'));
+
+        if (datosSala) {
+            // Actualizar los elementos del DOM con los datos de la sala
+            document.getElementById('idSala').textContent = datosSala.id_sala;
+            document.getElementById('jugadoresConectados').textContent = datosSala.jugadores_conectados + '/' + datosSala.max_jugadores;
+            document.getElementById('contraseñaSala').textContent = datosSala.contraseña_sala;
+
+            // Actualizar los nombres de los usuarios (asumiendo que tienes un máximo de 10 usuarios)
+            const usuarios = document.querySelectorAll('.row2 .col2');
+            usuarios.forEach((usuario, index) => {
+                if (index < datosSala.max_jugadores) {
+                    if (index < datosSala.jugadores_conectados) {
+                        usuario.textContent = index === 0 ? datosSala.nombre_jugador + ' (Creador)' : 'Jugador ' + (index + 1);
+                    } else {
+                        usuario.textContent = 'Esperando jugador...';
+                    }
+                } else {
+                    usuario.style.display = 'none'; // Ocultar espacios de usuario extra
+                }
+            });
+        }
+    });
+    </script>
 </body>
 </html>

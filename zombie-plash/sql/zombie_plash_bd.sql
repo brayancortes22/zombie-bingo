@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 15-10-2024 a las 22:34:08
+-- Tiempo de generación: 23-10-2024 a las 01:01:47
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -20,18 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `zombie_plash_bd`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `amigos`
---
-
-CREATE TABLE `amigos` (
-  `id_amigo` int(11) NOT NULL,
-  `id_jugador` int(11) DEFAULT NULL,
-  `id_jugador_2` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -77,7 +65,8 @@ INSERT INTO `invitados` (`id_invitado`, `apodo`) VALUES
 CREATE TABLE `jugador` (
   `id_jugador` int(11) NOT NULL,
   `nombre` varchar(255) DEFAULT NULL,
-  `id_credenciales` int(11) DEFAULT NULL
+  `id_credenciales` int(11) DEFAULT NULL,
+  `id_registro` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -176,20 +165,12 @@ CREATE TABLE `rol_jugador` (
 --
 
 CREATE TABLE `salas` (
-  `id_sala` int(11) NOT NULL,
-  `id_creador` int(11) DEFAULT NULL,
-  `contraseña` varchar(255) DEFAULT NULL,
-  `max_jugadores` int(11) DEFAULT NULL,
-  `jugadores_unidos` int(11) DEFAULT NULL
+  `id_sala` varchar(255) NOT NULL,
+  `id_creador` int(11) NOT NULL,
+  `contraseña` varchar(255) NOT NULL,
+  `max_jugadores` int(11) NOT NULL,
+  `jugadores_unidos` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `salas`
---
-
-INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`) VALUES
-(5, NULL, '', 0, NULL),
-(6, NULL, '', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -209,12 +190,6 @@ CREATE TABLE `tipo_seleccion` (
 --
 
 --
--- Indices de la tabla `amigos`
---
-ALTER TABLE `amigos`
-  ADD PRIMARY KEY (`id_amigo`);
-
---
 -- Indices de la tabla `amistad`
 --
 ALTER TABLE `amistad`
@@ -232,7 +207,9 @@ ALTER TABLE `invitados`
 -- Indices de la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  ADD PRIMARY KEY (`id_jugador`);
+  ADD PRIMARY KEY (`id_jugador`),
+  ADD UNIQUE KEY `id_registro` (`id_registro`),
+  ADD UNIQUE KEY `id_credenciales` (`id_credenciales`);
 
 --
 -- Indices de la tabla `partida`
@@ -304,12 +281,6 @@ ALTER TABLE `registro_usuarios`
   MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT de la tabla `salas`
---
-ALTER TABLE `salas`
-  MODIFY `id_sala` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- Restricciones para tablas volcadas
 --
 
@@ -319,6 +290,13 @@ ALTER TABLE `salas`
 ALTER TABLE `amistad`
   ADD CONSTRAINT `amistad_ibfk_1` FOREIGN KEY (`id_jugador`) REFERENCES `jugador` (`id_jugador`),
   ADD CONSTRAINT `amistad_ibfk_2` FOREIGN KEY (`id_amigo`) REFERENCES `jugador` (`id_jugador`);
+
+--
+-- Filtros para la tabla `jugador`
+--
+ALTER TABLE `jugador`
+  ADD CONSTRAINT `jugador_ibfk_1` FOREIGN KEY (`id_registro`) REFERENCES `registro_usuarios` (`id_registro`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `jugador_ibfk_2` FOREIGN KEY (`id_credenciales`) REFERENCES `invitados` (`id_invitado`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `recuperar_contraseña`
@@ -336,7 +314,7 @@ ALTER TABLE `rol_jugador`
 -- Filtros para la tabla `salas`
 --
 ALTER TABLE `salas`
-  ADD CONSTRAINT `fk_id_creador` FOREIGN KEY (`id_creador`) REFERENCES `jugador` (`id_jugador`);
+  ADD CONSTRAINT `fk_id_creador` FOREIGN KEY (`id_creador`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `tipo_seleccion`
