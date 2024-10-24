@@ -1,19 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Juego con Música de Fondo</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página Principal</title>
 </head>
 <body>
-    <h1>Bienvenido a mi Juego</h1>
-    <button onclick="cambiarPagina('pagina2.html')">Ir a la Página 2</button>
-    
-    <audio id="background-music" loop>
-        <source src="music/Paulo Londra - Recién Soltera (Official Video)_aTdUOSg1Oz0.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de de audio.
-    </audio>
+  <h1>Bienvenido a la Página Principal</h1>
+  <p>Contenido de la página principal.</p>
+  <a href="pagina1.html">Ir a Página 1</a>
+  <a href="pagina2.html">Ir a Página 2</a>
 
-    <script src="musica.js"></script>
+  <!-- Audio con muted para permitir la reproducción automática -->
+  <audio id="miAudio" src="../musica/music/Paulo Londra - Recién Soltera (Official Video)_aTdUOSg1Oz0.mp3" type="audio/mpeg" autoplay loop muted></audio>
+
+  <script>
+    var audio = document.getElementById("miAudio");
+
+    // Para permitir que la música suene automáticamente
+    window.onload = function() {
+      // Intentamos desmutear el audio
+      audio.muted = false; // Desmutear al cargar la página
+
+      // Reproducir audio y asegurarnos de que se escuche
+      audio.play().catch(function(error) {
+        console.log("Error al reproducir audio: " + error);
+      });
+
+      // Guardar el tiempo actual del audio antes de salir de la página
+      window.addEventListener("beforeunload", function() {
+        localStorage.setItem("audioTime", audio.currentTime);
+      });
+
+      // Al cargar la página, continuar desde el tiempo guardado
+      var savedTime = localStorage.getItem("audioTime");
+      if (savedTime !== null) {
+        audio.currentTime = savedTime; // Continuar desde el tiempo guardado
+      }
+    };
+  </script>
 </body>
 </html>

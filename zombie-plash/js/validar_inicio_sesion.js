@@ -6,30 +6,34 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
         el.textContent = '';
     });
 
-    // Ya no necesitamos verificar que las contraseñas coincidan para el inicio de sesión
-
-    // Realizar la validación mediante AJAX
     var formData = new FormData(this);
 
     fetch('../php/inicio_sesion.php', {
         method: 'POST',
-        body: formData
+        body: formData,
+        credentials: 'include' // Asegura que las cookies de sesión se envíen
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data);  
+        console.log('Respuesta completa del servidor:', data);
         if (data.success) {
-            alert('Inicio de sesión exitoso');
-            window.location.href = '../html/inicio.html';
+            console.log('Inicio de sesión exitoso:', data.session_info);
+            alert('Inicio de sesión exitoso. Redirigiendo...');
+            window.location.href = '../html/inicio.php'; // Asegúrate de que esta ruta sea correcta
         } else {
             // Mostrar error general
-            if (data.errors.general) {
+            if (data.errors && data.errors.general) {
                 document.getElementById('generalError').textContent = data.errors.general;
+            } else {
+                document.getElementById('generalError').textContent = 'Ocurrió un error desconocido';
             }
-            // Ya no necesitamos errores específicos para nombre, correo, etc.
+        }
+        if (data.debug) {
+            console.log('Información de depuración:', data.debug);
         }
     })
     .catch(error => {
         console.error('Error:', error);
+        document.getElementById('generalError').textContent = 'Error de conexión con el servidor';
     });
 });

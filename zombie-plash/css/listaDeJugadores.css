@@ -221,3 +221,6 @@
     width: 3%;
     margin-left: 12%;
 }
+.quitar{
+    visibility: hidden;
+}

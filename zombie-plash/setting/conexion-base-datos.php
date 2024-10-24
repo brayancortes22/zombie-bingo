@@ -1,16 +1,15 @@
 <?php
 // Configuración de la base de datos
 $host = 'localhost';
-$usuario = 'root';
-$contraseña = '';
-$base_de_datos = 'Zombie_plash_bd';
+$db   = 'zombie_plash_bd';
+$user = 'root';
+$pass = '';
 
-// Conexión a la base de datos
-$conn = new mysqli($host, $usuario, $contraseña, $base_de_datos);
+$conexion = new mysqli($host, $user, $pass, $db);
 
-// Verificar la conexión
-// if ($conn->connect_error) {
-//     die("La conexión falló: " . $conn->connect_error);
-// }else{
-//     echo("conexion exitosa");
-// }
+if ($conexion->connect_error) {
+    die(json_encode(['success' => false, 'errors' => ['general' => 'Error de conexión a la base de datos: ' . $conexion->connect_error]]));
+}
+
+// Establecer el conjunto de caracteres a utf8
+$conexion->set_charset("utf8");

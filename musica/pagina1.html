@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 1</title>
+</head>
+<body>
+  <h1>Contenido de la Página 1</h1>
+  <p>Este es el contenido de la página 1.</p>
+  <a href="musica.html">Ir a Página Principal</a>
+  <a href="pagina2.html">Ir a Página 2</a>
+
+  <!-- Audio con muted para permitir la reproducción automática -->
+  <audio id="miAudio" src="../musica/music/Paulo Londra - Recién Soltera (Official Video)_aTdUOSg1Oz0.mp3" type="audio/mpeg" autoplay loop muted></audio>
+
+  <script>
+    var audio = document.getElementById("miAudio");
+
+    window.onload = function() {
+      // Intentamos desmutear el audio
+      audio.muted = false; // Desmutear al cargar la página
+
+      audio.play().catch(function(error) {
+        console.log("Error al reproducir audio: " + error);
+      });
+
+      // Guardar el tiempo actual del audio antes de salir de la página
+      window.addEventListener("beforeunload", function() {
+        localStorage.setItem("audioTime", audio.currentTime);
+      });
+
+      // Al cargar la página, continuar desde el tiempo guardado
+      var savedTime = localStorage.getItem("audioTime");
+      if (savedTime !== null) {
+        audio.currentTime = savedTime; // Continuar desde el tiempo guardado
+      }
+    };
+  </script>
+</body>
+</html>

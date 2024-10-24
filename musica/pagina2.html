@@ -1,19 +1,41 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página 2</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Página 2</title>
 </head>
-<body>
-    <h1>Estás en la Página 2</h1>
-    <button onclick="cambiarPagina('musica.html')">Volver a la Página Principal</button>
+<body >
+  <h1>Contenido de la Página 2</h1>
+  <p>Este es el contenido de la página 2.</p>
+  <a href="musica.html">Ir a Página Principal</a>
+  <a href="pagina1.html">Ir a Página 1</a>
 
-    <audio id="background-music" loop>
-        <source src="music/Paulo Londra - Recién Soltera (Official Video)_aTdUOSg1Oz0.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
-    </audio>
+  <!-- Audio con muted para permitir la reproducción automática -->
+  <audio id="miAudio" src="music/Paulo Londra - Recién Soltera (Official Video)_aTdUOSg1Oz0.mp3" type="audio/mpeg" autoplay loop muted></audio>
 
-    <script src="musica.js"></script>
+  <script>
+    var audio = document.getElementById("miAudio");
+
+    window.onload = function() {
+      // Intentamos desmutear el audio
+      audio.muted = false; // Desmutear al cargar la página
+
+      audio.play().catch(function(error) {
+        console.log("Error al reproducir audio: " + error);
+      });
+
+      // Guardar el tiempo actual del audio antes de salir de la página
+      window.addEventListener("beforeunload", function() {
+        localStorage.setItem("audioTime", audio.currentTime);
+      });
+
+      // Al cargar la página, continuar desde el tiempo guardado
+      var savedTime = localStorage.getItem("audioTime");
+      if (savedTime !== null) {
+        audio.currentTime = savedTime; // Continuar desde el tiempo guardado
+      }
+    };
+  </script>
 </body>
 </html>
