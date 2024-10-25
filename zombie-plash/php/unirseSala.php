@@ -1,38 +1,90 @@
 <?php
-// Conectar a la base de datos
-require '../setting/conexion-base-datos.php'; // Asegúrate de tener este archivo con la conexión
+session_start();
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id_sala = $_POST['idSala'];
-    $contrasena_ingresada = $_POST['contrasenaSala'];
+require '../setting/conexion-base-datos.php';
 
-    // Verificar que la sala existe y obtener la contraseña
-    $sql = "SELECT contrasena, num_jugadores, max_jugadores FROM salas WHERE id_sala = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->execute([$id_sala]);
-    $sala = $stmt->fetch(PDO::FETCH_ASSOC);
+header('Content-Type: application/json');
 
-    if ($sala) {
-        // Verificar la contraseña
-        if (password_verify($contrasena_ingresada, $sala['contrasena'])) {
-            // Verificar si la sala tiene espacio
-            if ($sala['num_jugadores'] < $sala['max_jugadores']) {
-                // Incrementar el número de jugadores en la sala
-                $sql_update = "UPDATE salas SET num_jugadores = num_jugadores + 1 WHERE id_sala = ?";
-                $stmt_update = $conexion->prepare($sql_update);
-                if ($stmt_update->execute([$id_sala])) {
-                    echo json_encode(['success' => true]);
-                } else {
-                    echo json_encode(['success' => false, 'message' => 'Error al unirse a la sala']);
-                }
-            } else {
-                echo json_encode(['success' => false, 'message' => 'La sala está llena']);
-            }
-        } else {
-            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
-        }
-    } else {
-        echo json_encode(['success' => false, 'message' => 'La sala no existe']);
+try {
+    if (!isset($_SESSION['id_usuario'])) {
+        throw new Exception('Usuario no autenticado.');
     }
+
+    $id_sala = $_POST['idSala'] ?? 0;
+    $contraseña = $_POST['contraseñaSala'] ?? '';
+    $id_registro = $_SESSION['id_usuario'];
+    $nombre_usuario = $_SESSION['nombre_usuario'];
+
+    // Verificar si existe el jugador
+    $query = "SELECT id_jugador FROM jugador WHERE id_registro = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id_registro);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 0) {
+        // Si no existe el jugador, lo creamos
+        $insert_query = "INSERT INTO jugador (id_registro, nombre) VALUES (?, ?)";
+        $stmt_insert = $conexion->prepare($insert_query);
+        $stmt_insert->bind_param("is", $id_registro, $nombre_usuario);
+        $stmt_insert->execute();
+        $id_jugador = $conexion->insert_id;
+    } else {
+        $row = $result->fetch_assoc();
+        $id_jugador = $row['id_jugador'];
+    }
+
+    // Verificar la sala y la contraseña
+    $query = "SELECT * FROM salas WHERE id_sala = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id_sala);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $sala = $result->fetch_assoc();
+
+    if (!$sala) {
+        throw new Exception('La sala no existe.');
+    }
+
+    if (!password_verify($contraseña, $sala['contraseña'])) {
+        throw new Exception('Contraseña incorrecta.');
+    }
+
+    // Verificar si el jugador ya está en la sala
+    $query = "SELECT * FROM jugadores_en_sala WHERE id_sala = ? AND id_jugador = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("ii", $id_sala, $id_jugador);
+    $stmt->execute();
+    if ($stmt->get_result()->num_rows > 0) {
+        throw new Exception('Ya estás en esta sala.');
+    }
+
+    // Unir al jugador a la sala
+    $query = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador) VALUES (?, ?, ?)";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("iis", $id_sala, $id_jugador, $nombre_usuario);
+    $stmt->execute();
+
+    // Actualizar el contador de jugadores en la sala
+    $query = "UPDATE salas SET jugadores_unidos = jugadores_unidos + 1 WHERE id_sala = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id_sala);
+    $stmt->execute();
+
+    echo json_encode([
+        'success' => true,
+        'message' => 'Te has unido a la sala con éxito.',
+        'id_sala' => $id_sala,
+        'contraseña_sala' => $contraseña,
+        'jugadores_conectados' => $sala['jugadores_unidos'] + 1,
+        'max_jugadores' => $sala['max_jugadores']
+    ]);
+} catch (Exception $e) {
+    error_log("Intentando unir jugador: id_registro = $id_registro, id_jugador = $id_jugador, id_sala = $id_sala");
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
-?>
+
+$conexion->close();
