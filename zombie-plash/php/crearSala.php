@@ -14,62 +14,78 @@ try {
     }
 
     if (!isset($_SESSION['id_usuario'])) {
-        throw new Exception('Usuario no autenticado. Información de sesión: ' . json_encode($_SESSION));
+        throw new Exception('Usuario no autenticado.');
     }
 
     $contrasena = $_POST['contraseñaSala'] ?? '';
     $num_jugadores = $_POST['maxJugadores'] ?? 0;
     $id_registro = $_SESSION['id_usuario'];
+    $nombre_usuario = $_SESSION['nombre_usuario'];
 
-    // if (empty($contrasena) || empty($num_jugadores)) {
-    //     throw new Exception('Datos incompletos');
-    // }
+    if (empty($contrasena) || empty($num_jugadores)) {
+        throw new Exception('Datos incompletos');
+    }
+
+    // Iniciar transacción
+    $conexion->begin_transaction();
 
     // Verificar si existe el jugador
-    // $query = "SELECT id_jugador FROM jugador WHERE id_registro = '$id_registro'";
-    // $result = mysqli_query($conexion, $query);
+    $query = "SELECT id_jugador FROM jugador WHERE id_registro = ?";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("i", $id_registro);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    // if (!$result) {
-    //     throw new Exception('Error en la consulta: ' . mysqli_error($conexion));
-    // }
-
-    if (mysqli_num_rows($result) == 0) {
+    if ($result->num_rows == 0) {
         // Si no existe el jugador, lo creamos
-        $insert_query = "INSERT INTO jugador (id_registro, nombre) SELECT id_registro, nombre FROM registro_usuarios WHERE id_registro = '$id_registro'";
-        if (!mysqli_query($conexion, $insert_query)) {
-            throw new Exception('Error al crear el jugador: ' . mysqli_error($conexion));
-        }
-        $id_creador = mysqli_insert_id($conexion);
+        $insert_query = "INSERT INTO jugador (id_registro, nombre) VALUES (?, ?)";
+        $stmt_insert = $conexion->prepare($insert_query);
+        $stmt_insert->bind_param("is", $id_registro, $nombre_usuario);
+        $stmt_insert->execute();
+        $id_jugador = $conexion->insert_id;
     } else {
-        $row = mysqli_fetch_assoc($result);
-        $id_creador = $row['id_jugador'];
+        $row = $result->fetch_assoc();
+        $id_jugador = $row['id_jugador'];
     }
 
     $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
-    $query = "INSERT INTO salas (id_creador, contraseña, max_jugadores, jugadores_unidos) VALUES ('$id_creador', '$contrasena_hash', '$num_jugadores', 1)";
-    
-    if (!mysqli_query($conexion, $query)) {
-        throw new Exception('Error al crear la sala: ' . mysqli_error($conexion));
+    // Crear la sala
+    $query = "INSERT INTO salas (id_creador, contraseña, max_jugadores, jugadores_unidos) VALUES (?, ?, ?, 1)";
+    $stmt = $conexion->prepare($query);
+    $stmt->bind_param("isi", $id_jugador, $contrasena_hash, $num_jugadores);
+
+    if (!$stmt->execute()) {
+        throw new Exception('Error al crear la sala: ' . $stmt->error);
     }
 
-    $id_sala = mysqli_insert_id($conexion);
-    $_SESSION['sala_actual'] = $id_sala;
+    $id_sala = $conexion->insert_id;
+
+    // Insertar al creador en jugadores_en_sala
+    $query_insertar_jugador = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador) VALUES (?, ?, ?)";
+    $stmt_insertar = $conexion->prepare($query_insertar_jugador);
+    $stmt_insertar->bind_param("iis", $id_sala, $id_jugador, $nombre_usuario);
+    
+    if (!$stmt_insertar->execute()) {
+        throw new Exception('Error al insertar jugador en la sala: ' . $stmt_insertar->error);
+    }
+
+    // Confirmar transacción
+    $conexion->commit();
 
     $respuesta = [
         'success' => true,
         'id_sala' => $id_sala,
-        'nombre_jugador' => $datos_sala['nombre'],
-        'correo_jugador' => $datos_sala['correo'],
-        'contraseña_sala' => $contrasena, // Usamos la contraseña sin hash
-        'max_jugadores' => $datos_sala['max_jugadores'],
-        'jugadores_conectados' => 1 // Inicialmente solo el creador está conectado
+        'nombre_jugador' => $nombre_usuario,
+        'contraseña_sala' => $contrasena,
+        'max_jugadores' => $num_jugadores,
+        'jugadores_conectados' => 1
     ];
 
     echo json_encode($respuesta);
 } catch (Exception $e) {
+    $conexion->rollback();
     echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
 
-mysqli_close($conexion);
-
+$conexion->close();
