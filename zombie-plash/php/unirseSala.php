@@ -59,7 +59,10 @@ try {
     $stmt->bind_param("ii", $id_sala, $id_jugador);
     $stmt->execute();
     if ($stmt->get_result()->num_rows > 0) {
-        throw new Exception('Ya estás en esta sala.');
+        throw new Exception('Ya estás en esta sala.' );
+        // lo redirige a jugadores sala
+        // por el windos location en php
+        
     }
 
     // Unir al jugador a la sala

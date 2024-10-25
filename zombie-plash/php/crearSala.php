@@ -77,10 +77,12 @@ try {
         'success' => true,
         'id_sala' => $id_sala,
         'nombre_jugador' => $nombre_usuario,
-        'contraseña_sala' => $contrasena,
+        'contraseña_sala' => $contrasena, // Contraseña sin hash
         'max_jugadores' => $num_jugadores,
         'jugadores_conectados' => 1
     ];
+
+    $_SESSION['datosSala'] = $respuesta; // Guardar en la sesión
 
     echo json_encode($respuesta);
 } catch (Exception $e) {
