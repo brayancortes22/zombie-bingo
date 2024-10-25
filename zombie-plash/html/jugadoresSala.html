@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -11,7 +11,23 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <title>Crea tu sala</title>
+    <title>Jugadores en la Sala</title>
+    <style>
+   
+        /* Estilo para la barra de desplazamiento */
+        #contenedorJugadores::-webkit-scrollbar {
+            width: 10px;
+        }
+        #contenedorJugadores::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        #contenedorJugadores::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+        #contenedorJugadores::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -41,19 +57,8 @@
                     </div>
                 </div>
                 <div class="titulo"><strong>Jugadores en la sala</strong></div>
-                <div class="row1" id="circulosJugadores">
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                </div>
-                <div class="row2" id="nombresJugadores">
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
+                <div id="contenedorJugadores">
+                    <!-- Aquí se generarán dinámicamente las filas de jugadores -->
                 </div>
             </div>
         </div>
@@ -67,34 +72,54 @@
             document.getElementById('jugadoresConectados').textContent = datosSala.jugadores_conectados + '/' + datosSala.max_jugadores;
             document.getElementById('contraseñaSala').textContent = datosSala.contraseña_sala;
 
-            // Función para actualizar la lista de jugadores
             function actualizarJugadores() {
                 fetch('../php/obtenerJugadoresSala.php?id_sala=' + datosSala.id_sala)
                     .then(response => response.json())
                     .then(jugadores => {
                         console.log("Jugadores recibidos:", jugadores);
-                        const circulosJugadores = document.getElementById('circulosJugadores').children;
-                        const nombresJugadores = document.getElementById('nombresJugadores').children;
+                        const contenedorJugadores = document.getElementById('contenedorJugadores');
+                        contenedorJugadores.innerHTML = ''; // Limpiar el contenedor
 
-                        // Actualizar cada posición de jugador
-                        for (let i = 0; i < circulosJugadores.length; i++) {
-                            const circulo = circulosJugadores[i].querySelector('.circulo');
-                            const nombreElement = nombresJugadores[i];
+                        const totalFilas = Math.ceil(datosSala.max_jugadores / 5);
 
-                            if (i < jugadores.length) {
-                                // Jugador conectado
-                                circulo.style.backgroundColor = '#00ff00'; // Verde para jugadores conectados
-                                nombreElement.textContent = jugadores[i].nombre_jugador;
-                                console.log(`Actualizando jugador ${i}: ${jugadores[i].nombre_jugador}`);
-                            } else {
-                                // Espacio vacío
-                                circulo.style.backgroundColor = '#ff0000'; // Rojo para espacios vacíos
-                                nombreElement.textContent = 'Esperando jugador...';
-                                console.log(`Posición ${i}: Esperando jugador`);
+                        for (let i = 0; i < totalFilas; i++) {
+                            const filaJugadores = document.createElement('div');
+                            filaJugadores.className = 'fila-jugadores';
+
+                            const filaCirculos = document.createElement('div');
+                            filaCirculos.className = 'row1';
+                            
+                            const filaNombres = document.createElement('div');
+                            filaNombres.className = 'row2';
+
+                            for (let j = 0; j < 5; j++) {
+                                const index = i * 5 + j;
+                                const colCirculo = document.createElement('div');
+                                colCirculo.className = 'col2';
+                                const circulo = document.createElement('div');
+                                circulo.className = 'circulo';
+                                colCirculo.appendChild(circulo);
+                                filaCirculos.appendChild(colCirculo);
+
+                                const colNombre = document.createElement('div');
+                                colNombre.className = 'col2';
+                                
+                                if (index < jugadores.length) {
+                                    circulo.style.backgroundColor = '#00ff00';
+                                    colNombre.textContent = jugadores[index].nombre_jugador;
+                                } else {
+                                    circulo.style.backgroundColor = '#ff0000';
+                                    colNombre.textContent = 'Esperando jugador...';
+                                }
+                                
+                                filaNombres.appendChild(colNombre);
                             }
+
+                            filaJugadores.appendChild(filaCirculos);
+                            filaJugadores.appendChild(filaNombres);
+                            contenedorJugadores.appendChild(filaJugadores);
                         }
 
-                        // Actualizar el contador de jugadores conectados
                         document.getElementById('jugadoresConectados').textContent = jugadores.length + '/' + datosSala.max_jugadores;
                     })
                     .catch(error => {
@@ -102,7 +127,6 @@
                     });
             }
 
-            // Actualizar jugadores inmediatamente y cada 5 segundos
             actualizarJugadores();
             setInterval(actualizarJugadores, 5000);
         }
