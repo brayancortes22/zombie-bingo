@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -11,7 +11,23 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <title>Crea tu sala</title>
+    <title>Jugadores en la Sala</title>
+    <style>
+   
+        /* Estilo para la barra de desplazamiento */
+        #contenedorJugadores::-webkit-scrollbar {
+            width: 10px;
+        }
+        #contenedorJugadores::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        #contenedorJugadores::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+        #contenedorJugadores::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -41,104 +57,16 @@
                     </div>
                 </div>
                 <div class="titulo"><strong>Jugadores en la sala</strong></div>
-                <div class="row1" id="circulosJugadores">
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                    <div class="col2"><div class="circulo"></div></div>
-                </div>
-                <div class="row2" id="nombresJugadores">
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
-                    <div class="col2">Esperando jugador...</div>
+                <div id="contenedorJugadores">
+                    <!-- Aquí se generarán dinámicamente las filas de jugadores -->
                 </div>
             </div>
         </div>
     </div>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const datosSala = JSON.parse(localStorage.getItem('datosSala'));
-
-        if (datosSala) {
-            document.getElementById('idSala').textContent = datosSala.id_sala;
-            document.getElementById('jugadoresConectados').textContent = datosSala.jugadores_conectados + '/' + datosSala.max_jugadores;
-            document.getElementById('contraseñaSala').textContent = datosSala.contraseña_sala;
-
-            // Función para actualizar la lista de jugadores
-            function actualizarJugadores() {
-                fetch('../php/obtenerJugadoresSala.php?id_sala=' + datosSala.id_sala)
-                    .then(response => response.json())
-                    .then(jugadores => {
-                        console.log("Jugadores recibidos:", jugadores);
-                        const circulosJugadores = document.getElementById('circulosJugadores').children;
-                        const nombresJugadores = document.getElementById('nombresJugadores').children;
-
-                        // Actualizar cada posición de jugador
-                        for (let i = 0; i < circulosJugadores.length; i++) {
-                            const circulo = circulosJugadores[i].querySelector('.circulo');
-                            const nombreElement = nombresJugadores[i];
-
-                            if (i < jugadores.length) {
-                                // Jugador conectado
-                                circulo.style.backgroundColor = '#00ff00'; // Verde para jugadores conectados
-                                nombreElement.textContent = jugadores[i].nombre_jugador;
-                                console.log(`Actualizando jugador ${i}: ${jugadores[i].nombre_jugador}`);
-                            } else {
-                                // Espacio vacío
-                                circulo.style.backgroundColor = '#ff0000'; // Rojo para espacios vacíos
-                                nombreElement.textContent = 'Esperando jugador...';
-                                console.log(`Posición ${i}: Esperando jugador`);
-                            }
-                        }
-
-                        // Actualizar el contador de jugadores conectados
-                        document.getElementById('jugadoresConectados').textContent = jugadores.length + '/' + datosSala.max_jugadores;
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener jugadores:', error);
-                    });
-            }
-
-            // Actualizar jugadores inmediatamente y cada 5 segundos
-            actualizarJugadores();
-            setInterval(actualizarJugadores, 5000);
-        }
-    });
-
-    function cancelarSala() {
-        const datosSala = JSON.parse(localStorage.getItem('datosSala'));
-        console.log('Datos de la sala:', datosSala); // Añade este log
-        if (datosSala && datosSala.id_sala) {
-            if (confirm('¿Estás seguro de que quieres cancelar la sala?')) {
-                fetch('../php/cancelarSala.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ id_sala: datosSala.id_sala })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('La sala ha sido cancelada exitosamente.');
-                        localStorage.removeItem('datosSala');
-                        window.location.href = 'inicio.php'; // Redirige al usuario a la página de inicio
-                    } else {
-                        alert('Error al cancelar la sala: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Ocurrió un error al intentar cancelar la sala.');
-                });
-            }
-        } else {
-            alert('No se encontraron datos de la sala.');
-        }
-    }
+    
     </script>
+    <!-- <script src="../js/jugadoresSala_conectado.js"></script> -->
+    <script src="../js/jugadoresSala.js"></script>
 </body>
 </html>
