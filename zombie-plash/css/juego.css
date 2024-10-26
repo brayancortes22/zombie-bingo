@@ -19,7 +19,7 @@
     flex-direction: column;
     color: white; /* Cambia el color del texto para que sea visible */
     width: 100%;
-    z-index: 1;
+    z-index: 3;
 }
 .fila{
     border: solid black 3px;
@@ -68,8 +68,8 @@
     color: rgb(219, 159, 30)
 }
 .fila2{
-    border: solid black 3px;
-    height: 20%;
+    border: solid rgb(10, 214, 13) 3px;
+    height: 15%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -80,38 +80,127 @@
     width: 30%;
     border: solid rgb(194, 50, 50) 3px;
     border-radius: 40px;
-     background-color:rgba(243, 122, 122, 0.733)
+     background-color:rgba(243, 122, 122, 0.733);
+     margin-top: 2%;
+     margin-left: -2%;
 
 }
 .fila3{
     border: solid black 3px;
-    height: 100%;
+    height: 69%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: start;
+    margin-top: 3%;
 }
 .izquierda{
     width: 20%;
-    height: 80%;
-    border: solid rgb(29, 196, 65) 4px;
+    height: 90%;
+    border: solid rgb(29, 196, 65) 2px;
     border-radius: 50px;
     margin-left: 4%;
     margin-right: 4%;
     background-color: darkolivegreen;
+    filter: drop-shadow(0px 0px 12px rgb(12, 221, 26));
 }
 .centro{
-    width: 50%;
-    height: 80%;
+    
     border: solid black 4px;
+    background-image: url('../img/perfilJugador.jpeg');
+    width:35%;           /* Ancho del cuadro */
+    height: 90%;          /* Alto del cuadro */
+    background-size: cover; /* Escala la imagen para que cubra todo el cuadro */
+    background-position: center; /* Centra la imagen en el cuadro */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    border: 8px solid #000; /* Opcional: un borde para que se vea el cuadro */
+    overflow: hidden;       /* Asegura que nada se salga del cuadro */
+    border-radius: 50px;
    
 }
 .derecha{
     width: 30%;
-    height: 100%;
+    height: 80%;
     border: solid black 4px;
+    display: flex;
+    justify-content: center;
+  
 }
-img{
+
+
+.bingo{
+    width: 70%;
+    height: 26%;
+    border: solid black 2px;
+    border-radius: 20px;
+    background-color: limegreen;
+    color: aliceblue;
+    font-size: 40px;
+
+}
+.fila1{
+    border: solid rgb(255, 9, 9) 2px;
+    height: 15%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: goldenrod;
+    margin-top: 1%;
+    font-family:fantasy;
+    font-weight: 700;
+
+}
+.columna{
+    
     height: 100%;
+    width: 13%;
+    font-size: 80px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 50%;
+    margin-left: 2%;
+    margin-right: 2%;
+
+}
+.bh{
+    height:100%;
+    width: 100%;
+    background-color: limegreen;
+    border-radius: 20px;
+    font-size: 40px !important;
+    text-align: center;
+    filter: drop-shadow(0px 0px 12px rgb(12, 221, 26));
+    color: white;
+}
+.fila5{
+    
+    width: 100%;
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.6%;
+    
+
+}
+.columna1{
+  
+    height: 100%;
+    width: 13%;
+    font-size: 90px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    border-radius: 50%;
+    margin-left: 2%;
+    margin-right: 2%;
+    background-color: rgb(184, 6, 6);
+
+
+}
+.bi{
+    border: #000 solid 2px;
+    font-size: 20px;
 }
