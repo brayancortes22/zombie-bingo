@@ -1,9 +1,8 @@
 // js/musica.js
 
 // Cargar o inicializar el audio
-let audioJuego = new Audio("../musica/fondo.mp3");
+let audioJuego = new Audio("../musica/esta.mp3");
 audioJuego.loop = true;
-audioJuego.volume = 1.0;
 
 // Restaurar el tiempo guardado, si existe
 let savedTime = localStorage.getItem("audioTime");
@@ -12,7 +11,8 @@ if (savedTime) {
 }
 
 // Función para controlar el volumen en la página específica
-let estadoSonido = 2; // 2 = volumen completo, 1 = 50%, 0 = muteado
+let estadoSonido = localStorage.getItem("estadoSonido") || 2; // 2 = volumen completo, 1 = 50%, 0 = muteado
+audioJuego.volume = estadoSonido === "0" ? 0 : (estadoSonido === "1" ? 0.5 : 1.0);
 
 function controlarSonido() {
     const icono = document.getElementById("icono-sonido");
@@ -30,12 +30,18 @@ function controlarSonido() {
         icono.className = "fas fa-volume-up";
         estadoSonido = 2;
     }
+
+    // Guardar el estado de sonido en localStorage
+    localStorage.setItem("estadoSonido", estadoSonido);
 }
 
-// Reproducir el audio al cargar la primera vez
-audioJuego.play().catch(error => console.log("Error al reproducir audio:", error));
+// Llamar a initAudio solo cuando el usuario haga clic
+function initAudio() {
+    audioJuego.play().catch(error => console.log("Error al reproducir audio:", error));
+}
 
-// Guardar el tiempo actual antes de salir
-window.addEventListener("beforeunload", function () {
-    localStorage.setItem("audioTime", audioJuego.currentTime);
+// Agregar el evento al botón de sonido para controlar el sonido y reproducir el audio
+document.addEventListener("click", function() {
+    initAudio();
+    document.removeEventListener("click", arguments.callee); // Remueve el listener después de la primera interacción
 });

@@ -14,7 +14,7 @@
     <script async data-id="five-server" data-file="c:\xampp\htdocs\zombie-bingo\zombie-plash\html\inicio copy.html" type="application/javascript" src="/fiveserver.js"></script>
 </head>
 <body>
-    <audio id="audio-juego" src="../musica/Paulo Londra - Recién Soltera (Official Video)_aTdUOSg1Oz0.mp3" loop></audio> <!-- Añadido el elemento de audio -->
+    <audio id="audio-juego" src="../musica/esta.mp3" loop></audio> <!-- Añadido el elemento de audio -->
     
     <div class="container-fluid">
         <div class="imagen">
@@ -32,10 +32,11 @@
             <div class="izquierda">
                 <div class="col1">
                     <div class="sonido">
-                        <button type="button" class="bsonido" onclick="controlarSonido()">
+                        <button type="button" class="bsonido" onclick="controlarSonido(); initAudio();">
                             <i id="icono-sonido" class="fas fa-volume-up"></i>
                         </button>
                     </div>
+                    
                     <div class="conpartir">
                         <button type="button" class="bconpartir">
                             <i class="fas fa-share-alt"></i>
@@ -72,3 +73,5 @@
             </div>
         </div>
     </div>
+</body>
+</html>
