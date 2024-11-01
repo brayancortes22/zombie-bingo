@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-10-2024 a las 05:37:18
+-- Tiempo de generación: 25-10-2024 a las 22:40:29
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -99,12 +99,9 @@ CREATE TABLE `jugadores_en_sala` (
 --
 
 INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`) VALUES
-(27, 28, 1, 'bscl'),
-(30, 28, 2, 'bsl-1'),
-(31, 28, 3, 'bscl-2'),
-(32, 28, 4, 'bsl-3'),
-(33, 28, 5, 'bscl-4'),
-(34, 28, 6, 'bscl-5');
+(71, 53, 1, 'bscl'),
+(72, 53, 6, 'bscl-5'),
+(73, 53, 3, 'bscl-2');
 
 -- --------------------------------------------------------
 
@@ -221,7 +218,7 @@ CREATE TABLE `salas` (
 --
 
 INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`) VALUES
-(28, 1, '$2y$10$2Wg4ioqKglRLSmKAUXFK/eEP.5d6pFh3vfnKTV738UzEP/FlVhSMy', 11, 6);
+(53, 1, '$2y$10$3Wte5rG5w6Y2Glo6wumr/.IU60k4GHN42o.nE1o1Raab9p9ShKTx.', 2, 3);
 
 -- --------------------------------------------------------
 
@@ -343,7 +340,7 @@ ALTER TABLE `jugador`
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
@@ -355,7 +352,7 @@ ALTER TABLE `registro_usuarios`
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- Restricciones para tablas volcadas

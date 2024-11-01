@@ -1,0 +1,13 @@
+*{
+    font-family: 'Z-2', sans-serif;   
+    padding: 0%;
+    margin: 0%;
+}
+
+
+@font-face {
+    font-family: 'Z-2'; /* Nombre que le das a la fuente */
+    src: url('../fonts/hola/halloweek-webfont.woff2') format('woff2');/* Ruta al archivo de la fuente */ 
+    font-weight: normal; /* Peso de la fuente */
+    font-style: normal;  /* Estilo de la fuente */
+}

@@ -45,6 +45,12 @@ try {
     $result = $stmt->get_result();
     $sala = $result->fetch_assoc();
 
+
+    // Verificar si la sala está llena
+    if ($sala['jugadores_unidos'] >= $sala['max_jugadores']) {
+        throw new Exception('La sala está llena.');
+    }
+
     if (!$sala) {
         throw new Exception('La sala no existe.');
     }
