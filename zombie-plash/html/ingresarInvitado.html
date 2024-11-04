@@ -30,10 +30,10 @@
                 <div class="texto">
                     Ingresar como invitado
                 </div>
-                <form id="formulario" action="../php/invitado.php" method="post">
+                <form id="formulario" method="post">
                     <div class="formulario"><br><br>
-                        <label for="fname"><strong>Apodo del jugador</strong></label>
-                        <input type="text" id="apodo" name="apodo" type="submit" maxlength="12" required>
+                        <label for="apodo"><strong>Apodo del jugador</strong></label>
+                        <input type="text" id="apodo" name="apodo" maxlength="12" required>
                         <span id="apodoError" class="error"></span>
                     </div><br>
                     <div class="recomendaciones">
@@ -53,10 +53,8 @@
                 </div>
                 </a>
                 <div class="Aceptar">
-
-                    <button class="btn success"><strong>Aceptar</strong></button>
+                    <button type="submit" class="btn success"><strong>Aceptar</strong></button>
                 </div>
-
             </div>
             </form>
             <div class="zombi">

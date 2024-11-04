@@ -1,33 +1,52 @@
-document.getElementById('formulario').addEventListener('submit', function(e) {
-    e.preventDefault();
+$(document).ready(function() {
+    console.log('Script cargado correctamente');
 
-    // Limpiar mensajes de error previos
-    document.querySelectorAll('.error').forEach(function(el) {
-        el.textContent = '';
-    });
- 
-    // Realizar la validación mediante AJAX
-    var formData = new FormData(document.querySelector('form'));
-
-    fetch('../php/invitado.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);  
-        if (data.success) {
-            alert('Registro exitoso');
-            window.location.href = '../html/inicio.html';
-        } else {
-            // Mostrar errores específicos
-            if (data.errors.apodo) {
-                document.getElementById('apodoError').textContent = data.errors.apodo;
-            
-            }
+    $('#formulario').on('submit', function(e) {
+        e.preventDefault();
+        console.log('Formulario enviado');
+        
+        const apodo = $('#apodo').val().trim();
+        console.log('Apodo a enviar:', apodo);
+        
+        // Validación básica
+        if (apodo.length < 3) {
+            $('#apodoError').text('El apodo debe tener al menos 3 caracteres');
+            return;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
+        
+        // Mostrar que se está procesando
+        $('#apodoError').text('Procesando...');
+        
+        // Enviar datos mediante AJAX
+        $.ajax({
+            url: '../php/registrar_invitado.php',
+            type: 'POST',
+            data: { apodo: apodo },
+            dataType: 'json',
+            success: function(response) {
+                console.log('Respuesta completa del servidor:', response);
+                if (response.success) {
+                    alert('Registro exitoso');
+                    window.location.href = './inicio.php';
+                } else {
+                    $('#apodoError').text(response.message || 'Error al registrar');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Error detallado:', {
+                    error: error,
+                    status: status,
+                    responseText: xhr.responseText
+                });
+                
+                // Intentar parsear la respuesta por si es JSON
+                try {
+                    const errorResponse = JSON.parse(xhr.responseText);
+                    $('#apodoError').text(errorResponse.message || 'Error en el servidor');
+                } catch(e) {
+                    $('#apodoError').text('Error en el servidor: ' + xhr.responseText);
+                }
+            }
+        });
     });
 });
