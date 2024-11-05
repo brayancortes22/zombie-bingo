@@ -23,9 +23,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         const filaCirculos = document.createElement('div');
                         filaCirculos.className = 'row1';
+                        filaCirculos.style.backgroundImage = "url('../img/huellas2.jpg')";
+                        filaCirculos.style.backgroundSize = "cover";
+                        filaCirculos.style.backgroundPosition = "center";
                         
                         const filaNombres = document.createElement('div');
                         filaNombres.className = 'row2';
+                        filaNombres.style.backgroundImage = "url('../img/huellas2.jpg')";
+                        filaNombres.style.backgroundSize = "cover";
+                        filaNombres.style.backgroundPosition = "center";
 
                         for (let j = 0; j < 5; j++) {
                             const index = i * 5 + j;
