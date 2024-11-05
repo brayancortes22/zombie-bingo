@@ -14,22 +14,7 @@
     <link rel="stylesheet" href="../css/fuentes.css">
 
     <title>Jugadores en la Sala</title>
-    <style>
    
-        /* Estilo para la barra de desplazamiento */
-        #contenedorJugadores::-webkit-scrollbar {
-            width: 10px;
-        }
-        #contenedorJugadores::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        #contenedorJugadores::-webkit-scrollbar-thumb {
-            background: #888;
-        }
-        #contenedorJugadores::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
-    </style>
 </head>
 <body>
     <div class="container-fluid">
@@ -45,14 +30,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col ci">
-                        <i class="bi bi-person-add icono"></i>
-                    </div>
+                    
                     <div class="col contenedor quitar"></div>
                     <div class="col linia">Contraseña</div>
                     <div class="col contenedor" id="contraseñaSala"></div>
                     <div class="col">
-                        <button type="button" class="botonrojo" onclick="cancelarSala()"><strong>Cancelar sala</strong></button>
+                        <button type="button" class="botonrojo texto" onclick="cancelarSala()"><h5>Cancelar sala</h5></button>
                         <!-- boton para devolver al inicio del juego -->
                         <button type="button" class="botonrojo" onclick="window.location.href='./inicio.php'"><strong>salir</strong></button>
                 

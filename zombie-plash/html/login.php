@@ -27,8 +27,8 @@ if (isset($_SESSION['id_usuario'])) {
         <div class="cuadro">
             <div class="largo">
                 <div class="invitado">
-                    <a href="./ingresarInvitado.html">
-                        <button type="button" class="btn success"><strong>Ingresar como invitado</strong></button>
+                    <a href="">
+                        <button type="button" class="btn success"><strong>Ver juego</strong></button>
                     </a>
                 </div>
                 <div class="cuenta">
