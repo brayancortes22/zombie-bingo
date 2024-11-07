@@ -1,5 +1,6 @@
 .container-fluid{
-    background-color: black;
+   background-image: url(../img/fondo_login.jpg);
+    background-size: contain;
     height: 100vh;
     display: flex;
 }
