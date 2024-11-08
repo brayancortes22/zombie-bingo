@@ -1,20 +1,21 @@
 .container-fluid{
-    background-color: black;
+    background-image: url(../img/fondo_login.jpg);
+    width: 100%;
     height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
-form{
-    height: 200px;
-}
+
 .cuadro{
     border: solid 6px #6a5303; 
     height: 80%;
     width: 50%;
-    margin-left: 24%;
     border-radius: 30px;
     background-color: #384639;
     box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
-    margin-top: 4%;
+   
     
 }
 .titulo{
@@ -25,110 +26,40 @@ form{
     margin-top: 2%;
 }
 .texto{
-    height: 49%;
-    width: 58%;
-    font-size: 23px;
-    margin-left: 35%;
-    margin-top: 4%;
-    color:#26c218;
-}
-.ingresar{
-    color:#26c218;
-    height: 10%;
-    width: 100%;
-    text-align: center;
-    font-size: 25px;
-    margin-top: -10%;
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-.largo{
+    font-size: 30px;
+    color: white;
+    border: solid white 2px;
     display: flex;
-    flex-direction: row;
-    height: 8%;
-    position: absolute;
-    width: 50%;
     margin-top: 3%;
-    border: none;
-}
-.cancelar{
-    width: 20%;
-    border-radius: 30px;
-    background-color: red;
-    margin-left: 120px;
-    filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
-
- }
-.Aceptar{
-    width: 20%;
-    margin-left: 22%;
-    border-radius: 30px;
-    background-color: #26c218;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-}
-.btn{
-    border: none;
-    height: 100%;
-    width: 100%;
-    border-radius: 30px ;
-}
-.zombie{
-    position: absolute;
-    top: -690%;
-    left: 10%;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-}
-img{
-    height: 100%;
-    width: 115px;
-}
-.zombie2{
-    position: absolute;
-    top: 7%;
-    left: 0%;
-    height: 50px;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-}
-.tamaño{
-    height: 1000%;
-    width: 300px;
-}
-.zombie3{
-    position: absolute;
-    top: -2%;
-    left: 80%;
-    height: 60px;
-    filter: drop-shadow(0px 0px 12px rgb(64, 157, 201));
-}
-.tamaño3{
-    height: 1000%;
-    width: 200px;
-}
-.fila{
-    width: 53%;
-    height: 15%;
-    margin-left: 23%;
-    display: flex;
-    flex-direction: row;
-    margin-top: -1%;
+    justify-content: center;
     
 }
-.col{
-    width: 5%;
-    height: 100%;
-    margin: 2%;
-    border-radius: 15px;
-    background-color: white;
-    box-shadow: 6px 3px 1px #26c218; /* sombra en la derecha y parte inferior */
+.ingresar{
+    border: solid white 2px;
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: white;   
+}
+.formulario{
+    display: flex;
+    border: solid white 2px;
+    height: 40vh;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+.fila{
+    display: flex;
+    height: 6%;
+    width: 100%;
+    border: solid white 2px;
+    justify-content: center;
+    align-items: center;
 }
 .cua{
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    border: none;
-}
-input{
-    text-align: center;
-    font-size:28px !important;
-    font-weight: 100 !important;
+    border-radius: 50px;
+    height: 6vh;
 }
