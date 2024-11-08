@@ -1,93 +1,160 @@
 <?php
+ob_start(); // Iniciar buffer de salida
+header('Content-Type: application/json; charset=utf-8');
+
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require '../setting/conexion-base-datos.php'; // Asegúrate de tener este archivo con la conexión
+require '../setting/conexion-base-datos.php';
 
-header('Content-Type: application/json');
+class CrearSala {
+    private $pdo;
+    private $response;
+    private $id_usuario;
+    private $nombre_usuario;
+    private $contrasena;
+    private $num_jugadores;
+    private $id_jugador;
+    private $id_sala;
 
-try {
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        throw new Exception('Método no permitido');
+    public function __construct() {
+        try {
+            $conexion = new Conexion();
+            $this->pdo = $conexion->conectar();
+            $this->response = ['success' => false, 'message' => ''];
+            $this->id_usuario = $_SESSION['id_usuario'] ?? null;
+            $this->nombre_usuario = $_SESSION['nombre_usuario'] ?? null;
+        } catch (Exception $e) {
+            $this->response = [
+                'success' => false,
+                'message' => 'Error de conexión: ' . $e->getMessage()
+            ];
+        }
     }
 
-    if (!isset($_SESSION['id_usuario'])) {
-        throw new Exception('Usuario no autenticado.');
+    private function validarEntrada() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            throw new Exception('Método no permitido');
+        }
+
+        if (!$this->id_usuario || !$this->nombre_usuario) {
+            throw new Exception('Usuario no autenticado o sesión expirada');
+        }
+
+        $this->contrasena = $_POST['contraseñaSala'] ?? '';
+        $this->num_jugadores = intval($_POST['maxJugadores'] ?? 0);
+
+        if (empty($this->contrasena) || $this->num_jugadores < 2 || $this->num_jugadores > 4) {
+            throw new Exception('Datos de entrada inválidos');
+        }
     }
 
-    $contrasena = $_POST['contraseñaSala'] ?? '';
-    $num_jugadores = $_POST['maxJugadores'] ?? 0;
-    $id_registro = $_SESSION['id_usuario'];
-    $nombre_usuario = $_SESSION['nombre_usuario'];
+    private function obtenerOCrearJugador() {
+        $query = "SELECT id_jugador FROM jugador WHERE id_registro = :id_registro";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id_registro' => $this->id_usuario]);
+        $result = $stmt->fetch();
 
-    if (empty($contrasena) || empty($num_jugadores)) {
-        throw new Exception('Datos incompletos');
+        if (!$result) {
+            $insert_query = "INSERT INTO jugador (id_registro, nombre) VALUES (:id_registro, :nombre)";
+            $stmt = $this->pdo->prepare($insert_query);
+            $stmt->execute([
+                'id_registro' => $this->id_usuario,
+                'nombre' => $this->nombre_usuario
+            ]);
+            $this->id_jugador = $this->pdo->lastInsertId();
+        } else {
+            $this->id_jugador = $result['id_jugador'];
+        }
     }
 
-    // Iniciar transacción
-    $conexion->begin_transaction();
+    private function crearSala() {
+        $contrasena_hash = password_hash($this->contrasena, PASSWORD_DEFAULT);
+        
+        $query = "INSERT INTO salas (id_creador, contraseña, max_jugadores, jugadores_unidos) 
+                 VALUES (:id_jugador, :contrasena, :max_jugadores, 1)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            'id_jugador' => $this->id_jugador,
+            'contrasena' => $contrasena_hash,
+            'max_jugadores' => $this->num_jugadores
+        ]);
 
-    // Verificar si existe el jugador
-    $query = "SELECT id_jugador FROM jugador WHERE id_registro = ?";
-    $stmt = $conexion->prepare($query);
-    $stmt->bind_param("i", $id_registro);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows == 0) {
-        // Si no existe el jugador, lo creamos
-        $insert_query = "INSERT INTO jugador (id_registro, nombre) VALUES (?, ?)";
-        $stmt_insert = $conexion->prepare($insert_query);
-        $stmt_insert->bind_param("is", $id_registro, $nombre_usuario);
-        $stmt_insert->execute();
-        $id_jugador = $conexion->insert_id;
-    } else {
-        $row = $result->fetch_assoc();
-        $id_jugador = $row['id_jugador'];
+        $this->id_sala = $this->pdo->lastInsertId();
     }
 
-    $contrasena_hash = password_hash($contrasena, PASSWORD_DEFAULT);
-
-    // Crear la sala
-    $query = "INSERT INTO salas (id_creador, contraseña, max_jugadores, jugadores_unidos) VALUES (?, ?, ?, 1)";
-    $stmt = $conexion->prepare($query);
-    $stmt->bind_param("isi", $id_jugador, $contrasena_hash, $num_jugadores);
-
-    if (!$stmt->execute()) {
-        throw new Exception('Error al crear la sala: ' . $stmt->error);
+    private function agregarJugadorASala() {
+        $query = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador) 
+                 VALUES (:id_sala, :id_jugador, :nombre_jugador)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            'id_sala' => $this->id_sala,
+            'id_jugador' => $this->id_jugador,
+            'nombre_jugador' => $this->nombre_usuario
+        ]);
     }
 
-    $id_sala = $conexion->insert_id;
+    private function prepararRespuesta() {
+        $this->response = [
+            'success' => true,
+            'id_sala' => $this->id_sala,
+            'nombre_jugador' => $this->nombre_usuario,
+            'contraseña_sala' => $this->contrasena,
+            'max_jugadores' => $this->num_jugadores,
+            'jugadores_conectados' => 1
+        ];
 
-    // Insertar al creador en jugadores_en_sala
-    $query_insertar_jugador = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador) VALUES (?, ?, ?)";
-    $stmt_insertar = $conexion->prepare($query_insertar_jugador);
-    $stmt_insertar->bind_param("iis", $id_sala, $id_jugador, $nombre_usuario);
-    
-    if (!$stmt_insertar->execute()) {
-        throw new Exception('Error al insertar jugador en la sala: ' . $stmt_insertar->error);
+        $_SESSION['datosSala'] = $this->response;
     }
 
-    // Confirmar transacción
-    $conexion->commit();
+    public function crearNuevaSala() {
+        try {
+            $this->validarEntrada();
+            
+            $this->pdo->beginTransaction();
+            
+            $this->obtenerOCrearJugador();
+            $this->crearSala();
+            $this->agregarJugadorASala();
+            $this->prepararRespuesta();
+            
+            $this->pdo->commit();
 
-    $respuesta = [
-        'success' => true,
-        'id_sala' => $id_sala,
-        'nombre_jugador' => $nombre_usuario,
-        'contraseña_sala' => $contrasena, // Contraseña sin hash
-        'max_jugadores' => $num_jugadores,
-        'jugadores_conectados' => 1
-    ];
+        } catch (Exception $e) {
+            if ($this->pdo && $this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            $this->response = [
+                'success' => false,
+                'message' => $e->getMessage(),
+                'debug' => [
+                    'post_data' => $_POST,
+                    'session_data' => [
+                        'id_usuario' => $this->id_usuario,
+                        'nombre_usuario' => $this->nombre_usuario
+                    ]
+                ]
+            ];
+        }
 
-    $_SESSION['datosSala'] = $respuesta; // Guardar en la sesión
-
-    echo json_encode($respuesta);
-} catch (Exception $e) {
-    $conexion->rollback();
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+        return $this->response;
+    }
 }
 
-$conexion->close();
+// Limpiar cualquier salida previa
+ob_clean();
+
+try {
+    $creadorSala = new CrearSala();
+    $resultado = $creadorSala->crearNuevaSala();
+} catch (Exception $e) {
+    $resultado = [
+        'success' => false,
+        'message' => 'Error del sistema: ' . $e->getMessage()
+    ];
+}
+
+echo json_encode($resultado);
+exit;
