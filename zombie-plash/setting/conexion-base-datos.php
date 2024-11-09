@@ -13,7 +13,7 @@ class Conexion{
     private $pdo;
 
     public function __construct(){
-        echo "Construyendo objeto...<br>";
+        //echo "Construyendo objeto...<br>";
         $this->servidor="localhost";
         $this->usuario="root";
         $this->password="";
@@ -43,8 +43,15 @@ class Conexion{
 
         return $this->pdo;
     }
+    
 }
 
-// echo "Creando instancia de Conexion...<br>";
+
+
+ // Método para consultar usuarios
+
+
+    // echo "Creando instancia de Conexion...<br>";
 $conexion = new Conexion();
+
 ?>

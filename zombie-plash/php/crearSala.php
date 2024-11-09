@@ -1,7 +1,4 @@
 <?php
-ob_start(); // Iniciar buffer de salida
-header('Content-Type: application/json; charset=utf-8');
-
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
@@ -20,18 +17,11 @@ class CrearSala {
     private $id_sala;
 
     public function __construct() {
-        try {
-            $conexion = new Conexion();
-            $this->pdo = $conexion->conectar();
-            $this->response = ['success' => false, 'message' => ''];
-            $this->id_usuario = $_SESSION['id_usuario'] ?? null;
-            $this->nombre_usuario = $_SESSION['nombre_usuario'] ?? null;
-        } catch (Exception $e) {
-            $this->response = [
-                'success' => false,
-                'message' => 'Error de conexión: ' . $e->getMessage()
-            ];
-        }
+        $conexion = new Conexion();
+        $this->pdo = $conexion->conectar();
+        $this->response = ['success' => false];
+        $this->id_usuario = $_SESSION['id_usuario'] ?? null;
+        $this->nombre_usuario = $_SESSION['nombre_usuario'] ?? null;
     }
 
     private function validarEntrada() {
@@ -39,15 +29,15 @@ class CrearSala {
             throw new Exception('Método no permitido');
         }
 
-        if (!$this->id_usuario || !$this->nombre_usuario) {
-            throw new Exception('Usuario no autenticado o sesión expirada');
+        if (!$this->id_usuario) {
+            throw new Exception('Usuario no autenticado.');
         }
 
         $this->contrasena = $_POST['contraseñaSala'] ?? '';
-        $this->num_jugadores = intval($_POST['maxJugadores'] ?? 0);
+        $this->num_jugadores = $_POST['maxJugadores'] ?? 0;
 
-        if (empty($this->contrasena) || $this->num_jugadores < 2 || $this->num_jugadores > 4) {
-            throw new Exception('Datos de entrada inválidos');
+        if (empty($this->contrasena) || empty($this->num_jugadores)) {
+            throw new Exception('Datos incompletos');
         }
     }
 
@@ -123,38 +113,21 @@ class CrearSala {
             $this->pdo->commit();
 
         } catch (Exception $e) {
-            if ($this->pdo && $this->pdo->inTransaction()) {
+            if ($this->pdo->inTransaction()) {
                 $this->pdo->rollBack();
             }
-            $this->response = [
-                'success' => false,
-                'message' => $e->getMessage(),
-                'debug' => [
-                    'post_data' => $_POST,
-                    'session_data' => [
-                        'id_usuario' => $this->id_usuario,
-                        'nombre_usuario' => $this->nombre_usuario
-                    ]
-                ]
-            ];
+            $this->response = ['success' => false, 'message' => $e->getMessage()];
+        } finally {
+            $this->pdo = null;
         }
 
         return $this->response;
     }
 }
 
-// Limpiar cualquier salida previa
-ob_clean();
+// Uso de la clase
+header('Content-Type: application/json');
 
-try {
-    $creadorSala = new CrearSala();
-    $resultado = $creadorSala->crearNuevaSala();
-} catch (Exception $e) {
-    $resultado = [
-        'success' => false,
-        'message' => 'Error del sistema: ' . $e->getMessage()
-    ];
-}
-
+$creadorSala = new CrearSala();
+$resultado = $creadorSala->crearNuevaSala();
 echo json_encode($resultado);
-exit;
