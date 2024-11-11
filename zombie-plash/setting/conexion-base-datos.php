@@ -43,15 +43,8 @@ class Conexion{
 
         return $this->pdo;
     }
-    
 }
-
-
-
- // Método para consultar usuarios
-
-
-    // echo "Creando instancia de Conexion...<br>";
+     // echo "Creando instancia de Conexion...<br>";
 $conexion = new Conexion();
 
 ?>
