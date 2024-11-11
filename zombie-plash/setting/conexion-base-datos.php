@@ -1,15 +1,50 @@
 <?php
-// Configuración de la base de datos
-$host = 'localhost';
-$db   = 'zombie_plash_bd';
-$user = 'root';
-$pass = '';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
-$conexion = new mysqli($host, $user, $pass, $db);
+// echo "Iniciando script...<br>";
 
-// if ($conexion->connect_error) {
-//     die(json_encode(['success' => false, 'errors' => ['general' => 'Error de conexión a la base de datos: ' . $conexion->connect_error]]));
-// }
+class Conexion{
+    private $servidor;
+    private $usuario;
+    private $password;
+    private $puerto;
+    private $baseDatos;
+    private $pdo;
 
-// Establecer el conjunto de caracteres a utf8
-// $conexion->set_charset("utf8");
+    public function __construct(){
+        //echo "Construyendo objeto...<br>";
+        $this->servidor="localhost";
+        $this->usuario="root";
+        $this->password="";
+        $this->puerto="3306";
+        $this->baseDatos="zombie_plash_bd";
+        $this->pdo=$this->conectar();
+    }
+
+    public function conectar(){
+        try {
+            // echo "Intentando conectar...<br>";
+            $dsn = "mysql:host=$this->servidor;port=$this->puerto;dbname=$this->baseDatos";
+            
+            // echo "DSN: " . $dsn . "<br>";
+            
+            $this->pdo = new PDO($dsn, $this->usuario, $this->password, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+            ]);
+            
+            // echo "Conexión exitosa a MySQL<br>";
+            
+        } catch (PDOException $e) {
+            // echo "Error capturado: " . $e->getMessage() . "<br>";
+            die('Error en la conexión: ' . $e->getMessage());
+        }
+
+        return $this->pdo;
+    }
+}
+     // echo "Creando instancia de Conexion...<br>";
+$conexion = new Conexion();
+
+?>

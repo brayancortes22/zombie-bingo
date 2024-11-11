@@ -2,62 +2,88 @@
 session_start();
 require '../setting/conexion-base-datos.php';
 
+class CancelarSala {
+    private $pdo;
+    private $response;
+    private $id_sala;
+    private $id_usuario;
+
+    public function __construct() {
+        $conexion = new Conexion();
+        $this->pdo = $conexion->conectar();
+        $this->response = ['success' => false, 'message' => ''];
+        $this->id_usuario = $_SESSION['id_usuario'] ?? null;
+    }
+
+    public function obtenerDatosEntrada() {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $this->id_sala = $input['id_sala'] ?? null;
+
+        if (!$this->id_sala) {
+            throw new Exception('ID de sala no proporcionado');
+        }
+    }
+
+    public function verificarCreadorSala() {
+        $query = "SELECT id_creador FROM salas WHERE id_sala = :id_sala";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id_sala' => $this->id_sala]);
+        $sala = $stmt->fetch();
+
+        if (!$sala) {
+            throw new Exception('Sala no encontrada');
+        }
+
+        if ($sala['id_creador'] != $this->id_usuario) {
+            throw new Exception('No tienes permiso para cancelar esta sala');
+        }
+
+        return true;
+    }
+
+    public function eliminarJugadoresSala() {
+        $query = "DELETE FROM jugadores_en_sala WHERE id_sala = :id_sala";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id_sala' => $this->id_sala]);
+    }
+
+    public function eliminarSala() {
+        $query = "DELETE FROM salas WHERE id_sala = :id_sala";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute(['id_sala' => $this->id_sala]);
+    }
+
+    public function ejecutarCancelacion() {
+        try {
+            $this->obtenerDatosEntrada();
+            $this->verificarCreadorSala();
+
+            $this->pdo->beginTransaction();
+            
+            $this->eliminarJugadoresSala();
+            $this->eliminarSala();
+            
+            $this->pdo->commit();
+            
+            $this->response['success'] = true;
+            $this->response['message'] = 'Sala cancelada exitosamente';
+
+        } catch (Exception $e) {
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            $this->response['message'] = 'Error al cancelar la sala: ' . $e->getMessage();
+        } finally {
+            $this->pdo = null;
+        }
+
+        return $this->response;
+    }
+}
+
+// Uso de la clase
 header('Content-Type: application/json');
 
-$input = json_decode(file_get_contents('php://input'), true);
-$id_sala = $input['id_sala'] ?? null;
-
-if (!$id_sala) {
-    echo json_encode(['success' => false, 'message' => 'ID de sala no proporcionado']);
-    exit;
-}
-
-try {
-    // Verificar si el usuario actual es el creador de la sala
-    $query_check = "SELECT id_creador FROM salas WHERE id_sala = ?";
-    $stmt_check = $conexion->prepare($query_check);
-    $stmt_check->bind_param("i", $id_sala);
-    $stmt_check->execute();
-    $result = $stmt_check->get_result();
-    $sala = $result->fetch_assoc();
-
-    // Logging para depuración
-    error_log("ID de sala: " . $id_sala);
-    error_log("ID del creador en la base de datos: " . ($sala ? $sala['id_creador'] : 'No encontrado'));
-    error_log("ID del usuario actual: " . $_SESSION['id_usuario']);
-
-    if (!$sala) {
-        echo json_encode(['success' => false, 'message' => 'Sala no encontrada']);
-        exit;
-    }
-
-    if ($sala['id_creador'] != $_SESSION['id_usuario']) {
-        echo json_encode(['success' => false, 'message' => 'No tienes permiso para cancelar esta sala. Creador: ' . $sala['id_creador'] . ', Tu ID: ' . $_SESSION['id_usuario']]);
-        exit;
-    }
-
-    // Iniciar transacción
-    $conexion->begin_transaction();
-
-    // Eliminar jugadores de la sala
-    $query_delete_players = "DELETE FROM jugadores_en_sala WHERE id_sala = ?";
-    $stmt_delete_players = $conexion->prepare($query_delete_players);
-    $stmt_delete_players->bind_param("i", $id_sala);
-    $stmt_delete_players->execute();
-
-    // Eliminar la sala
-    $query_delete_sala = "DELETE FROM salas WHERE id_sala = ?";
-    $stmt_delete_sala = $conexion->prepare($query_delete_sala);
-    $stmt_delete_sala->bind_param("i", $id_sala);
-    $stmt_delete_sala->execute();
-
-    // Confirmar transacción
-    $conexion->commit();
-
-    echo json_encode(['success' => true, 'message' => 'Sala cancelada exitosamente']);
-} catch (Exception $e) {
-    $conexion->rollback();
-    echo json_encode(['success' => false, 'message' => 'Error al cancelar la sala: ' . $e->getMessage()]);
-}
-
-$conexion->close();
+$cancelador = new CancelarSala();
+$resultado = $cancelador->ejecutarCancelacion();
+echo json_encode($resultado);
