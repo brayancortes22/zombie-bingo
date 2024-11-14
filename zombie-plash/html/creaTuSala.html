@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <script src="../js/cancelarLetra.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="../js/musica.js"></script>
     <link rel="stylesheet" href="../css/creaTuSala.css">
     <link rel="stylesheet" href="../css/fuentes.css">
 
@@ -16,6 +17,7 @@
     <title>Crea tu sala</title>
 </head>
 <body>
+    <audio id="audio-juego" src="../musica/esta.mp3" loop></audio>
 
     <script>
         // Verificar si el usuario ha iniciado sesión
@@ -33,7 +35,8 @@
             <h1 class="titulo">Crea tu sala</h1>
             <div class="cajita">
                 <form id="crearSalaForm">
-                  
+                    <label for="nombreSala" class="contra">Nombre de la sala</label>
+                    <input type="text" id="nombreSala" name="nombreSala" class="redondeo" required>
                     
                     <label for="contraseñaSala" class="contra">Contraseña</label>
                     <input type="password" id="contraseñaSala" name="contraseñaSala" class="redondeo" required>
