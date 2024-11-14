@@ -7,6 +7,7 @@
     /* overflow:visible; */
 }
 
+
 .imagen{ 
     
     
@@ -21,7 +22,7 @@
     color: white; /* Cambia el color del texto para que sea visible */
     width: 100%;
     z-index: 3;
-    
+
 }
 .fila{
     border: solid black 3px;
