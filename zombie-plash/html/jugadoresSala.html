@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -12,7 +12,10 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
-    <title>Crea tu sala</title>
+    <link rel="stylesheet" href="../css/fuentes.css">
+
+    <title>Jugadores en la Sala</title>
+   
 </head>
 <body>
     <audio id="miAudio" src="../musica/musica.mp3" type="audio/mpeg" autoplay loop></audio>
@@ -29,77 +32,28 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col ci">
-                        <i class="bi bi-person-add icono"></i>
-                    </div>
+                    
                     <div class="col contenedor quitar"></div>
                     <div class="col linia">Contraseña</div>
                     <div class="col contenedor"></div>
                     <div class="col">
-                        <button type="button" class="botonrojo"><strong>Cancelar sala</strong></button>
+                        <button type="button" class="botonrojo texto" onclick="cancelarSala()"><h5>Cancelar sala</h5></button>
+                        <!-- boton para devolver al inicio del juego -->
+                        <button type="button" class="botonrojo" onclick="window.location.href='./inicio.php'"><strong>salir</strong></button>
+                
                     </div>
                 </div>
                 <div class="titulo"><strong>Jugadores en la sala</strong></div>
-                <div class="row1">
-                    <div class="col2">
-                        <div class="circulo"></div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo"></div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo"></div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo"></div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo"></div>
-                    </div>
-                </div>
-                <div class="row2">
-                    <div class="col2" class="pocision"> Usuario-1</div>
-                    <div class="col2" class="pocision"> Usuario-1</div>
-                    <div class="col2" class="pocision"> Usuario-1</div>
-                    <div class="col2" class="pocision"> Usuario-1</div>
-                    <div class="col2" class="pocision"> Usuario-1</div>
-                </div><br>
-                <div class="row1">
-                    <div class="col2">
-                        <div class="circulo">
-
-                        </div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo">
-
-                        </div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo">
-
-                        </div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo">
-
-                        </div>
-                    </div>
-                    <div class="col2">
-                        <div class="circulo">
-
-                        </div>
-                    </div>
-                </div>
-                <div class="row2">
-                    <div class="col2" class="pocision">Usuario-1</div>
-                    <div class="col2" class="pocision">Usuario-1</div>
-                    <div class="col2" class="pocision">Usuario-1</div>
-                    <div class="col2" class="pocision">Usuario-1</div>
-                    <div class="col2" class="pocision">Usuario-1</div>
+                <div id="contenedorJugadores">
+                    <!-- Aquí se generarán dinámicamente las filas de jugadores -->
                 </div>
             </div>
         </div>
     </div>
+    <script>
+    
+    </script>
+    <!-- <script src="../js/jugadoresSala_conectado.js"></script> -->
+    <script src="../js/jugadoresSala.js"></script>
 </body>
 </html>

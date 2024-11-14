@@ -1,9 +1,10 @@
+
 .container-fluid{
     margin: 0% !important;
     padding: 0% !important;
 }
 .imagen{
-    background-image: url('../img/fondoCreaTuSala.jpeg');
+    background-image: url('../img/huellas.jpg');
     background-size: cover; /* Hace que la imagen cubra toda la pantalla */
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -18,7 +19,8 @@
 }
 
 .cuadro{
-    border: #36ecf8 solid 5px;
+    background-image: url('../img/huellas2.jpg');
+    border: #fa1414 solid 5px;
     height: 80%;
     width: 50%;
     background-color: rgba(14, 85, 87, 0.5); /* Azul con 50% de transparencia */

@@ -16,6 +16,10 @@ if (isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/login.css">
     <link rel="icon" href="../img/image-removebg-preview.png" type="image/png">
+    <link rel="stylesheet" href="../css/fuentes.css">
+        <!-- ... otros elementos ... -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Login</title>
 </head>
@@ -25,9 +29,8 @@ if (isset($_SESSION['user_id'])) {
         <div class="cuadro">
             <div class="largo">
                 <div class="invitado">
-                    <a href="./ingresarInvitado.html">
-                        <button type="button" class="btn success"><strong>Ingresar como invitado</strong></button>
-                    
+                    <a href="">
+                        <button type="button" class="btn success"><strong>Ver juego</strong></button>
                     </a>
                 </div>
                 <div class="cuenta">
@@ -50,6 +53,14 @@ if (isset($_SESSION['user_id'])) {
                 <div class="iniciar">
                     <button type="submit" class="btn success"><strong>Iniciar sesión</strong></button>
                 </div>
+                <!-- mensaje de error -->
+                <div id="generalError" class="error"></div>
+                <div class="olvidado">
+                    <a href="./restablecimientoContra.html">
+                        <strong>¿Olvidaste tu contraseña?</strong>
+                    </a>
+                </div>
+                <div class="zombie" id="z_3"></div>
             </form>
             
             <script>
@@ -63,13 +74,11 @@ if (isset($_SESSION['user_id'])) {
             </script>
             
         </div>
-        <div class="fantasma1">
-            <iframe src="https://lottie.host/embed/5c760837-4a83-446f-a2ff-cfc525075cb6/soZSyQTDo9.json"></iframe>
-        </div>
-        <div class="fantasma2">
-            <iframe src="https://lottie.host/embed/5c760837-4a83-446f-a2ff-cfc525075cb6/soZSyQTDo9.json"></iframe>
-        </div>
+        <!-- animacion de fantasma -->
+        <div id="z_1" class="fantasma1"></div>
+        <div id="z_2" class="fantasma2"></div>
     </div>
+    <script src="../json/anima.js"></script>
     <script src="../js/validar_inicio_sesion.js"></script>
     <script>
         // Función que se ejecuta cuando el formulario es enviado
@@ -82,3 +91,6 @@ if (isset($_SESSION['user_id'])) {
     </script>
 </body>
 </html>
+<script>
+
+</script>

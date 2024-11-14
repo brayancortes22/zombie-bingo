@@ -18,7 +18,8 @@
     z-index: 1;
 }
 .cuadro{
-    border: #ce7c00 solid 5px;
+    border: #555 solid 5px;
+    background-image: url('../img/sangre.png');
     height: 90%;
     width: 90%;
     background-color: rgba(14, 85, 87, 0.5); /* Azul con 50% de transparencia */
@@ -31,7 +32,22 @@
 
     
 }
+
+        /* Estilo para la barra de desplazamiento */
+        #contenedorJugadores::-webkit-scrollbar {
+            width: 10px;
+        }
+        #contenedorJugadores::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        #contenedorJugadores::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+        #contenedorJugadores::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
 .row{
+    
     display: flex;
     height: 8%;
     width: 100%;
@@ -70,7 +86,7 @@
 .titulo{
     display: flex;
     justify-content: center;
-    color: red;
+    color: rgb(247, 232, 232);
     font-size: 30px;
     
 }
@@ -107,7 +123,7 @@
 }
 .col2{
     border: solid black 2px;
-    height: 100%;
+    height: 50%;
     width: 100%;
     margin-left: 3%;
     margin-right: 3%;
@@ -115,7 +131,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ce7c00;
+    
+
     
 }
 .posision{
@@ -141,8 +158,7 @@
     
 }
 .circulo{
-     
-        background-image: url('../img/jugadoresSala.jpeg');
+     background-image: url('../img/perfilsala.jpeg');
         background-size: cover; /* Ajusta la imagen para cubrir todo el div */
         background-position: center; /* Centra la imagen */
         background-repeat: no-repeat; /* No repetir la imagen */
@@ -153,10 +169,12 @@
 }
 
 .botonrojo{ 
+    
     height: 100%;
     width: 100%;
     border-radius: 30px;
     display: flex;
+   
     justify-content: center !important;
     align-items: center !important;
     background-color: rgb(187, 0, 0);
@@ -175,4 +193,94 @@
     filter: drop-shadow(0px 0px 12px rgb(0, 0, 0));
     margin-left: 90px;
 
+}
+
+/* Nuevos estilos para el contenedor de jugadores */
+#contenedorJugadores {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-height: 60vh; /* Ajusta según sea necesario */
+    overflow-y: auto;
+    padding: 20px;
+    margin-top: 20px;
+    gap: 20px; /* Reducido el espacio entre filas de jugadores */
+}
+
+.fila-jugadores {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+   
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px; /* Para darle bordes redondeados */
+    padding: 10px; /* Para dar algo de espacio interno */
+}
+
+/* Ajustes a los estilos existentes */
+.row1 {
+    
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: auto; /* Altura automática basada en el contenido */
+    gap: 20px; /* Espacio entre jugadores en la misma fila */
+    
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    padding: 10px;
+}
+.row2{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: auto; /* Altura automática basada en el contenido */
+    gap: 20px; /* Espacio entre jugadores en la misma fila */
+    
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 15px;
+    padding: 10px;
+}
+.col2 {
+    background-image: url('../img/sangre2.png');
+    flex: 1;
+    max-width: 120px; /* Ajusta según sea necesario */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: auto; /* Altura automática basada en el contenido */
+}
+
+.circulo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px; /* Espacio entre círculo y nombre */
+}
+
+/* Estilos para la barra de desplazamiento */
+#contenedorJugadores::-webkit-scrollbar {
+    width: 10px;
+}
+
+#contenedorJugadores::-webkit-scrollbar-track {
+    background: rgba(241, 241, 241, 0.3);
+    border-radius: 5px;
+}
+
+#contenedorJugadores::-webkit-scrollbar-thumb {
+    background: rgba(136, 136, 136, 0.5);
+    border-radius: 5px;
+}
+
+#contenedorJugadores::-webkit-scrollbar-thumb:hover {
+    background: rgba(85, 85, 85, 0.7);
 }
