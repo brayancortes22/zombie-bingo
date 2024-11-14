@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-10-2024 a las 22:40:29
+-- Tiempo de generación: 14-11-2024 a las 21:00:08
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -36,29 +36,6 @@ CREATE TABLE `amistad` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `invitados`
---
-
-CREATE TABLE `invitados` (
-  `id_invitado` int(11) NOT NULL,
-  `apodo` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `invitados`
---
-
-INSERT INTO `invitados` (`id_invitado`, `apodo`) VALUES
-(1, 'hola'),
-(3, 'helou'),
-(5, 'j'),
-(6, 'holajj'),
-(7, 'holaaaa'),
-(8, 'Cata');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `jugador`
 --
 
@@ -79,7 +56,8 @@ INSERT INTO `jugador` (`id_jugador`, `nombre`, `id_credenciales`, `id_registro`)
 (3, 'bscl-2', NULL, 7),
 (4, 'bsl-3', NULL, 8),
 (5, 'bscl-4', NULL, 9),
-(6, 'bscl-5', NULL, 10);
+(6, 'bscl-5', NULL, 10),
+(7, 'bsl-31', NULL, 12);
 
 -- --------------------------------------------------------
 
@@ -93,15 +71,6 @@ CREATE TABLE `jugadores_en_sala` (
   `id_jugador` int(11) DEFAULT NULL,
   `nombre_jugador` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `jugadores_en_sala`
---
-
-INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`) VALUES
-(71, 53, 1, 'bscl'),
-(72, 53, 6, 'bscl-5'),
-(73, 53, 3, 'bscl-2');
 
 -- --------------------------------------------------------
 
@@ -180,12 +149,17 @@ INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo
 (2, 'jhon', '$2y$10$Yi5b4dFqPazLcPMhFja0fuoz10TS2QxCN1n4nFBeLswFxYYOE7Pga', 'jhon@d.com', NULL),
 (3, 'jhondd', '$2y$10$8gAjzhQMgOjmM0S.c5384Og5wDjmx2.wYH3RPTa0RgfYN5QysIyfG', 'wwww@gmail.co', NULL),
 (4, 'bs', '$2y$10$6ZeQlaB2GjNHcoOcumTxTeQSjCgevvpkbzKfnlPG4vEw/gVoXRB/y', 'bsc@gmail.com', NULL),
-(5, 'Algericoffe', '$2y$10$pBWGcIM4K5kVe.vzUfwzxu5Zj1PO1iByHDnhrOQccVmaivzxHE6ne', 'jsolayareyes@gmail.com', NULL),
 (6, 'bsl-1', '$2y$10$iQU7o1RbOyLG3ie53guOYO8LuPNpXFxc8IT.tAsST0GnmWaOXLfru', 'bscl-1@gmail.com', NULL),
 (7, 'bscl-2', '$2y$10$CIr/WjQSTAR02H1Wqs6r/uQLlWrLqY//7fr8FJo/oC49ea7HjTdoO', 'bscl-2@gmail.com', NULL),
 (8, 'bsl-3', '$2y$10$Zr6XuSqwJZwWJf3C4gZ.1.yrFU46aWtAkk8sebGEKJi8k92YQaywa', 'bscl-3@gmail.com', NULL),
 (9, 'bscl-4', '$2y$10$RncrORRaf/wF8GavdHIMNO2S5BQghk2XmN6/b9j9vDMxBnY/KVG7.', 'bscl-4@gmail.com', NULL),
-(10, 'bscl-5', '$2y$10$Pm.KgzjXIutMFVt.0h8d2OgYaez6TYFPiKE7km9CWwv4ZN89Fr1rO', 'bscl-5@gmail.com', NULL);
+(10, 'bscl-5', '$2y$10$Pm.KgzjXIutMFVt.0h8d2OgYaez6TYFPiKE7km9CWwv4ZN89Fr1rO', 'bscl-5@gmail.com', NULL),
+(11, 'catalina', '$2y$10$h6SZm1h9E3jO3wbbelCWr.SmtEUzbAX0chtjY3WFsG7gTXcGfvN2i', 'catalina2005cometta@gmail.com', NULL),
+(12, 'bsl-31', '$2y$10$0y5Xft.a5SI8taVmJftfLOkE5MpqL.2PjoNlf1ddiYfZ1.nW4wbCW', 'wwwffw@gmail.co', NULL),
+(14, 'hola283', '$2y$10$7y5yCSDFY48XwYr19/AFleoFccoPdacLEOQtGR2ckacM6Q7.ITMka', 'hola@gamail.com', NULL),
+(15, 'GTRG', '$2y$10$Rf8IFRrLLUlbY8D2zkUGjeOmjpK6Nlw9yu0wmXQQJDXZ4OZRNktoa', 'RTG@GMAIL.COM', NULL),
+(16, 's', '$2y$10$tzPvpaaP5fixP2pQ/EIpL.abRFY7XZ2DR299KvmdRn84mEZGzO5R6', 'bscl2006s2007@gmail.com', NULL),
+(17, 'sss', '$2y$10$2Y.lDE1SArVeGThmLlXjkO0G/htDy8SzOEoFv.EBP.cx/mYnLruiK', 'bscl2006s20aa07@gmail.com', NULL);
 
 -- --------------------------------------------------------
 
@@ -213,13 +187,6 @@ CREATE TABLE `salas` (
   `jugadores_unidos` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `salas`
---
-
-INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`) VALUES
-(53, 1, '$2y$10$3Wte5rG5w6Y2Glo6wumr/.IU60k4GHN42o.nE1o1Raab9p9ShKTx.', 2, 3);
-
 -- --------------------------------------------------------
 
 --
@@ -244,12 +211,6 @@ ALTER TABLE `amistad`
   ADD PRIMARY KEY (`id_amistad`),
   ADD KEY `id_jugador` (`id_jugador`),
   ADD KEY `id_amigo` (`id_amigo`);
-
---
--- Indices de la tabla `invitados`
---
-ALTER TABLE `invitados`
-  ADD PRIMARY KEY (`id_invitado`);
 
 --
 -- Indices de la tabla `jugador`
@@ -325,34 +286,28 @@ ALTER TABLE `tipo_seleccion`
 --
 
 --
--- AUTO_INCREMENT de la tabla `invitados`
---
-ALTER TABLE `invitados`
-  MODIFY `id_invitado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
 -- AUTO_INCREMENT de la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
 --
 ALTER TABLE `registro_usuarios`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- Restricciones para tablas volcadas

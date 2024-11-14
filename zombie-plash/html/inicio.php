@@ -135,7 +135,9 @@ function cambiarIcono() {
                     <div class="usuario"></div>
                 </div>
                 <div class="columna">
-                <i class="bi bi-person-plus"></i>
+                <a href="./listaDeJugadores.html">
+                    <i class="bi bi-person-plus"></i>
+                </a>
                 </div>
                </div>
                <div class="filass1">

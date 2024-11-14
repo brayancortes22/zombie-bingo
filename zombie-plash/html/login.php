@@ -63,12 +63,12 @@ if (isset($_SESSION['id_usuario'])) {
                         <strong>¿Olvidaste tu contraseña?</strong>
                     </a>
                 </div>
-                <div class="zombie" id="z_3"></div>
+                <div class="zombie" id="z_2"></div>
             </form>
         </div>
         <!-- animacion de fantasma -->
         <div id="z_1" class="fantasma1"></div>
-        <div id="z_2" class="fantasma2"></div>
+        <div id="z_1_v2" class="fantasma2"></div>
     </div>
     <script src="../json/anima.js"></script>
     <script src="../js/validar_inicio_sesion.js"></script>
