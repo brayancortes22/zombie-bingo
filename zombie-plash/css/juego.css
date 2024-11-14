@@ -7,7 +7,8 @@
     /* overflow:visible; */
 }
 
-.imagen{
+.imagen{ 
+    
     
     background-image: url('../img/fondoJuego.jpeg');
     background-size: cover; /* Hace que la imagen cubra toda la pantalla */
