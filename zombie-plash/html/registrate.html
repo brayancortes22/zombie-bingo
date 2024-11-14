@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,7 +13,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <link rel="stylesheet" href="../css/registrate.css">
-    <link rel="icon" href="../img/image-removebg-preview.png" type="image/png">    
+    <script src="../js/musica.js"></script>    <link rel="icon" href="../img/image-removebg-preview.png" type="image/png">    
     <link rel="stylesheet" href="../css/fuentes.css">
     <link rel="stylesheet" href="../css/icono_z.css">
     
@@ -22,6 +23,7 @@
 
 </head>
 <body>
+    <audio id="audio-juego" src="../musica/esta.mp3" loop></audio>
     <div class="container-fluid">
         <div class="cuadro">
             <div class="row registrate">
@@ -29,10 +31,13 @@
             </div>
             <form id="formulario" action="../php/registro.php" method="post">
                 <div class="formularios">
+                    <div>
+                    </div>
                     <div class="row filas">
                         <label for="nombre"><strong>Usuario</strong></label>
                         <input type="text" class="redondeo" id="nombre" name="nombre" required>
                         <span id="nombreError" class="error"></span>
+                        
                     </div>
                     <div class="row filas">
                         <label for="correo"><strong>Correo electrónico</strong></label>
@@ -47,7 +52,7 @@
                     <div class="row filas">
                         <label for="confirmar_contraseña"><strong>Ingrese nuevamente la Contraseña</strong></label>
                         <input type="password" class="redondeo" id="confirmar_contraseña" name="confirmar_contraseña" required>
-                        <span id="confirmar_ContraseñaError" class="error"></span>
+                        <span id="confirmar_ContraseñaError" class="error-message"></span>
                     </div>
                 </div><br><br>
                 <a style="text-decoration: none;" href="./login.php">

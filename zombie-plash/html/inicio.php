@@ -97,7 +97,7 @@ function cambiarIcono() {
                 </div>
                 <div class="col2">
                     <div class="crear">
-                        <button type="button" class="bcrear" onclick="window.location.href='./creaTuSala.html'">
+                        <button type="submit" class="bcrear" onclick="window.location.href='./creaTuSala.html'">
                                 
                                 <i class="fas fa-users">
                                 </i>
@@ -164,6 +164,11 @@ function cambiarIcono() {
             
         </div>
     </div>
+    <script>
+        function redireccion(){
+          window.location.href='cargando.html'
+        }
+      </script>
     
 </body>
 </html>

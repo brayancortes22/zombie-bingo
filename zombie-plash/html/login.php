@@ -2,7 +2,7 @@
 session_start();
 
 // Verificar si el usuario ya ha iniciado sesión
-if (isset($_SESSION['id_usuario'])) {
+if (isset($_SESSION['user_id'])) {
     // El usuario ya ha iniciado sesión, redirigir a la página de inicio
     header("Location: inicio.php");
     exit();
@@ -40,11 +40,8 @@ if (isset($_SESSION['id_usuario'])) {
                 </div>
             </div>
             <!-- formulario  -->
-            <form id="formulario" action="../php/inicio_sesion.php" method="POST">
+            <form id="formulario" onsubmit="redirectAfterLogin(event)">
                 <div class="texto"><strong>Iniciar sesión</strong></div>
-                <div class="zombie2">
-                    <img src="../img/image-removebg-preview.png" alt="">
-                </div>
                 <div class="form1">
                     <label for="nombre"><strong>Usuario o correo electrónico</strong></label>
                     <input type="text" class="redondeo" id="nombre" name="nombre" placeholder="nombre_usu" required>
@@ -65,6 +62,17 @@ if (isset($_SESSION['id_usuario'])) {
                 </div>
                 <div class="zombie" id="z_2"></div>
             </form>
+            
+            <script>
+                // Función que se ejecuta cuando el formulario es enviado
+                function redirectAfterLogin(event) {
+                    event.preventDefault(); // Evita que el formulario se envíe de forma normal
+            
+                    // Redirige a la página de cargando con el redirect a la página de inicio
+                    window.location.href = './cargando.html?redirect=./inicio.html';
+                }
+            </script>
+            
         </div>
         <!-- animacion de fantasma -->
         <div id="z_1" class="fantasma1"></div>
@@ -72,6 +80,15 @@ if (isset($_SESSION['id_usuario'])) {
     </div>
     <script src="../json/anima.js"></script>
     <script src="../js/validar_inicio_sesion.js"></script>
+    <script>
+        // Función que se ejecuta cuando el formulario es enviado
+        function redirectAfterLogin(event) {
+            event.preventDefault(); // Evita que el formulario se envíe de forma normal
+    
+            // Redirige a la página de cargando con el redirect a la página de inicio
+            window.location.href = './cargando.html?redirect=./inicio.html';
+        }
+    </script>
 </body>
 </html>
 <script>

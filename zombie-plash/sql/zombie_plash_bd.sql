@@ -24,6 +24,18 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `amigos`
+--
+
+CREATE TABLE `amigos` (
+  `id_amigo` int(11) NOT NULL,
+  `id_jugador` int(11) DEFAULT NULL,
+  `id_jugador_2` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `amistad`
 --
 
@@ -205,6 +217,12 @@ CREATE TABLE `tipo_seleccion` (
 --
 
 --
+-- Indices de la tabla `amigos`
+--
+ALTER TABLE `amigos`
+  ADD PRIMARY KEY (`id_amigo`);
+
+--
 -- Indices de la tabla `amistad`
 --
 ALTER TABLE `amistad`
@@ -265,13 +283,6 @@ ALTER TABLE `registro_usuarios`
 ALTER TABLE `rol_jugador`
   ADD PRIMARY KEY (`id_rol_jugador`),
   ADD KEY `fk_id_participacion` (`id_participacion`);
-
---
--- Indices de la tabla `salas`
---
-ALTER TABLE `salas`
-  ADD PRIMARY KEY (`id_sala`),
-  ADD KEY `id_creador` (`id_creador`);
 
 --
 -- Indices de la tabla `tipo_seleccion`
@@ -346,12 +357,6 @@ ALTER TABLE `recuperar_contraseña`
 --
 ALTER TABLE `rol_jugador`
   ADD CONSTRAINT `fk_id_participacion` FOREIGN KEY (`id_participacion`) REFERENCES `partida` (`id_partida`);
-
---
--- Filtros para la tabla `salas`
---
-ALTER TABLE `salas`
-  ADD CONSTRAINT `fk_id_creador` FOREIGN KEY (`id_creador`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `tipo_seleccion`
