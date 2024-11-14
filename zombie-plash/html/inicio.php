@@ -109,7 +109,7 @@ function cambiarIcono() {
                             </i>
                             <strong>Unirse a una sala</strong></button>
                         </div>
-                        <div class="jugar" onclick="window.location.href='jugar.html'">
+                        <div class="jugar" onclick="window.location.href='juego.html'">
                             <button type="button" class="bjugar"> 
                             <i class="fas fa-user">
                             </i>
