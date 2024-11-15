@@ -75,14 +75,25 @@ class PerfilJugador {
                 throw new Exception('No se proporcionó un avatar');
             }
 
-            return [
-                'success' => true,
-                'message' => 'Avatar actualizado correctamente',
-                'data' => [
-                    'avatar' => $avatar
-                ]
-            ];
+            $query = "UPDATE registro_usuarios 
+                     SET avatar = :avatar 
+                     WHERE id_registro = :id";
+            
+            $stmt = $this->pdo->prepare($query);
+            $success = $stmt->execute([
+                'avatar' => $avatar,
+                'id' => $this->id_usuario
+            ]);
 
+            if ($success) {
+                return [
+                    'success' => true,
+                    'message' => 'Avatar actualizado correctamente',
+                    'data' => ['avatar' => $avatar]
+                ];
+            } else {
+                throw new Exception('Error al actualizar el avatar');
+            }
         } catch (Exception $e) {
             return [
                 'success' => false,

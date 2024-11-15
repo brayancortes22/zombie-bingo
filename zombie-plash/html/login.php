@@ -39,9 +39,13 @@ if (isset($_SESSION['user_id'])) {
                     </a>
                 </div>
             </div>
+             
             <!-- formulario  -->
             <form id="formulario" onsubmit="redirectAfterLogin(event)">
                 <div class="texto"><strong>Iniciar sesión</strong></div>
+                <div class="zombie2">
+                <img src="../img/image-removebg-preview.png" alt="imagen">
+            </div> 
                 <div class="form1">
                     <label for="nombre"><strong>Usuario o correo electrónico</strong></label>
                     <input type="text" class="redondeo" id="nombre" name="nombre" placeholder="nombre_usu" required>

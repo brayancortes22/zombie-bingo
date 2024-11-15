@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bingo</title>
+    <style>
+        .bingo-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .main-layout {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin: 20px auto;
+            max-width: 1400px;
+            gap: 20px;
+        }
+        .center-panel {
+            flex: 2;
+            text-align: center;
+        }
+        .side-panel {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .bingo-board {
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        .bingo-cell {
+            width: 60px;
+            height: 60px;
+            border: 2px solid black;
+            text-align: center;
+            font-size: 20px;
+            position: relative;
+            cursor: pointer;
+        }
+        .header-cell {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+        }
+        .marked {
+            background-color: yellow;
+        }
+        .reconteo {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+        }
+        .reconteo-columna {
+            margin: 10px 0;
+            padding: 5px;
+        }
+        .letra-titulo {
+            font-weight: bold;
+            color: #4CAF50;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        .numeros-letra {
+            color: #666;
+            line-height: 1.4;
+        }
+        .contador-total {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+            margin: 20px 0;
+            padding: 10px;
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        .bingo-button {
+            background-color: #ff4444;
+            color: white;
+            font-size: 24px;
+            padding: 15px 30px;
+            margin: 20px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .bingo-button:hover {
+            background-color: #ff0000;
+        }
+        .mensaje-validacion {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .mensaje-error {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .mensaje-exito {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .historial {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            text-align: left;
+            line-height: 1.6;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="bingo-container">
+        <h1>BINGO</h1>
+        <a href="./inicio.php">
+            <h2>salir</h2>
+        </a>
+
+        <div class="controls-container">
+            <button onclick="generarNuevoCarton()">Generar Nuevo Cartón</button>
+            <button onclick="iniciarJuego()" id="btnIniciar">Iniciar Juego</button>
+            <button onclick="detenerJuego()" id="btnDetener" style="display: none;">Detener Juego</button>
+        </div>
+
+        <div class="main-layout">
+            <!-- Panel Izquierdo -->
+            <div class="side-panel">
+                <h3>Reconteo por Letra</h3>
+                <div id="reconteo" class="reconteo"></div>
+                <button onclick="verificarBingo()" class="bingo-button">¡BINGO!</button>
+                <div id="mensajeValidacion" class="mensaje-validacion"></div>
+            </div>
+
+            <!-- Panel Central -->
+            <div class="center-panel">
+                <table id="bingoBoard" class="bingo-board"></table>
+                <div class="contador-total">
+                    Números sacados: <span id="contadorNumeros">0</span>/60
+                </div>
+            </div>
+
+            <!-- Panel Derecho -->
+            <div class="side-panel">
+                <h3>Números Sacados</h3>
+                <div id="historial" class="historial"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let numerosSacados = [];
+        let cartonActual = Array(5).fill().map(() => Array(5).fill(0));
+        let juegoIniciado = false;
+        let intervalId = null;
+        const INTERVALO_NUMEROS = 3000;
+        
+        const columnas = {
+            0: {min: 1, max: 12, letra: 'B'},
+            1: {min: 13, max: 24, letra: 'I'},
+            2: {min: 25, max: 36, letra: 'N'},
+            3: {min: 37, max: 48, letra: 'G'},
+            4: {min: 49, max: 60, letra: 'O'}
+        };
+
+        const letras = ['B', 'I', 'N', 'G', 'O'];
+
+        function generarNumeroAleatorio(min, max, numerosUsados) {
+            let numero;
+            do {
+                numero = Math.floor(Math.random() * (max - min + 1)) + min;
+            } while (numerosUsados.includes(numero));
+            return numero;
+        }
+
+        function generarCarton() {
+            cartonActual = Array(5).fill().map(() => Array(5).fill(0));
+            
+            for (let col = 0; col < 5; col++) {
+                let numerosUsados = [];
+                const {min, max} = columnas[col];
+                
+                for (let fila = 0; fila < 5; fila++) {
+                    const numero = generarNumeroAleatorio(min, max, numerosUsados);
+                    numerosUsados.push(numero);
+                    cartonActual[fila][col] = numero;
+                }
+                
+                let columnaOrdenada = cartonActual.map(fila => fila[col]).sort((a, b) => a - b);
+                for (let fila = 0; fila < 5; fila++) {
+                    cartonActual[fila][col] = columnaOrdenada[fila];
+                }
+            }
+            
+            mostrarCarton();
+        }
+
+        function mostrarCarton() {
+            let tabla = document.getElementById('bingoBoard');
+            let html = '<tr>';
+            
+            letras.forEach((letra, index) => {
+                html += `<td class="bingo-cell header-cell">
+                    ${letra}
+                    <span class="cell-number">${columnas[index].min}-${columnas[index].max}</span>
+                </td>`;
+            });
+            html += '</tr>';
+            
+            for (let fila = 0; fila < 5; fila++) {
+                html += '<tr>';
+                for (let col = 0; col < 5; col++) {
+                    const numero = cartonActual[fila][col];
+                    html += `<td class="bingo-cell" 
+                                onclick="marcarCasilla(this)" 
+                                data-numero="${numero}">
+                            ${numero}
+                        </td>`;
+                }
+                html += '</tr>';
+            }
+            
+            tabla.innerHTML = html;
+        }
+
+        function marcarCasilla(celda) {
+            if (juegoIniciado) {
+                celda.classList.toggle('marked');
+            }
+        }
+
+        function generarNuevoCarton() {
+            if (!juegoIniciado) {
+                generarCarton();
+            }
+        }
+
+        function iniciarJuego() {
+            juegoIniciado = true;
+            document.getElementById('btnIniciar').style.display = 'none';
+            document.getElementById('btnDetener').style.display = 'inline-block';
+            numerosSacados = [];
+            document.getElementById('contadorNumeros').textContent = '0';
+            document.getElementById('historial').textContent = '';
+            document.getElementById('reconteo').innerHTML = '';
+            
+            iniciarGeneracionNumeros();
+        }
+
+        function detenerJuego() {
+            if (intervalId) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+            juegoIniciado = false;
+            document.getElementById('btnIniciar').style.display = 'inline-block';
+            document.getElementById('btnDetener').style.display = 'none';
+        }
+
+        function iniciarGeneracionNumeros() {
+            if (intervalId) {
+                clearInterval(intervalId);
+            }
+            
+            intervalId = setInterval(() => {
+                if (numerosSacados.length >= 60) {
+                    detenerJuego();
+                    alert('¡Ya se han sacado todos los números!');
+                    return;
+                }
+                sacarNumero();
+            }, INTERVALO_NUMEROS);
+        }
+
+        function sacarNumero() {
+            if (!juegoIniciado) return;
+
+            let numerosDisponibles = [];
+            for (let col = 0; col < 5; col++) {
+                const {min, max, letra} = columnas[col];
+                for (let num = min; num <= max; num++) {
+                    if (!numerosSacados.includes(num)) {
+                        numerosDisponibles.push({numero: num, letra: letra});
+                    }
+                }
+            }
+
+            const seleccion = numerosDisponibles[Math.floor(Math.random() * numerosDisponibles.length)];
+            numerosSacados.push(seleccion.numero);
+            
+            actualizarHistorial();
+        }
+
+        function actualizarHistorial() {
+            const historial = numerosSacados.map(numero => {
+                for (let col = 0; col < 5; col++) {
+                    const {min, max, letra} = columnas[col];
+                    if (numero >= min && numero <= max) {
+                        return `${letra}-${numero}`;
+                    }
+                }
+            });
+            
+            document.getElementById('historial').textContent = historial.join(', ');
+            document.getElementById('contadorNumeros').textContent = numerosSacados.length;
+            actualizarReconteo();
+        }
+
+        function verificarBingo() {
+            if (!juegoIniciado) return;
+
+            const celdasMarcadas = document.querySelectorAll('.bingo-cell.marked');
+            const mensajeElement = document.getElementById('mensajeValidacion');
+            let mensaje = '';
+            let esValido = true;
+
+            // 1. Verificar que todas las celdas marcadas correspondan a números sacados
+            celdasMarcadas.forEach(celda => {
+                const numero = parseInt(celda.dataset.numero);
+                if (!numerosSacados.includes(numero)) {
+                    esValido = false;
+                    mensaje = `Error: El número ${numero} está marcado pero no ha salido`;
+                    return;
+                }
+            });
+
+            // 2. Verificar que se hayan marcado todos los números que han salido en el cartón
+            if (esValido) {
+                cartonActual.forEach((fila, i) => {
+                    fila.forEach((numero, j) => {
+                        if (numerosSacados.includes(numero)) {
+                            const celda = document.querySelector(`.bingo-cell[data-numero="${numero}"]`);
+                            if (!celda.classList.contains('marked')) {
+                                esValido = false;
+                                mensaje = `Error: El número ${numero} ha salido pero no está marcado en tu cartón`;
+                                return;
+                            }
+                        }
+                    });
+                });
+            }
+
+            // 3. Verificar que haya suficientes números marcados para hacer bingo
+            if (esValido) {
+                const numerosNecesarios = 25; // Un cartón completo
+                if (celdasMarcadas.length < numerosNecesarios) {
+                    esValido = false;
+                    mensaje = `Error: No hay suficientes números marcados para hacer bingo. 
+                              Tienes ${celdasMarcadas.length} de ${numerosNecesarios} necesarios`;
+                }
+            }
+
+            // 4. Verificar patrones de bingo (puedes personalizar según tus reglas)
+            if (esValido) {
+                // Verificar filas
+                let bingoEncontrado = false;
+                for (let i = 0; i < 5; i++) {
+                    let filaCompleta = true;
+                    for (let j = 0; j < 5; j++) {
+                        const numero = cartonActual[i][j];
+                        const celda = document.querySelector(`.bingo-cell[data-numero="${numero}"]`);
+                        if (!celda.classList.contains('marked')) {
+                            filaCompleta = false;
+                            break;
+                        }
+                    }
+                    if (filaCompleta) {
+                        bingoEncontrado = true;
+                        break;
+                    }
+                }
+
+                // Verificar columnas
+                if (!bingoEncontrado) {
+                    for (let j = 0; j < 5; j++) {
+                        let columnaCompleta = true;
+                        for (let i = 0; i < 5; i++) {
+                            const numero = cartonActual[i][j];
+                            const celda = document.querySelector(`.bingo-cell[data-numero="${numero}"]`);
+                            if (!celda.classList.contains('marked')) {
+                                columnaCompleta = false;
+                                break;
+                            }
+                        }
+                        if (columnaCompleta) {
+                            bingoEncontrado = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Verificar diagonales
+                if (!bingoEncontrado) {
+                    // Diagonal principal
+                    let diagonalPrincipal = true;
+                    for (let i = 0; i < 5; i++) {
+                        const numero = cartonActual[i][i];
+                        const celda = document.querySelector(`.bingo-cell[data-numero="${numero}"]`);
+                        if (!celda.classList.contains('marked')) {
+                            diagonalPrincipal = false;
+                            break;
+                        }
+                    }
+                    
+                    // Diagonal secundaria
+                    let diagonalSecundaria = true;
+                    for (let i = 0; i < 5; i++) {
+                        const numero = cartonActual[i][4-i];
+                        const celda = document.querySelector(`.bingo-cell[data-numero="${numero}"]`);
+                        if (!celda.classList.contains('marked')) {
+                            diagonalSecundaria = false;
+                            break;
+                        }
+                    }
+
+                    bingoEncontrado = diagonalPrincipal || diagonalSecundaria;
+                }
+
+                if (!bingoEncontrado) {
+                    esValido = false;
+                    mensaje = 'Error: No se encontró un patrón válido de bingo (línea, columna o diagonal)';
+                }
+            }
+
+            // Mostrar resultado
+            mensajeElement.textContent = esValido ? '¡BINGO CORRECTO!' : mensaje;
+            mensajeElement.className = `mensaje-validacion ${esValido ? 'mensaje-exito' : 'mensaje-error'}`;
+
+            // Si es válido, detener el juego
+            if (esValido) {
+                detenerJuego();
+                alert('¡Felicitaciones! Has ganado el BINGO');
+            }
+        }
+
+        function actualizarReconteo() {
+            const reconteo = document.getElementById('reconteo');
+            let html = '';
+            
+            // Crear objeto para almacenar números por letra
+            const numerosPorLetra = {};
+            letras.forEach(letra => {
+                numerosPorLetra[letra] = [];
+            });
+
+            // Clasificar números por letra
+            numerosSacados.forEach(numero => {
+                for (let col = 0; col < 5; col++) {
+                    const {min, max, letra} = columnas[col];
+                    if (numero >= min && numero <= max) {
+                        numerosPorLetra[letra].push(numero);
+                        break;
+                    }
+                }
+            });
+
+            // Crear HTML para cada columna
+            letras.forEach(letra => {
+                const numeros = numerosPorLetra[letra].sort((a, b) => a - b);
+                const rango = columnas[letras.indexOf(letra)];
+                html += `
+                    <div class="reconteo-columna">
+                        <div class="letra-titulo">
+                            ${letra} (${numeros.length})
+                            <span style="font-size: 12px; color: #666;">
+                                [${rango.min}-${rango.max}]
+                            </span>
+                        </div>
+                        <div class="numeros-letra">
+                            ${numeros.join(', ') || 'Ninguno'}
+                        </div>
+                    </div>`;
+            });
+
+            reconteo.innerHTML = html;
+        }
+
+        // Iniciar con un primer cartón
+        generarCarton();
+    </script>
+</body>
+</html> 

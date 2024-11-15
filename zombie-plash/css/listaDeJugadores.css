@@ -5,7 +5,11 @@
     height: 100vh;
     display: flex;
 }
-
+.btn{
+    width: 100%;
+    height: 100%;
+    background-color: red;
+}
 .imagen{
     background-image: url('../img/jugadoresSala.jpeg');
     background-size: cover; /* Hace que la imagen cubra toda la pantalla */
@@ -40,7 +44,7 @@
     
     width: 8%;
     height: 10vh;
-  
+    color: red;
     margin-right: 27%;
 }
 .titulo{
@@ -53,7 +57,7 @@
     color: red;
 }
 .grandote{
-    height: 100%;
+    height: 95%;
     width: 100%;
     margin-top: -1%;
     display: flex;
@@ -67,161 +71,135 @@
     align-items: center;
     
 }
+/* contenedor de la casilla de lista de jugadores */
 .derecha{
-    
-    width: 75%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    margin-right: 4%;
-}
-.centro{
-    width: 90%;
-    height: 90%;
-    margin-bottom:7% ;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    border: solid white 2px;
-}
-.jugador{
     width: 100%;
-    height: 8vh;
+    height: 90%; /* Altura fija para el contenedor */
+    overflow-y: auto; /* Barra de desplazamiento vertical */
+    padding: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    color: red;
-    font-size: 27px;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
 
+/* Estilizar la barra de desplazamiento */
+.derecha::-webkit-scrollbar {
+    width: 10px;
 }
-.inpu{
-    border: none;
+
+.derecha::-webkit-scrollbar-track {
+    background: rgba(38, 194, 24, 0.1);
+    border-radius: 5px;
+}
+
+.derecha::-webkit-scrollbar-thumb {
+    background: #26c218;
+    border-radius: 5px;
+}
+
+.derecha::-webkit-scrollbar-thumb:hover {
+    background: #1e9612;
+}
+
+/* Contenedor de cada jugador */
+.fila {
+    width: calc(20% - 20px); /* 5 jugadores por fila con espacio entre ellos */
+    min-width: 150px; /* Ancho mínimo para evitar que se hagan muy pequeños */
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #26c218;
+    border-radius: 10px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.fila:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(38, 194, 24, 0.3);
+}
+
+.cuadrito {
     width: 100%;
-    height: 6vh;
+    height: 20%;
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
-    margin-top: 10px;
-    
+    gap: 10px;
+    position: relative;
 }
-.redondeo{
-    border-radius: 20px;
-    height: 100%;
+
+.circulo {
     width: 100%;
-    background-color: rgba(250, 160, 140, 0.671);
-    border: none;
+    height: 80%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #26c218;
+    box-shadow: 0 0 10px rgba(38, 194, 24, 0.5);
+}
+
+.circulo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.icono {
+    margin-top: 10%;
+    right: 10px;
+    bottom: 0;
+    background: #26c218;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.icono:hover {
+    transform: scale(1.1);
+    background: #1e9612;
+}
+
+.icono i {
+    
     color: white;
+    font-size: 22px;
+}
+
+.cuadritos {
+    width: 100%;
     text-align: center;
-    font-size: 20px;
+    color: #26c218;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+input{
+    width: 120%;
+    height: 8vh;
+    border-radius: 50px;
 }
 .boton{
-    width: 50%;
-    border: solid white 2px;
-    margin-top: 30px;
-    background-color: chartreuse;
-    border-radius: 20px;
-}
-.btn{
-    border-radius: 20px;
-    height: 100%;
-    width: 100%;
-    background-color: chartreuse;
-}
-.fila{
-    height: 18vh;
-    width: 100%;
-    display: flex;
+    background-color: #1e9612;
     
-}
-.fila2{
-    height: 18vh;
+    border-radius: 50px;
     width: 100%;
-    display: flex;
+    height: 10%;
 }
-.fila3{
-    height: 18vh;
+.btn2{
+    background-color: #d30909;
+    border-radius: 50px;
     width: 100%;
-    display: flex;
-    
-}
-.cuadrito{
-    border: solid rgb(177, 29, 29) 2px;
-    height: 100%;
-    width: 90%;
-    background-color: #ce7c00;
-    margin-left: 2%;
-    margin-right: 2%;
-    border-radius: 20px;
-    display: flex;
-    align-items: start;
-    justify-content: start;
-   
-}
-.cuadritos{
-    border: solid rgb(177, 29, 29) 2px;
-    height: 100%;
-    width: 90%;
-    background-color: #ce7c00;
-    margin-left: 2%;
-    margin-right: 2%;
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    color: rgba(154, 255, 2, 0.931);
-    font-size: 20px;
-    
-   
-}
-.filita{
-    
-    height: 5vh;
-    width: 100%;
-    display: flex;
-    margin-top: 1%;
-}
-.filita1{
-    
-    height: 5vh;
-    width: 100%;
-    display: flex;
-    margin-top: 1%;
-}
-.filita2{
-    
-    height: 5vh;
-    width: 100%;
-    display: flex;
-    margin-top: 1%;
-}
-.circulo{
-     
-    background-image: url('../img/jugadoresSala.jpeg');
-    background-size: cover; /* Ajusta la imagen para cubrir todo el div */
-    background-position: center; /* Centra la imagen */
-    background-repeat: no-repeat; /* No repetir la imagen */
-    position: relative; /* Puedes cambiar a fixed o absolute si lo deseas fijo en la pantalla */
-    border-radius: 50%;
-    width: 48%;
-    height: 72%;
-    border: black solid 4px ;
-    filter: drop-shadow(0px 0px 12px rgb(0, 0, 0));
-    margin-left: 3%;
-    margin-top: 4%;
-
-}
-.bi{
-    font-size: 60px;
-    width: 3%;
-    margin-left: 120%;
-}
-.bo{
-    font-size: 60px;
-    width: 3%;
-    margin-left: 12%;
-}
-.quitar{
-    visibility: hidden;
+    height: 10%;
 }
