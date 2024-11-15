@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+
     <script>
         // Función para cambiar la imagen principal al hacer clic en una de las imágenes de la barra
         function cambiarImagenPrincipal(src) {
@@ -13,6 +14,10 @@
         function mostrarImagenArchivo(input) {
             var file = input.files[0];
             var reader = new FileReader();
+
+    <script src="../js/musica.js"></script> <!-- Agregar aquí el script de audio -->
+    <link rel="stylesheet" href="../css/fuentes.css">
+
 
             reader.onload = function(e) {
                 // Cambiar la imagen principal al cargar el archivo
@@ -26,10 +31,17 @@
     <link rel="stylesheet" href="../css/fuentes.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/perfilJugador.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <title>Crea tu sala</title>
 </head>
 <body>
+    <audio id="audio-juego" src="../musica/esta.mp3" loop></audio> <!-- El audio se seguirá reproduciendo aquí -->
     <div class="container-fluid">
         <div class="imagen">
             <a href="./inicio.php">

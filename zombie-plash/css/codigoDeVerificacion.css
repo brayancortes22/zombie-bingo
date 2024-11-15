@@ -1,135 +1,138 @@
 .container-fluid{
-   background-image: url(../img/fondo_login.jpg);
-    background-size: contain;
+    width: 100%;
     height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('../img/codigoveri.jpg');
+    background-position: center; /* Centra la imagen */
+    background-size: cover; /* Hace que la imagen cubra toda la pantalla */
+       
+
+    
 }
-form{
-    height: 200px;
-}
+
 .cuadro{
     border: solid 6px #6a5303; 
-    height: 80%;
+    height: 60vh;
     width: 50%;
-    margin-left: 24%;
     border-radius: 30px;
     background-color: #384639;
     box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
-    margin-top: 4%;
+   
     
 }
 .titulo{
     font-size: 29px;
     text-align: center;
-    color: white;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(255, 255, 255);
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
     margin-top: 2%;
 }
 .texto{
-    height: 49%;
-    width: 58%;
-    font-size: 23px;
-    margin-left: 35%;
-    margin-top: 4%;
-    color:#26c218;
+    font-size: 30px;
+    color: rgb(21, 255, 0);
+    display: flex;
+    margin-top: 3%;
+    justify-content: center;
+    
 }
 .ingresar{
-    color:#26c218;
-    height: 10%;
+    
+    height: 10vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: rgb(21, 255, 0);
+}
+.formulario{
+    display: flex;
+    height: 22vh;
     width: 100%;
+    justify-content: center;
+    
+}
+form{
+    height: 100%;
+    width: 80%;
+}
+.fila{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1%;
+}
+.cua{
+    border-radius: 50px;
+    height: 6vh;
     text-align: center;
-    font-size: 25px;
-    margin-top: -10%;
-
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: #26c218;
+    width: 100%;
+    font-size: 30px;
+    
 }
 .largo{
     display: flex;
-    flex-direction: row;
-    height: 8%;
-    position: absolute;
-    width: 50%;
-    margin-top: 3%;
-    border: none;
+    height: 7vh;
+    margin-top: 7%;
+    justify-content: center;
 }
 .cancelar{
+    height: 7vh;
     width: 20%;
-    border-radius: 30px;
-    background-color: red;
-    margin-left: 120px;
-    filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
 
- }
-.Aceptar{
-    width: 20%;
-    margin-left: 22%;
-    border-radius: 30px;
-    background-color: #26c218;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-}
-.btn{
-    border: none;
-    height: 100%;
-    width: 100%;
-    border-radius: 30px ;
-}
-.zombie{
-    position: absolute;
-    top: -690%;
-    left: 10%;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-}
-img{
-    height: 100%;
-    width: 115px;
-}
-.zombie2{
-    position: absolute;
-    top: 7%;
-    left: 0%;
-    height: 50px;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-}
-.tamaño{
-    height: 1000%;
-    width: 300px;
-}
-.zombie3{
-    position: absolute;
-    top: -2%;
-    left: 80%;
-    height: 60px;
-    filter: drop-shadow(0px 0px 12px rgb(64, 157, 201));
-}
-.tamaño3{
-    height: 1000%;
-    width: 200px;
-}
-.fila{
-    width: 53%;
-    height: 15%;
-    margin-left: 23%;
-    display: flex;
-    flex-direction: row;
-    margin-top: -1%;
+    text-align: center;
+    margin-right: 10%;
+    border-radius: 50px;
+    background-color: red;
+    
     
 }
-.col{
-    width: 5%;
-    height: 100%;
-    margin: 2%;
-    border-radius: 15px;
-    background-color: white;
-    box-shadow: 6px 3px 1px #26c218; /* sombra en la derecha y parte inferior */
-}
-.cua{
-    width: 100%;
-    height: 100%;
-    border-radius: 15px;
-    border: none;
-}
-input{
+.aceptar{
+    height: 7vh;
+    width: 20%;
+ 
     text-align: center;
-    font-size:28px !important;
-    font-weight: 100 !important;
+    margin-left: 10%;
+    border-radius: 50px;
+    background-color: #26c218;
+    
+}
+.btn{
+    height: 100%;   
+    width: 100%;
+    border-radius: 50px;
+    color: #ffffff !important;
+}
+
+.zombie2{
+    
+    height: 50vh;
+    width: 20%;
+    filter: drop-shadow(0px 0px 12px rgb(0, 247, 21));
+
+}
+
+.zombie3{
+    
+    height: 50vh;
+    width: 20%;
+}
+.tamaño3{
+    height: 70%;
+    width: 100%;
+    filter: drop-shadow(0px 0px 12px rgb(0, 247, 21));
+}
+.tamaño{
+    height: 70%;
+    width: 100%;
+}
+.fila{
+  
+    height: 22%;
+    width: 100%;
+    display: flex;
+    
 }
