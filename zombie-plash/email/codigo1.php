@@ -44,7 +44,7 @@ if (isset($_SESSION['id_usuario'])) {
                         <button class="btn success" type="submit"><strong>Aceptar</strong></button>
                     </div>
                     <div class="cancelar">
-                        <a href="./login.php">
+                        <a href="../html/login.php">
                             <button class="btn success" type="button"><strong>Cancelar</strong></button>
                         </a>
                     </div>
@@ -65,50 +65,43 @@ if (isset($_SESSION['id_usuario'])) {
 
     <script>
         document.getElementById('resetPasswordForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evitar el envío tradicional del formulario
+            e.preventDefault();
 
-
-
-            const email = document.getElementById('email').value; // Obtener el valor del campo de entrada
-
-
-            // Verificar que el email no esté vacío
-
+            const email = document.getElementById('email').value;
             if (!email) {
-
-                console.log('Por favor, ingresa un correo electrónico.');
-
+                alert('Por favor, ingresa un correo electrónico.');
                 return;
-
             }
-            fetch('./codigo.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email: email
-                    }) // Usar el valor del campo de entrada
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la respuesta del servidor');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.error) {
-                        console.error('Error:', data.error);
-                        alert(data.error); // Mostrar el error al usuario
-                    } else {
-                        console.log('Código de verificación:', data.success);
-                        alert(data.success); // Mostrar el éxito al usuario
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Hubo un error en la solicitud.');
-                });
+
+            // Mostrar algún indicador de carga
+            const submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<strong>Enviando...</strong>';
+
+            fetch('codigo.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.error || 'Error al enviar el código');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al procesar la solicitud');
+            })
+            .finally(() => {
+                // Restaurar el botón
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<strong>Aceptar</strong>';
+            });
         });
     </script>
 </body>

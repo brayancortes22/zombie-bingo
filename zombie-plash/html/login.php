@@ -56,7 +56,7 @@ if (isset($_SESSION['user_id'])) {
                 <!-- mensaje de error -->
                 <div id="generalError" class="error"></div>
                 <div class="olvidado">
-                    <a href="./codigo1.php">¿Olvidaste tu contraseña?</a>
+                    <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
                 </div>
                 <div class="zombie" id="z_3"></div>
             </form>
@@ -67,7 +67,7 @@ if (isset($_SESSION['user_id'])) {
                     event.preventDefault(); // Evita que el formulario se envíe de forma normal
             
                     // Redirige a la página de cargando con el redirect a la página de inicio
-                    window.location.href = './cargando.html?redirect=./inicio.html';
+                    window.location.href = './cargando.html?redirect=./inicio.php';
                 }
             </script>
             
@@ -84,7 +84,7 @@ if (isset($_SESSION['user_id'])) {
             event.preventDefault(); // Evita que el formulario se envíe de forma normal
     
             // Redirige a la página de cargando con el redirect a la página de inicio
-            window.location.href = './cargando.html?redirect=./inicio.html';
+            window.location.href = './cargando.html?redirect=./inicio.php';
         }
     </script>
 </body>

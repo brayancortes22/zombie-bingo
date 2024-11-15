@@ -12,7 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(255, 1, 1); /* Cambia el color del texto para que sea visible */
+    /* color: rgb(255, 1, 1); Cambia el color del texto para que sea visible */
     width: 100%;
     z-index: 1;
     display: flex;

@@ -1,25 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/cargando.css"><link
-    
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-    <title>Cargando....</title>
+    <link rel="stylesheet" href="../css/cargando.css">
+    <title>Enviando código...</title>
 </head>
 <body>
     <div class="container-fluid">
         <div class="imagen">
             <div class="gif">
-                <!-- Animación de carga -->
-                <iframe src="https://lottie.host/embed/6f196d65-2c15-4ef8-872b-d2bbf073bfe7/FU6dqnyp3d.json" frameborder="0"></iframe>
+                <iframe src="https://lottie.host/embed/6f196d65-2c15-4ef8-872b-d2bbf073bfe7/FU6dqnyp3d.json"></iframe>
             </div>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const params = new URLSearchParams(window.location.search);
+        const redirectUrl = params.get('redirect');
+        
+        setTimeout(() => {
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = 'codigo1.php';
+            }
+        }, 3000); // 3 segundos de animación
+    });
+    </script>
 </body>
 </html>
