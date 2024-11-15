@@ -6,105 +6,95 @@ class PerfilManager {
 
     async init() {
         try {
-            console.log('Iniciando carga del perfil...');
             await this.cargarDatosPerfil();
             this.setupEventListeners();
         } catch (error) {
             console.error('Error en init:', error);
-            alert('Error al inicializar el perfil: ' + error.message);
+            alert('Error al inicializar el perfil');
         }
     }
 
     async cargarDatosPerfil() {
         try {
-            console.log('Realizando petición al servidor...');
-            const response = await fetch('../php/PerfilJugador.php?action=obtener', {
-                method: 'GET',
-                headers: {
-                    'Accept': 'application/json',
-                    'Cache-Control': 'no-cache'
-                },
-                credentials: 'same-origin'
-            });
-            
-            console.log('Respuesta recibida:', response);
-            
-            if (!response.ok) {
-                throw new Error(`Error HTTP: ${response.status}`);
+            const response = await fetch('../php/PerfilJugador.php?action=obtener');
+            const data = await response.json();
+
+            if (!data.success) {
+                throw new Error(data.message || 'Error al cargar el perfil');
             }
 
-            const contentType = response.headers.get('content-type');
-            console.log('Tipo de contenido:', contentType);
+            // Actualizar la información del perfil
+            const avatarActual = document.getElementById('avatarActual');
+            const nombreUsuario = document.getElementById('nombreUsuario');
 
-            const text = await response.text();
-            console.log('Texto de respuesta:', text);
-
-            let data;
-            try {
-                data = JSON.parse(text);
-            } catch (e) {
-                console.error('Error al parsear JSON:', e);
-                throw new Error('Respuesta no válida del servidor');
+            if (avatarActual && data.data.avatar) {
+                avatarActual.src = `../img/${data.data.avatar}`;
+                this.selectedAvatar = data.data.avatar;
             }
 
-            console.log('Datos parseados:', data);
+            if (nombreUsuario && data.data.nombre) {
+                nombreUsuario.textContent = data.data.nombre;
+            }
 
-            if (data.success) {
-                // Actualizar elementos del DOM
-                const elementos = {
-                    'nombreUsuario': data.data.nombre,
-                    'nombreCompleto': data.data.nombre,
-                    'userId': data.data.id
-                };
-
-                for (const [id, valor] of Object.entries(elementos)) {
-                    const elemento = document.getElementById(id);
-                    if (elemento) {
-                        elemento.textContent = valor;
-                    } else {
-                        console.warn(`Elemento ${id} no encontrado`);
-                    }
+            // Marcar el avatar seleccionado
+            if (this.selectedAvatar) {
+                const avatarOption = document.querySelector(`[data-avatar="${this.selectedAvatar}"]`);
+                if (avatarOption) {
+                    avatarOption.closest('.avatar-option').classList.add('selected');
                 }
-
-                const avatarImg = document.getElementById('avatarActual');
-                if (avatarImg) {
-                    avatarImg.src = `../img/${data.data.avatar}`;
-                    avatarImg.onerror = () => {
-                        console.warn('Error al cargar avatar, usando default');
-                        avatarImg.src = '../img/perfil1.jpeg';
-                    };
-                }
-            } else {
-                throw new Error(data.message || 'Error al cargar los datos del perfil');
             }
         } catch (error) {
-            console.error('Error detallado:', error);
+            console.error('Error al cargar perfil:', error);
             throw error;
         }
     }
 
     setupEventListeners() {
-        console.log('Configurando event listeners...');
-        const avatarOptions = document.querySelectorAll('.avatar-option');
-        console.log('Opciones de avatar encontradas:', avatarOptions.length);
-        
-        avatarOptions.forEach(avatar => {
-            avatar.addEventListener('click', (e) => {
-                avatarOptions.forEach(a => a.classList.remove('selected'));
-                e.target.classList.add('selected');
-                this.selectedAvatar = e.target.dataset.avatar;
-                console.log('Avatar seleccionado:', this.selectedAvatar);
+        document.querySelectorAll('.avatar-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.avatar-option').forEach(opt => 
+                    opt.classList.remove('selected'));
+                
+                option.classList.add('selected');
+                this.selectedAvatar = option.querySelector('img').dataset.avatar;
+                this.actualizarAvatar();
             });
         });
+    }
+
+    async actualizarAvatar() {
+        if (!this.selectedAvatar) return;
+
+        try {
+            const response = await fetch('../php/PerfilJugador.php?action=actualizar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    avatar: this.selectedAvatar
+                })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                const avatarActual = document.getElementById('avatarActual');
+                if (avatarActual) {
+                    avatarActual.src = `../img/${this.selectedAvatar}`;
+                }
+                // Opcional: mostrar mensaje de éxito
+                console.log('Avatar actualizado correctamente');
+            } else {
+                throw new Error(data.message || 'Error al actualizar el avatar');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al guardar el avatar');
+        }
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM cargado, iniciando PerfilManager...');
-    try {
-        new PerfilManager();
-    } catch (error) {
-        console.error('Error al crear PerfilManager:', error);
-        alert('Error al inicializar el perfil');
-    }
+    new PerfilManager();
 }); 

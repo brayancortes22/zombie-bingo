@@ -444,6 +444,17 @@ box-shadow: 0 0 20px rgba(0, 255, 0, 0.8), 0 0 30px rgba(0, 255, 0, 0.6); /* Efe
     position: relative; /* Puedes cambiar a fixed o absolute si lo deseas fijo en la pantalla */
     
 }
+.usuario21 img{
+    background-size: cover; /* Ajusta la imagen para cubrir todo el div */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* No repetir la imagen */
+    width: 100px; /* Ocupa todo el ancho del div */
+    height: 100px; /* Ajusta la altura a tu preferencia */
+    position: relative; /* Puedes cambiar a fixed o absolute si lo deseas fijo en la pantalla */
+    border-radius: 50%;
+    border: black solid 4px ;
+    filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
+}
 .usuario{
     border-radius: 50%;
     width: 100px;
