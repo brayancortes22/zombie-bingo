@@ -7,11 +7,16 @@ use PHPMailer\PHPMailer\Exception;
 require_once('../setting/conexion-base-datos.php');
 require_once('config.php');
 
-// Verificar si el email está definido
-$email = isset($_POST['email']) ? $_POST['email'] : null;
+// Establecer el encabezado para JSON
+header('Content-Type: application/json');
+
+// Obtener la entrada JSON
+$input = json_decode(file_get_contents('php://input'), true);
+$email = isset($input['email']) ? $input['email'] : null;
+
 if (!$email) {
-    echo "Email no proporcionado.";
-   
+    echo json_encode(['error' => 'Email no proporcionado.']);
+    exit();  
 }
 
 // Crear instancia de la conexión a la base de datos
@@ -19,10 +24,18 @@ $conexion = new Conexion();
 $pdo = $conexion->Conectar(); // Obtener el objeto PDO
 
 // Consulta a la base de datos
-$query = "SELECT * FROM usuarios WHERE correo = :email AND status = 1";
+$query = "SELECT * FROM registro_usuarios WHERE correo = :email";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':email', $email);
 $stmt->execute();
+
+if (!$stmt) {
+
+    echo json_encode(['error' => 'Error en la consulta a la base de datos.']);
+
+    exit();
+
+}
 
 if ($stmt && $stmt->rowCount() > 0) {
     require './PHPMailer/Exception.php';
@@ -51,11 +64,11 @@ if ($stmt && $stmt->rowCount() > 0) {
         $mail->AltBody = 'Este es el mensaje en texto plano para clientes que no soportan HTML';
 
         $mail->send();
-        echo 'El mensaje ha sido enviado';
+        echo json_encode(['success' => 'El mensaje ha sido enviado']);
     } catch (Exception $e) {
-        echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
+        echo json_encode(['error' => "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}"]);
     }
 } else {
-    header("location: ../html/login.php");
+    echo json_encode(['error' => 'Usuario no encontrado o inactivo.']);
 }
 ?>
