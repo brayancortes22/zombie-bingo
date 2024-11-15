@@ -46,4 +46,5 @@ class Conexion{
 }
      // echo "Creando instancia de Conexion...<br>";
 $conexion = new Conexion();
+
 ?>

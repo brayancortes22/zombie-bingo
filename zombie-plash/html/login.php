@@ -69,6 +69,8 @@ if (isset($_SESSION['id_usuario'])) {
         <div id="z_2" class="fantasma2"></div>
     </div>
     <script src="../json/anima.js"></script>
+    <script src="../js/validar_inicio_sesion.js"></script>
+</body>
 </html>
 <script>
 

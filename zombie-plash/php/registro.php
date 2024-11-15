@@ -1,49 +1,103 @@
-<?php
-include_once ('../setting/conexion-base-datos.php');
+<?php 
+session_start();
+require '../setting/conexion-base-datos.php';
 
-header('Content-Type: application/json');
+class Registro {
+    private $pdo;
+    private $response;
+    private $usuario;
+    private $correo;
+    private $contraseña;
+    private $confirmar_contraseña;
 
-$response = ['success' => false, 'errors' => []];
+    public function __construct() {
+        $conexion = new Conexion();
+        $this->pdo = $conexion->conectar();
+        $this->response = ['success' => false, 'errors' => []];
+    }
 
-if (isset($_POST['nombre']) && isset($_POST['correo']) && isset($_POST['contraseña']) && isset($_POST['confirmar_contraseña'])) {
-    
-    $usuario = $_POST['nombre'];
-    $correo = $_POST['correo'];
-    $contraseña = $_POST['contraseña'];
-    $confirmar_contraseña = $_POST['confirmar_contraseña'];
+    private function validarEntrada() {
+        if (!isset($_POST['nombre']) || !isset($_POST['correo']) || 
+            !isset($_POST['contraseña']) || !isset($_POST['confirmar_contraseña'])) {
+            throw new Exception('Por favor, complete todos los campos del formulario.');
+        }
 
-    // Verificar que las contraseñas coincidan
-    if ($contraseña !== $confirmar_contraseña) {
-        $response['errors']['confirmar_contraseña'] = 'Las contraseñas no coinciden';
-    } else {
-        $checkQuery = "SELECT * FROM registro_usuarios WHERE usuario='$usuario' OR correo='$correo'";
-        $result = $conn->query($checkQuery);
+        $this->usuario = $_POST['nombre'];
+        $this->correo = $_POST['correo'];
+        $this->contraseña = $_POST['contraseña'];
+        $this->confirmar_contraseña = $_POST['confirmar_contraseña'];
+    }
 
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            if ($row['usuario'] == $usuario) {
-                $response['errors']['nombre'] = 'El nombre de usuario ya está registrado.';
+    private function validarContraseñas() {
+        if ($this->contraseña !== $this->confirmar_contraseña) {
+            throw new Exception('Las contraseñas no coinciden');
+        }
+    }
+
+    private function verificarUsuarioExistente() {
+        $query = "SELECT nombre, correo 
+                 FROM registro_usuarios 
+                 WHERE nombre = :nombre OR correo = :correo";
+                 
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ':nombre' => $this->usuario,
+            ':correo' => $this->correo
+        ]);
+        
+        $usuario_existente = $stmt->fetch();
+
+        if ($usuario_existente) {
+            if ($usuario_existente['nombre'] == $this->usuario) {
+                throw new Exception('El nombre de usuario ya está registrado.');
             }
-            if ($row['correo'] == $correo) {
-                $response['errors']['correo'] = 'El correo ya está registrado.';
-            }
-        } else {
-            // Aquí deberías usar password_hash() para la contraseña
-            $hashed_password = password_hash($contraseña, PASSWORD_DEFAULT);
-            $sql = "INSERT INTO registro_usuarios(usuario, correo, contraseña) VALUES ('$usuario', '$correo', '$hashed_password')";
-            if ($conn->query($sql) === TRUE) {
-                $response['success'] = true;
-            } else {
-                $response['errors']['general'] = 'Error al crear el registro: ' . $conn->error;
+            if ($usuario_existente['correo'] == $this->correo) {
+                throw new Exception('El correo ya está registrado.');
             }
         }
     }
 
-    $conn->close();
+    private function registrarUsuario() {
+        $hashed_password = password_hash($this->contraseña, PASSWORD_DEFAULT);
+        
+        $query = "INSERT INTO registro_usuarios (nombre, correo, contraseña) 
+                 VALUES (:nombre, :correo, :contrasena)";
+                 
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ':nombre' => $this->usuario,
+            ':correo' => $this->correo,
+            ':contrasena' => $hashed_password
+        ]);
 
-} else {
-    $response['errors']['general'] = 'Por favor, complete todos los campos del formulario.';
+        return $stmt->rowCount() > 0;
+    }
+
+    public function procesarRegistro() {
+        try {
+            $this->validarEntrada();
+            $this->validarContraseñas();
+            $this->verificarUsuarioExistente();
+            
+            if ($this->registrarUsuario()) {
+                $this->response['success'] = true;
+            } else {
+                throw new Exception('Error al crear el registro');
+            }
+
+        } catch (Exception $e) {
+            $this->response['errors']['general'] = $e->getMessage();
+        } finally {
+            $this->pdo = null;
+        }
+
+        return $this->response;
+    }
 }
 
-echo json_encode($response);
-?>
+// Uso de la clase
+header('Content-Type: application/json');
+
+$registro = new Registro();
+$resultado = $registro->procesarRegistro();
+echo json_encode($resultado);

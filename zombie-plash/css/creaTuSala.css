@@ -1,9 +1,10 @@
+
 .container-fluid{
     margin: 0% !important;
     padding: 0% !important;
 }
 .imagen{
-    background-image: url('../img/fondoCreaTuSala.jpeg');
+    background-image: url('../img/huellas.jpg');
     background-size: cover; /* Hace que la imagen cubra toda la pantalla */
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -14,24 +15,48 @@
     justify-content: center;
     color: white; /* Cambia el color del texto para que sea visible */
     width: 100%;
-    z-index: 1;
+   
 }
+
 .cuadro{
-    border: #36ecf8 solid 5px;
+    background-image: url('../img/huellas2.jpg');
+    border: #fa1414 solid 5px;
     height: 80%;
     width: 50%;
     background-color: rgba(14, 85, 87, 0.5); /* Azul con 50% de transparencia */
     border-radius: 40px;
-    position: absolute;
+    position: absolute; /* Cambiado de absolute a relative */
+    top: 0; /* Eliminamos el posicionamiento absoluto */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    transform: none; /* Eliminamos cualquier transformación previa */
+    margin: auto; /* Centramos el cuadro */
+   
+    width: 50%; /* Usamos un porcentaje para responsividad */
+    height: 80%; /* Altura automática */
+    padding: 40px 20px; /* Añadimos padding interno */
     filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+    display: flex;
     
+    justify-content: center;
     
+    flex-direction: column;
+    align-items: center;
+   
+    padding: 40px 20px;
 }
-.titulo{
+
+.titulo {
     font-size: 40px;
     color: rgb(255, 255, 255);
-    position: absolute;
-    left: 34%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.cajita {
+    width: 100%;
+    max-width: 400px;
 }
 .cuadro::before{
     
@@ -41,67 +66,91 @@
         left: 0;
         right: 0;
         bottom: 0;
+        border-radius: 40px;
         background-color: rgba(0, 0, 0, 0.3); /* Negro con 30% de transparencia */
-    }
+}
     
-    .cajita{
-        height: 50%;
-        width: 60%;
+  
+    #crearSalaForm {
         display: flex;
         flex-direction: column;
-        margin-top: 15%;
-        margin-left: 20%;
-        position: absolute;
-        
-        
+        align-items: center;
+        width: 100%;
     }
-    .contra{
+    
+    .contra {
         text-align: center;
         color: white !important;
         font-size: 25px;
+        margin-bottom: 10px;
+        width: 100%;
     }
-    .redondeo{
+    
+    .redondeo {
         border-radius: 20px;
         width: 100%;
-        height: 35%;
+        max-width: 300px;
+        height: 40px;
+        margin-bottom: 20px;
         text-align: center;
         background-color: #d19797;
         font-size: 30px;
         filter: drop-shadow(0px 0px 12px rgb(182, 33, 6));
-        
-
     }
-    .largo{
-        display: flex;
-        flex-direction: row;
-        height: 10%;
-        width: 60%;
-        margin-top: 57%;
-        margin-top: 57%;
-        margin-left: 20%;
-
-    }
-    .cancelar{
-        width: 24%;
-        border-radius: 30px;
-        background-color: red;
-        margin-left: 14%;
-        filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
     
-     }
-    .Aceptar{
-        width: 24%;
-        margin-left: 22%;
-        border-radius: 30px;
-        background-color: #2fcbc2;
-        filter: drop-shadow(0px 0px 12px rgb(38, 162, 211));
+   
+.botones {
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.cancelar, .Aceptar {
+    width: 120px;
+    margin: 0 10px;
+}
+
+.cancelar {
+    border-radius: 20px;
+    background-color: red;
+    filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
+}
+
+.Aceptar {
+    border-radius: 20px;
+    background-color: #2fcbc2;
+    filter: drop-shadow(0px 0px 12px rgb(38, 162, 211));
+}
+.btn {
+    border: none;
+    height: 100%;
+    width: 100%;
+    border-radius: 30px;
+    padding: 10px 0;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .cuadro {
+        width: 95%;
+        padding: 20px 10px;
     }
-    .btn{
-        border: none;
-        height: 100%;
-        width: 100%;
-        border-radius: 30px ;
+
+    .titulo {
+        font-size: 30px;
     }
 
+    .contra {
+        font-size: 20px;
+    }
 
+    .redondeo {
+        font-size: 20px;
+    }
 
+    .cancelar, .Aceptar {
+        width: 100px;
+    }
+}
