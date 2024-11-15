@@ -118,47 +118,11 @@ function cambiarIcono() {
             </div>
             <div class="abajo">
                <div class="titulo"><strong>Amigos agregados</strong></div>
-               <div class="filass">
-                <div class="columna">
-                    <div class="usuario"></div>
-                </div>
-                <div class="columna">
-                    <div class="usuario"></div>
-                </div>
-                <div class="columna">
-                    <div class="usuario"></div>
-                </div>
-                <div class="columna">
-                    <div class="usuario"></div>
-                </div>
-                <div class="columna">
-                    <div class="usuario"></div>
-                </div>
-                <div class="columna">
-                <a href="./listaDeJugadores.html">
-                    <i class="bi bi-person-plus"></i>
-                </a>
-                </div>
+               <div class="filass" id="amigosAvatares">
+                <!-- Los avatares se cargarán dinámicamente aquí -->
                </div>
-               <div class="filass1">
-                <div class="columna1">
-                    <strong>Usuario-1</strong>
-                </div>
-                <div class="columna1">
-                    <strong>Usuario-1</strong>
-                </div>
-                <div class="columna1">
-                    <strong>Usuario-1</strong>
-                </div>
-                <div class="columna1">
-                    <strong>Usuario-1</strong>
-                </div>
-                <div class="columna1">
-                    <strong>Usuario-1</strong>
-                </div>
-                <div class="columna1">
-                    <strong>Agregar Amigos</strong>
-                </div>
+               <div class="filass1" id="amigosNombres">
+                <!-- Los nombres se cargarán dinámicamente aquí -->
                </div>
             </div>
             
@@ -169,6 +133,6 @@ function cambiarIcono() {
           window.location.href='cargando.html'
         }
       </script>
-    
+    <script src="../js/obtenerAmigos.js"></script>
 </body>
 </html>
