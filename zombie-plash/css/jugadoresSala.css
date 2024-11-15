@@ -229,7 +229,7 @@
     width: 100%;
     height: auto; /* Altura automática basada en el contenido */
     gap: 20px; /* Espacio entre jugadores en la misma fila */
-    
+    background-image: url('../img/huellas2.jpg');
     background-size: cover;
     background-position: center;
     border-radius: 15px;
