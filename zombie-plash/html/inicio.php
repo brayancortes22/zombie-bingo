@@ -109,7 +109,7 @@ function cambiarIcono() {
                             </i>
                             <strong>Unirse a una sala</strong></button>
                         </div>
-                        <div class="jugar" onclick="window.location.href='jugar.html'">
+                        <div class="jugar" onclick="window.location.href='juego.html'">
                             <button type="button" class="bjugar"> 
                             <i class="fas fa-user">
                             </i>
@@ -135,7 +135,9 @@ function cambiarIcono() {
                     <div class="usuario"></div>
                 </div>
                 <div class="columna">
-                <i class="bi bi-person-plus"></i>
+                <a href="./listaDeJugadores.html">
+                    <i class="bi bi-person-plus"></i>
+                </a>
                 </div>
                </div>
                <div class="filass1">

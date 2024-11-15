@@ -48,11 +48,15 @@ class Registro {
         $usuario_existente = $stmt->fetch();
 
         if ($usuario_existente) {
+            $errors = [];
             if ($usuario_existente['nombre'] == $this->usuario) {
-                throw new Exception('El nombre de usuario ya está registrado.');
+                $errors= 'El nombre de usuario ya está registrado.';
             }
             if ($usuario_existente['correo'] == $this->correo) {
-                throw new Exception('El correo ya está registrado.');
+                $errors = 'El correo ya está registrado.';
+            }
+            if (!empty($errors)) {
+                throw new Exception(json_encode($errors));
             }
         }
     }

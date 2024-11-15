@@ -5,6 +5,7 @@
     height: 100vh;
     display: flex;
 }
+
 .imagen{
     background-image: url('../img/jugadoresSala.jpeg');
     background-size: cover; /* Hace que la imagen cubra toda la pantalla */
@@ -21,7 +22,7 @@
 }
 .cuadro{
     border: #ce7c00 solid 5px;
-    height: 90vh;
+    height: 95vh;
     width: 90%;
     background-color: rgba(14, 85, 87, 0.5); /* Azul con 50% de transparencia */
     border-radius: 30px;

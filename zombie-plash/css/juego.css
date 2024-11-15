@@ -6,14 +6,20 @@
     height: 100vh;
     /* overflow:visible; */
 }
+.centro{
 
-
-
-
+    background-image: url('../img/marco.jpg');
+    width:35%;           /* Ancho del cuadro */
+    height: 97%;          /* Alto del cuadro */
+    background-size: cover; /* Escala la imagen para que cubra todo el cuadro */
+    background-position: center; /* Centra la imagen en el cuadro */
+    background-repeat: no-repeat; /* Evita que la imagen se repita */
+    overflow: hidden;       /* Asegura que nada se salga del cuadro */
+    border-radius: 50px;
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+}
 .imagen{ 
-    
-    
-    background-image: url('../img/fondoJuego.jpeg');
+    background-image: url('../img/fondo_juego_v2.jpg');
     background-size: cover; /* Hace que la imagen cubra toda la pantalla */
     background-position: center; /* Centra la imagen */
     background-repeat: no-repeat; /* Evita que la imagen se repita */
@@ -24,56 +30,62 @@
     color: white; /* Cambia el color del texto para que sea visible */
     width: 100%;
     z-index: 3;
-
+    
 }
 .fila{
-    border: solid black 3px;
-    height: 20%;
+    height: 15%;
     width: 100%;
     display: flex;
-
 }
 .colu1{
     height: 100%;
     width: 15%;
-    border: solid red 3px;
     display: flex;
     justify-content: center;
     align-items: center;
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+
     
 }
 .colu2{
     height: 100%;
     width: 30%;
-    border: solid red 3px;
-    
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+
 }
 .colu3{
     height: 100%;
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
     width: 20%;
-    border: solid red 3px;
 }
 .colu4{
     height: 100%;
     width: 10%;
-    border: solid red 3px;
     margin-left: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
 .bu{
     height: 100%;
     width: 100%;
-    background-color: rgb(233, 140, 97);
+    background-color: rgb(147, 208, 216);
     border-radius: 40px;
     text-align: 40px;
     font-size: 40px;
-    color: white ;
+    color:  rgb(255, 255, 255);
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
 }
 .bi{
-    font-size: 90px;
-    color: rgb(219, 159, 30)
+    height: 100%;
+    color: rgb(36, 219, 30);
+    width: 100%;
+    font-size: 79px !important;
+    text-align: center;
+    
 }
 .fila2{
-    border: solid rgb(10, 214, 13) 3px;
     height: 15%;
     width: 100%;
     display: flex;
@@ -83,16 +95,16 @@
 .resultados{
     height: 100%;
     width: 30%;
-    border: solid rgb(194, 50, 50) 3px;
     border-radius: 40px;
-     background-color:rgba(243, 122, 122, 0.733);
-     margin-top: 2%;
-     margin-left: -2%;
+    margin-top: 2%;
+    margin-left: -2%;
+    background-color:rgba(58, 204, 180, 0.733);
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+    border: solid 1px black;
 
 }
 .fila3{
-    border: solid black 3px;
-    height: 69%;
+    height: 70%;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -102,33 +114,21 @@
 .izquierda{
     width: 20%;
     height: 90%;
-    border: solid rgb(29, 196, 65) 2px;
-    border-radius: 50px;
     margin-left: 4%;
     margin-right: 4%;
-    background-color: darkolivegreen;
-    filter: drop-shadow(0px 0px 12px rgb(12, 221, 26));
-}
-.centro{
-    
-    border: solid black 4px;
-    background-image: url('../img/perfilJugador.jpeg');
-    width:35%;           /* Ancho del cuadro */
-    height: 90%;          /* Alto del cuadro */
-    background-size: cover; /* Escala la imagen para que cubra todo el cuadro */
-    background-position: center; /* Centra la imagen en el cuadro */
-    background-repeat: no-repeat; /* Evita que la imagen se repita */
-    border: 8px solid #000; /* Opcional: un borde para que se vea el cuadro */
-    overflow: hidden;       /* Asegura que nada se salga del cuadro */
+    background-color: rgb(147, 208, 216);
     border-radius: 50px;
-   
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+
 }
+
 .derecha{
     width: 30%;
     height: 80%;
-    border: solid black 4px;
     display: flex;
     justify-content: center;
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+
   
 }
 
@@ -136,21 +136,21 @@
 .bingo{
     width: 70%;
     height: 26%;
-    border: solid black 2px;
     border-radius: 20px;
-    background-color: limegreen;
+    background-color: rgb(0, 0, 0);
     color: aliceblue;
     font-size: 40px;
-
+   
 }
 .fila1{
-    border: solid rgb(255, 9, 9) 2px;
     height: 15%;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: goldenrod;
+    color: rgb(255, 214, 32);
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+
     margin-top: 1%;
     font-family:fantasy;
     font-weight: 700;
@@ -172,12 +172,12 @@
 .bh{
     height:100%;
     width: 100%;
-    background-color: limegreen;
+    background-color: rgb(147, 208, 216);
     border-radius: 20px;
     font-size: 40px !important;
     text-align: center;
-    filter: drop-shadow(0px 0px 12px rgb(12, 221, 26));
     color: white;
+    
 }
 .fila5{
     
@@ -201,11 +201,7 @@
     border-radius: 50%;
     margin-left: 2%;
     margin-right: 2%;
-    background-color: rgb(184, 6, 6);
+    background-color: rgb(118, 161, 255);
 
 
-}
-.bi{
-    border: #000 solid 2px;
-    font-size: 20px;
 }
