@@ -1,48 +1,22 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <scr>
-        // Función para cambiar la imagen principal al hacer clic en una de las imágenes de la barra
-        function cambiarImagenPrincipal(src) {
-            document.getElementById("imagenPrincipal").src = src;
-            document.getElementById("imagenSeleccionada").value = src; // Guardar la ruta de la imagen seleccionada
-        }
-
-        // Función para mostrar la imagen seleccionada desde el input de tipo "file"
-        function mostrarImagenArchivo(input) {
-            var file = input.files[0];
-            var reader = new FileReader();
-        
-
-    <!-- <script src="../js/musica.js"></script> --> <!-- Agregar aquí el script de audio -->
+    <script src="../js/cancelarLetra.js"></script>
     <link rel="stylesheet" href="../css/fuentes.css">
 
-
-            reader.onload = function(e) {
-                // Cambiar la imagen principal al cargar el archivo
-                document.getElementById("imagenPrincipal").src = e.target.result;
-                document.getElementById("imagenSeleccionada").value = e.target.result; // Guardar la ruta del archivo
-            };
-
-            reader.readAsDataURL(file); // Leer el archivo como URL
-        }
-    </script>
-    <link rel="stylesheet" href="../css/fuentes.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/perfilJugador.css">
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-          crossorigin="anonymous" />
+    <link rel="stylesheet" href="../css/perfilJugador.css"><link
+    
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
     <title>Crea tu sala</title>
 </head>
 <body>
-    <audio id="audio-juego" src="../musica/esta.mp3" loop></audio> <!-- El audio se seguirá reproduciendo aquí -->
     <div class="container-fluid">
         <div class="imagen">
             <a href="./inicio.php">
@@ -50,11 +24,10 @@
             </a>
             <div class="cua">
                 <div class="zombi1">
-                    <!-- Imagen principal a cambiar -->
-                    <img id="imagenPrincipal" src="../img/perfil1.jpeg" alt="">
+                    <img id="avatarActual" src="../img/perfil1.jpeg" alt="Avatar">
                 </div>
                 <div class="zombie-1">
-                    <h1><strong>Zombie-1</strong></h1>
+                    <h1><strong id="nombreUsuario">Cargando...</strong></h1>
                 </div>
             </div>
             <div class="cuadro">
@@ -63,11 +36,7 @@
                         <h2><strong>Nombre: </strong></h2>
                     </div>
                     <div class="zo">
-                        <!-- Reemplazo del campo estático por un input con los estilos proporcionados -->
-                        <div class="form__group field">
-                            <input type="text" class="form__field" placeholder="Zombie-1" value="Zombie-1" required />
-                            <label for="nombre" class="form__label">Nombre</label>
-                        </div>
+                        <h2><strong id="nombreCompleto">Cargando...</strong></h2>
                     </div>
                 </div><br><br>
                 <div class="largo">
@@ -75,39 +44,37 @@
                         <h2><strong>ID: </strong></h2>
                     </div>
                     <div class="zo">
-                        <!-- Reemplazo del campo estático por un input con los estilos proporcionados -->
-                        <div class="form__group field">
-                            <input type="text" class="form__field" placeholder="1123546" value="1123546" required />
-                            <label for="id" class="form__label">ID</label>
-                        </div>
+                        <h2><strong id="userId">Cargando...</strong></h2>
                     </div>
                 </div>
             </div>
-            <!-- Barra de selección de imágenes -->
-            <div class="row" id="barraSeleccion">
-                <!-- Imágenes de ejemplo -->
+            <div class="row" id="avatarOptions">
                 <div class="col">
-                    <img src="../img/avatar1.jpg" alt="Imagen 1" onclick="cambiarImagenPrincipal(this.src)">
+                    <img src="../img/lapida.jpg" alt="Avatar 1" data-avatar="lapida.jpg" class="avatar-option">
                 </div>
                 <div class="col">
-                    <img src="../img/avatar3.jpg" alt="Imagen 2" onclick="cambiarImagenPrincipal(this.src)">
+                    <img src="../img/murcielago.jpg" alt="Avatar 2" data-avatar="murcielago.jpg" class="avatar-option">
                 </div>
                 <div class="col">
-                    <img src="../img/1posion.jpeg" alt="Imagen 3" onclick="cambiarImagenPrincipal(this.src)">
+                    <img src="../img/codigoveri.jpg" alt="Avatar 3" data-avatar="codigoveri.jpg" class="avatar-option">
+                </div>
+                <div class="col">
+                    <img src="../img/avatar1.jpg" alt="Avatar 4" data-avatar="avatar1.jpg" class="avatar-option">
+                </div>
+                <div class="col">
+                    <img src="../img/avatar3.jpg" alt="Avatar 5" data-avatar="avatar3.jpg" class="avatar-option">
+                </div>
+                <div class="col">
+                    <img src="../img/perfil1.jpeg" alt="Avatar 6" data-avatar="perfil1.jpeg" class="avatar-option">
                 </div>
             </div>
-
-            <!-- Formulario para subir una nueva imagen -->
-            <form action="actualizar_jugador.php" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="id" value="1123546"> <!-- ID del usuario -->
-                <input type="hidden" id="imagenSeleccionada" name="imagenSeleccionada" value="../img/perfil1.jpeg">
-                
-                <label for="nuevaImagen">Sube una imagen</label>
-                <input type="file" id="nuevaImagen" name="nuevaImagen" onchange="mostrarImagenArchivo(this)"><br><br>
-
-                <button type="submit" class="btn btn-success"><strong>Guardar</strong></button>
-            </form>
+            <div class="guardare">
+                <div class="guardar">
+                    <button id="guardarPerfil" class="btn success"><strong>Guardar</strong></button>
+                </div>
+            </div>
         </div>
     </div>
+    <script src="../js/perfilJugador.js"></script>
 </body>
 </html>
