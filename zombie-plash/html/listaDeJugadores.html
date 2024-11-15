@@ -24,100 +24,25 @@
                         <div class="centro">
                             <div class="jugador"><strong>ID jugador:</strong></div>
                             <div class="inpu">
-                                <input type="number" name="" id="" class="redondeo" min="1" max="12" oninput="limitarNumero">
+                                <input type="number" id="buscarJugadorId" class="redondeo" min="1" max="999" oninput="limitarNumero(this)">
                             </div>
+                            <br><br>
                             <div class="boton">
-                                <button type="button" class="btn"><strong>Buscar jugador</strong></button>
+                                <button type="button" class="btn" id="btnBuscar"><strong>Buscar jugador</strong></button>
+                            </div>
+                            <br><br>
+                            <div class="boton">
+                                <button type="button" class="btn2" onclick="window.location.href='./inicio.php'"><strong>volver</strong></button>
                             </div>
                         </div>
                     </div>
-                    <div class="derecha">
-                        <div class="fila">
-                            <div class="cuadrito">
-                                <div class="circulo"><div class="icono">
-                                    <i class="bi bi-person-add"></i></div></div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo"><div class="icono">
-                                    <i class="bi bi-person-add"></i></div></div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo"><div class="icono">
-                                    <i class="bi bi-person-add"></i></div></div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo"><div class="icono">
-                                    <i class="bi bi-person-add"></i></div></div>
-                            </div>
-                        </div>
-                        <div class="filita">
-                            <div class="cuadritos">Usuario-1</div>
-                            <div class="cuadritos">Usuario-1</div>
-                            <div class="cuadritos">Usuario-1</div>
-                            <div class="cuadritos">Usuario-1</div>
-                        </div><br>
-                        <div class="fila2">
-                            <div class="cuadrito">
-                                <div class="circulo"><div class="icono">
-                                    <i class="bi bi-person-add"></i></div></div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo"><div class="icono">
-                                    <i class="bi bi-person-add"></i></div></div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo">
-                                    <div class="icono">
-                                        <i class="bi bi-person-add"></i></div>
-                                </div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo">
-                                    <div class="icono">
-                                        <i class="bi bi-person-add"></i></div></div>
-                            </div>
-                        </div>
-                        <div class="filita1">
-                            <div class="cuadritos">Usuario-1</div>
-                            <div class="cuadritos">Usuario-1</div>
-                            <div class="cuadritos">Usuario-1</div>
-                            <div class="cuadritos">Usuario-1</div>
-                        </div><br>
-                        <div class="fila3">
-                            <div class="cuadrito">
-                                <div class="circulo">
-                                    <div class="icono">
-                                        <i class="bi bi-person-add"></i></div>
-                                </div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo">
-                                    <div class="icono">
-                                        <i class="bi bi-person-add"></i></div>
-                                </div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo">
-                                    <div class="icono">
-                                        <i class="bi bi-person-add"></i></div>
-                                </div>
-                            </div>
-                            <div class="cuadrito">
-                                <div class="circulo"></div>
-                                <div class="icono">
-                                    <i class="bi bi-person-add bo"></i></div>
-                            </div>
-                        </div>
-                        <div class="filita2">
-                            <div class="cuadritos"><strong>Usuario-1</strong></div>
-                            <div class="cuadritos"><strong>Usuario-1</strong></div>
-                            <div class="cuadritos"><strong>Usuario-1</strong></div>
-                            <div class="cuadritos"><strong>Usuario-1</strong></div>
-                        </div>
+                    <div class="derecha" id="listaJugadores">
+                        <!-- Los jugadores se cargarán dinámicamente aquí -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script src="../js/listaJugadores.js" defer></script>
 </body>
 </html>

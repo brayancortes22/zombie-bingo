@@ -2,20 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="../js/musica.js"></script> <!-- Agregar aquí el script de audio -->
+    <script src="../js/cancelarLetra.js"></script>
     <link rel="stylesheet" href="../css/fuentes.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/perfilJugador.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-          crossorigin="anonymous" />
+    <link rel="stylesheet" href="../css/perfilJugador.css"><link
+    
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Crea tu sala</title>
 </head>
 <body>
-    <audio id="audio-juego" src="../musica/esta.mp3" loop></audio> <!-- El audio se seguirá reproduciendo aquí -->
+    <audio autoplay id="audio-juego" >
+        <source src="../musica/esta.mp3" type="audio/mpeg">
+      </audio>
     <div class="container-fluid">
         <div class="imagen">
             <a href="./inicio.php">
@@ -23,10 +27,10 @@
             </a>
             <div class="cua">
                 <div class="zombi1">
-                    <img src="../img/perfil1.jpeg" alt="">
+                    <img id="avatarActual" src="../img/perfil1.jpeg" alt="Avatar">
                 </div>
                 <div class="zombie-1">
-                    <h1><strong>Zombie-1</strong></h1>
+                    <h1><strong id="nombreUsuario">Cargando...</strong></h1>
                 </div>
             </div>
             <div class="cuadro">
@@ -35,7 +39,7 @@
                         <h2><strong>Nombre: </strong></h2>
                     </div>
                     <div class="zo">
-                        <h2><strong>Zombie-1</strong></h2>
+                        <h2><strong id="nombreCompleto">Cargando...</strong></h2>
                     </div>
                 </div><br><br>
                 <div class="largo">
@@ -43,36 +47,37 @@
                         <h2><strong>ID: </strong></h2>
                     </div>
                     <div class="zo">
-                        <h2><strong>1123546</strong></h2>
+                        <h2><strong id="userId">Cargando...</strong></h2>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" id="avatarOptions">
                 <div class="col">
-                    <img src="../img/perfil1.jpeg" alt="">
+                    <img src="../img/lapida.jpg" alt="Avatar 1" data-avatar="lapida.jpg" class="avatar-option">
                 </div>
                 <div class="col">
-                    <img src="../img/perfil1.jpeg" alt="">
+                    <img src="../img/murcielago.jpg" alt="Avatar 2" data-avatar="murcielago.jpg" class="avatar-option">
                 </div>
                 <div class="col">
-                    <img src="../img/perfil1.jpeg" alt="">
+                    <img src="../img/codigoveri.jpg" alt="Avatar 3" data-avatar="codigoveri.jpg" class="avatar-option">
                 </div>
                 <div class="col">
-                    <img src="../img/perfil1.jpeg" alt="">
+                    <img src="../img/avatar1.jpg" alt="Avatar 4" data-avatar="avatar1.jpg" class="avatar-option">
                 </div>
                 <div class="col">
-                    <img src="../img/perfil1.jpeg" alt="">
+                    <img src="../img/avatar3.jpg" alt="Avatar 5" data-avatar="avatar3.jpg" class="avatar-option">
                 </div>
                 <div class="col">
-                    <img src="../img/perfil1.jpeg" alt="">
+                    <img src="../img/perfil1.jpeg" alt="Avatar 6" data-avatar="perfil1.jpeg" class="avatar-option">
                 </div>
             </div>
             <div class="guardare">
                 <div class="guardar">
-                  <button class="btn success"><strong>Guardar</strong></button>
+                    <button id="guardarPerfil" class="btn success"><strong>Guardar</strong></button>
                 </div>
             </div>
         </div>
     </div>
+    <script src="../js/perfilJugador.js"></script>
 </body>
 </html>
