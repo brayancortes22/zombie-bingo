@@ -136,3 +136,145 @@ form{
     display: flex;
     
 }
+@media (max-width: 700px) {
+    .container-fluid{
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        background-image: url('../img/codigoveri.jpg');
+        background-position: center; /* Centra la imagen */
+        background-size: cover; /* Hace que la imagen cubra toda la pantalla */
+        align-items: start;
+           
+    
+        
+    }
+    
+    .cuadro{
+        border: solid 6px #6a5303; 
+        height: 140vw;
+        width: 90vw;
+        border-radius: 30px;
+        background-color: #446346c7;
+        box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
+
+    }
+
+    .titulo{
+        font-size: 1px;
+        text-align: center;
+        color: rgb(255, 255, 255);
+        font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif ;
+        margin-top: 2%;
+    }
+    .texto{
+        font-size: 15px;
+        color: rgb(21, 255, 0);
+        display: flex;
+        margin-top: 3%;
+        justify-content: center;
+        
+    }
+    .ingresar{
+        
+        height: 10vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        color: rgb(21, 255, 0);
+    }
+    .formulario{
+        display: flex;
+        height: 22vh;
+        width: 100%;
+        justify-content: center;
+        
+    }
+    form{
+        height: 100%;
+        width: 80%;
+    }
+    .fila{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10%;
+    }
+    .cua{
+        border-radius: 10px;
+        height: 6vh;
+        text-align: center;
+        color: #26c218;
+        width: 100%;
+        font-size: 30px;
+        
+    }
+    .largo{
+        display: flex;
+        height: 7vh;
+        margin-top: 40%;
+        justify-content: center;
+
+    }
+    .cancelar{
+        height: 7vh;
+        width: 35%;
+        text-align: center;
+        margin-right: 10%;
+        border-radius: 10px;
+        background-color: red;
+        
+        
+        
+    }
+    .aceptar{
+        height: 7vh;
+        width: 35%;
+        text-align: center;
+        margin-left: 10%;
+        border-radius: 10px;
+        background-color: #26c218;
+        font-size: 15px;
+        
+    }
+    .btn{
+        height: 100%;   
+        width: 100%;
+        border-radius: 50px;
+        color: #ffffff !important;
+
+        font-size: 15px !important;
+    }
+    
+    .zombie2{
+        
+        height: 50vh;
+        width: 20%;
+        filter: drop-shadow(0px 0px 12px rgb(0, 247, 21));
+    
+    }
+    
+    .zombie3{
+        
+        height: 50vh;
+        width: 20%;
+    }
+    .tamaño3{
+        height: 70%;
+        width: 100%;
+        filter: drop-shadow(0px 0px 12px rgb(0, 247, 21));
+    }
+    .tamaño{
+        height: 70%;
+        width: 100%;
+    }
+    .fila{
+      
+        height: 22%;
+        width: 100%;
+        display: flex;
+        
+    }
+}
