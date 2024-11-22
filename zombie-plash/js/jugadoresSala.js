@@ -124,40 +124,35 @@ class SalaManager {
 document.addEventListener('DOMContentLoaded', () => {
     new SalaManager();
 });
-
-// Función para cancelar la sala
-async function cancelarSala() {
-    const datosSala = JSON.parse(localStorage.getItem('datosSala'));
-    
-    if (!datosSala?.id_sala) {
-        alert('No se encontraron datos de la sala.');
-        return;
-    }
-
-    if (!confirm('¿Estás seguro de que quieres cancelar la sala?')) {
-        return;
-    }
-
+document.getElementById('btnSalirSala').addEventListener('click', async function() {
     try {
-        const response = await fetch('../php/cancelarSala.php', {
+        const id_sala = JSON.parse(localStorage.getItem('datosSala')).id_sala;
+        const id_jugador = localStorage.getItem('id_jugador');
+
+        const response = await fetch('../php/salirDeSala.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id_sala: datosSala.id_sala })
+            body: JSON.stringify({
+                id_sala: id_sala,
+                id_jugador: id_jugador
+            })
         });
 
         const data = await response.json();
-
+        
         if (data.success) {
-            alert('La sala ha sido cancelada exitosamente.');
+            // Limpiar datos de la sala del localStorage
             localStorage.removeItem('datosSala');
-            window.location.href = 'inicio.php';
+            // Redireccionar a la página principal
+            window.location.href = '';
         } else {
-            alert('Error al cancelar la sala: ' + data.message);
+            console.error('Error:', data.message);
+            alert('Error al salir de la sala: ' + data.message);
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Ocurrió un error al intentar cancelar la sala.');
+        alert('Error al procesar la solicitud');
     }
-}
+});

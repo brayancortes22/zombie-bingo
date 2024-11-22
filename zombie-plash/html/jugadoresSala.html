@@ -19,6 +19,9 @@
 <body>
     <div class="container-fluid">
         <div class="imagen">
+            <div id="userid">
+                <p>ID Usuario: <span id="nombreUsuario">Cargando</span></p>
+            </div>
             <div class="cuadro">
                 <div class="row">
                     <div class="col linia">ID Sala</div>
@@ -41,9 +44,10 @@
                     <div class="col contenedor" id="contraseñaSala"></div>
                     <div class="col">
                         <button type="button" class="botonrojo texto" onclick="cancelarSala()"><h5>Cancelar sala</h5></button>
-                        <!-- boton para devolver al inicio del juego -->
-                        <button type="button" class="botonrojo" onclick="window.location.href='./inicio.php'"><strong>salir</strong></button>
-                
+                       <!-- Agregar el botón de salir -->
+<button id="btnSalirSala" class="btn btn-danger">
+    Salir de la Sala
+</button>
                     </div>
                 </div>
                 <div class="titulo"><strong>Jugadores en la sala</strong></div>
@@ -58,5 +62,6 @@
     </script>
     <!-- <script src="../js/jugadoresSala_conectado.js"></script> -->
     <script src="../js/jugadoresSala.js"></script>
+    <script src="../js/perfilJugador.js"></script>
 </body>
 </html>
