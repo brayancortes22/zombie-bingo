@@ -7,7 +7,6 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location: login.php");
     exit();
 }
-
 // Resto del código de inicio.php
 ?>
 <!DOCTYPE html>
@@ -37,10 +36,11 @@ if (!isset($_SESSION['id_usuario'])) {
     <div class="container-fluid">
         <div class="imagen">
             <div class="primera">
-                <a href="./perfiljugador.html">
-                    <div class="circulop1"> 
-                        </div>
-                    </a>
+            <a href="./perfiljugador.html">
+        <div class="circulop1">
+            <img src="../uploads/avatars/<?php echo $avatar; ?>" alt="">
+        </div>
+    </a>
                    
                     
                     <button class="Btn" onclick="cerrarSesion()">

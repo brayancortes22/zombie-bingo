@@ -29,7 +29,7 @@ function handleFileUpload(file) {
         fetch('../avatar_icono/guardar_avatar.php', {
             method: 'POST',
             body: formData,
-            credentials: 'include'
+            credentials: 'include'             
         })
         .then(response => response.json())
         .then(data => {
