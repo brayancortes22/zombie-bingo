@@ -60,7 +60,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Perfil actualizado correctamente');
+                alert('Perfil actualizado correctamente. El nombre de usuario para iniciar sesión también se actualizará al cerrar sesión.');
+                localStorage.setItem('nombre_usuario', nombre); // Guardar en localStorage
+        
             } else {
                 alert('Error al actualizar el perfil: ' + data.message);
             }

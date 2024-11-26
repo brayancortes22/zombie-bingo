@@ -50,8 +50,15 @@ if (!isset($_SESSION['id_usuario'])) {
                         
                         <div class="text">Cerrar sesión</div>
 </button>
-<h1>Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?>!</h1>
+<h1>Bienvenido, <span id="nombreUsuario"><?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?></span>!</h1>
 <script>
+document.addEventListener('DOMContentLoaded', function() {
+        const nombreUsuario = localStorage.getItem('nombre_usuario');
+        if (nombreUsuario) {
+            document.getElementById('nombreUsuario').textContent = nombreUsuario;
+        }
+    });
+
                     function cerrarSesion() {
                         if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
         window.location.href = '../php/cerrar_sesion.php';

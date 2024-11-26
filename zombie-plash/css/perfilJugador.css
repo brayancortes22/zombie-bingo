@@ -61,6 +61,13 @@ h1{
     font-size: 10px;
     color: blueviolet !important;
 }
+.bi-pencil-square{
+    position: absolute;
+    top: 18%;
+    right: 28%;
+    font-size: 30px;
+    color: blueviolet;
+}
 .cuadro{
     height: 35%;
     width: 50%;
