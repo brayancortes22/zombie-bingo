@@ -34,6 +34,10 @@ class BingoGame{
         this.efectos.toggleEfectoBloqueo();
     }
 
+    toggleEfectoEligeNumero() {
+        this.efectos.iniciarEfectoEligeNumero();
+    }
+
     async obtenerCarton() {
         try {
             const response = await fetch('../php/obtenerCarton.php');
@@ -274,7 +278,7 @@ class BingoGame{
             const panel = document.createElement('div');
             panel.id = 'panel-historial';
             panel.style.height = '100%';
-            panel.style.padding = '10px';
+            panel.style.padding = '8px';
             panel.style.display = 'flex';
             panel.style.flexDirection = 'column';
             panel.style.color = 'black';
@@ -331,7 +335,7 @@ class BingoGame{
             if (contenedor) {
                 const numeroElement = document.createElement('span');
                 numeroElement.textContent = numero;
-                numeroElement.style.backgroundColor = '#ff6b6b';
+                // numeroElement.style.backgroundColor = '#ff6b6b';
                 numeroElement.style.padding = '2px 5px';
                 numeroElement.style.borderRadius = '3px';
                 numeroElement.style.marginRight = '3px';
