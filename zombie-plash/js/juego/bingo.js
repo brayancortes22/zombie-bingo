@@ -34,6 +34,10 @@ class BingoGame{
         this.efectos.toggleEfectoBloqueo();
     }
 
+    toggleEfectoEligeNumero() {
+        this.efectos.iniciarEfectoEligeNumero();
+    }
+
     async obtenerCarton() {
         try {
             const response = await fetch('../php/obtenerCarton.php');
@@ -149,7 +153,6 @@ class BingoGame{
             console.error('Error al sacar número:', error);
         }
     }
-
     async nuevoCarton() {
         try {
             const response = await fetch('../php/nuevoCarton.php');
@@ -274,7 +277,7 @@ class BingoGame{
             const panel = document.createElement('div');
             panel.id = 'panel-historial';
             panel.style.height = '100%';
-            panel.style.padding = '10px';
+            panel.style.padding = '8px';
             panel.style.display = 'flex';
             panel.style.flexDirection = 'column';
             panel.style.color = 'black';
@@ -331,7 +334,7 @@ class BingoGame{
             if (contenedor) {
                 const numeroElement = document.createElement('span');
                 numeroElement.textContent = numero;
-                numeroElement.style.backgroundColor = '#ff6b6b';
+                // numeroElement.style.backgroundColor = '#ff6b6b';
                 numeroElement.style.padding = '2px 5px';
                 numeroElement.style.borderRadius = '3px';
                 numeroElement.style.marginRight = '3px';
@@ -340,8 +343,29 @@ class BingoGame{
         });
     }
 
+    iniciarEfectoEligeNumero() {
+        // Filtrar números que no han sido sacados
+        const numerosDisponibles = Array.from({ length: 60 }, (_, i) => i + 1).filter(
+            numero => !bingoGame.numerosSacados.includes(numero)
+        );
+
+        const contenedor = document.getElementById('numerosDisponibles');
+        contenedor.innerHTML = ''; // Limpiar contenido previo
+
+        // Crear botones para cada número disponible
+        numerosDisponibles.forEach(numero => {
+            const botonNumero = document.createElement('button');
+            botonNumero.textContent = numero;
+            botonNumero.onclick = () => this.seleccionarNumero(numero);
+            contenedor.appendChild(botonNumero);
+        });
+
+        document.getElementById('modalEligeNumero').style.display = 'block';
+    }
+
 }   
 
 
 // Exportar la instancia del juego
 window.bingoGame = new BingoGame();
+

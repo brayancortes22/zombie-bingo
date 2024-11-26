@@ -23,8 +23,8 @@ class PerfilJugador {
             if (!$this->id_usuario) {
                 throw new Exception('Usuario no autenticado');
             }
-
-            $query = "SELECT r.id_registro, r.nombre, r.correo, r.estado 
+    
+            $query = "SELECT r.id_registro, r.nombre, r.avatar 
                      FROM registro_usuarios r 
                      WHERE r.id_registro = :id";
             
@@ -37,23 +37,12 @@ class PerfilJugador {
                     'data' => [
                         'id' => $row['id_registro'],
                         'nombre' => $row['nombre'],
-                        'correo' => $row['correo'],
-                        'estado' => $row['estado'],
                         'avatar' => $row['avatar']
                     ]
                 ];
             } else {
                 throw new Exception('Usuario no encontrado en la base de datos');
             }
-        } catch (PDOException $e) {
-            return [
-                'success' => false,
-                'message' => 'Error en la base de datos: ' . $e->getMessage(),
-                'debug' => [
-                    'error_code' => $e->getCode(),
-                    'error_message' => $e->getMessage()
-                ]
-            ];
         } catch (Exception $e) {
             return [
                 'success' => false,
@@ -61,7 +50,6 @@ class PerfilJugador {
             ];
         }
     }
-
     public function actualizarAvatar() {
         try {
             if (!$this->id_usuario) {
@@ -70,29 +58,31 @@ class PerfilJugador {
 
             $data = json_decode(file_get_contents('php://input'), true);
             $avatar = $data['avatar'] ?? null;
+            $nombre = $data['nombre'] ?? null;
 
-            if (!$avatar) {
-                throw new Exception('No se proporcionó un avatar');
+            if (!$avatar || !$nombre) {
+                throw new Exception('Datos incompletos');
             }
 
             $query = "UPDATE registro_usuarios 
-                     SET avatar = :avatar 
+                     SET avatar = :avatar, nombre = :nombre
                      WHERE id_registro = :id";
             
             $stmt = $this->pdo->prepare($query);
             $success = $stmt->execute([
                 'avatar' => $avatar,
+                'nombre' => $nombre,
                 'id' => $this->id_usuario
             ]);
 
             if ($success) {
                 return [
                     'success' => true,
-                    'message' => 'Avatar actualizado correctamente',
-                    'data' => ['avatar' => $avatar]
+                    'message' => 'Perfil actualizado correctamente',
+                    'data' => ['avatar' => $avatar, 'nombre' => $nombre]
                 ];
             } else {
-                throw new Exception('Error al actualizar el avatar');
+                throw new Exception('Error al actualizar el perfil');
             }
         } catch (Exception $e) {
             return [

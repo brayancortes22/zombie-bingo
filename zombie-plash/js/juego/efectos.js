@@ -3,6 +3,8 @@ class Efectos {
         this.efectoOscuridadActivo = false;
         this.efectoNumerosActivo = false;
         this.efectoBloqueoActivo = false;
+        this.efectoEligeNumeroActivo = false;
+        
     }
 
 toggleEfectos() {
@@ -200,12 +202,36 @@ iniciarEfectoNumeros() {
     }, 10000);
 }
 
-iniciarEfectoBloqueo() {
-    const btnBingo = document.querySelector('#btnBingo');
-    if (btnBingo) {
-        btnBingo.disabled = true;
-        btnBingo.style.opacity = '0.5';
+iniciarEfectoEligeNumero() {
+    const numerosDisponibles = Array.from({ length: 60 }, (_, i) => i + 1).filter(
+        numero => !bingoGame.numerosSacados.includes(numero)
+    );
+
+    const contenedor = document.getElementById('numerosDisponibles');
+    contenedor.innerHTML = '';
+
+    numerosDisponibles.forEach(numero => {
+        const botonNumero = document.createElement('button');
+        botonNumero.textContent = numero;
+        botonNumero.onclick = () => this.seleccionarNumero(numero);
+        contenedor.appendChild(botonNumero);
+    });
+
+    document.getElementById('modalEligeNumero').style.display = 'block';
+}
+
+seleccionarNumero(numero) {
+    if (!bingoGame.numerosSacados.includes(numero)) {
+        bingoGame.numerosSacados.push(numero);
+        bingoGame.mostrarNumerosSacados();
+        bingoGame.verificarNumeroEnCarton(numero);
+        bingoGame.actualizarNumerosEnPanel();
     }
+    this.cerrarModal();
+}
+
+cerrarModal() {
+    document.getElementById('modalEligeNumero').style.display = 'none';
 }
 
 detenerEfectoOscuridad() {

@@ -44,7 +44,7 @@ button:disabled {
     
 }
 .fila{
-    height: 15%;
+    height: 10%;
     width: 100%;
     display: flex;
 }
@@ -85,7 +85,7 @@ button:disabled {
     background-color: rgb(147, 208, 216);
     border-radius: 40px;
     text-align: center;
-    font-size: 40px;
+    font-size: 20px;
     color:  rgb(255, 255, 255);
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
     padding: 8px 16px;
@@ -132,10 +132,10 @@ button:disabled {
     padding: 1%;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 80%;
     width: 30%;
     border-radius: 40px;
-    margin-top: 2%;
+    
     margin-left: -2%;
     background-color:rgba(58, 204, 180, 0.733);
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
@@ -148,17 +148,17 @@ button:disabled {
     display: flex;
     justify-content: center;
     align-items: start;
-    margin-top: 3%;
+    margin-top: 1%;
 }
 .izquierda{
-    width: 20%;
-    height: 90%;
-    margin-left: 4%;
+    width: 30%;
+    height: 100%;
+    margin-left: 2%;
     margin-right: 4%;
     background-color: rgb(147, 208, 216);
     border-radius: 50px;
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
-    padding: 10px;
+    padding: 1px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -389,4 +389,38 @@ button:disabled {
     padding: 8px;
     border-radius: 5px;
     margin-bottom: 5px;
+}
+
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
