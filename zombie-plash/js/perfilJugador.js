@@ -1,54 +1,72 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const fileInput = document.getElementById('fileInput');
     const avatarActual = document.getElementById('avatarActual');
-    const successMessage = document.getElementById('successMessage');
+    const nombreCompleto = document.getElementById('nombreCompleto');
+    const userId = document.getElementById('userId');
+    const guardarPerfil = document.getElementById('guardarPerfil');
+    const fileInput = document.getElementById('fileInput');
+    let selectedAvatar = null;
 
-    if (fileInput) {
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    if (avatarActual) {
-                        avatarActual.src = e.target.result;
-                    }
-                }
-                reader.readAsDataURL(file);
-                
-                handleFileUpload(file);
+    // Obtener datos del perfil
+    fetch('../php/PerfilJugador.php?action=obtener')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                nombreCompleto.textContent = data.data.nombre;
+                userId.textContent = data.data.id;
+                avatarActual.src = `../uploads/avatars/${data.data.avatar}`;
+            } else {
+                console.error('Error al obtener datos del perfil:', data.message);
             }
         });
-    }
-});
 
-function handleFileUpload(file) {
-    const formData = new FormData();
-    formData.append('avatar', file);
+    // Seleccionar avatar
+    document.querySelectorAll('.avatar-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+            this.classList.add('selected');
+            selectedAvatar = this.getAttribute('data-avatar');
+            avatarActual.src = `../img/${selectedAvatar}`;
+        });
+    });
 
-    return new Promise((resolve, reject) => {
-        fetch('../avatar_icono/guardar_avatar.php', {
+    // Previsualizar imagen subida
+    fileInput.addEventListener('change', function() {
+        const file = this.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                avatarActual.src = e.target.result;
+                selectedAvatar = null; // Reset selected avatar
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Editar nombre
+    nombreCompleto.contentEditable = true;
+
+    // Guardar cambios
+    guardarPerfil.addEventListener('click', function() {
+        const nombre = nombreCompleto.textContent.trim();
+        const avatar = selectedAvatar || avatarActual.src.split('/').pop();
+
+        fetch('../php/PerfilJugador.php?action=actualizar', {
             method: 'POST',
-            body: formData,
-            credentials: 'include'             
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nombre, avatar })
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                const successMessage = document.getElementById('successMessage');
-                if (successMessage) {
-                    successMessage.style.display = 'block';
-                    setTimeout(() => {
-                        successMessage.style.display = 'none';
-                    }, 3000);
-                }
-                resolve(data);
+                alert('Perfil actualizado correctamente');
             } else {
-                reject(new Error(data.message));
+                alert('Error al actualizar el perfil: ' + data.message);
             }
         })
         .catch(error => {
-            console.error('Error:', error);
-            reject(error);
+            console.error('Error al actualizar el perfil:', error);
         });
     });
-}
+});
