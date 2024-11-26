@@ -158,7 +158,10 @@ button:disabled {
     background-color: rgb(147, 208, 216);
     border-radius: 50px;
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
-
+    padding: 10px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .derecha{
@@ -262,4 +265,128 @@ button:disabled {
     z-index: 9999;
     pointer-events: none;
     transition: background-color 0.3s ease;
+}
+
+#numerosSacados {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow: hidden;
+    padding: 10px;
+    min-height: 80px;
+    width: 25%;
+}
+
+.balota {
+    background: linear-gradient(145deg, #d40606, #cf6b6b);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+    transition: all 0.5s ease;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.nueva-balota {
+    transform: scale(1.5);
+    background: linear-gradient(145deg, #ff9900, #ff6600);
+    color: rgb(243, 16, 16);
+    animation: aparecer 0.5s ease-out;
+}
+
+.balota-saliente {
+    transform: translateX(-100px) scale(0);
+    opacity: 0;
+}
+
+@keyframes aparecer {
+    from {
+        transform: translateX(100px) scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1.5);
+        opacity: 1;
+    }
+}
+
+.countdown-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 1s ease;
+}
+
+.countdown {
+    font-size: 100px;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 30px;
+    font-family: 'zombie', sans-serif;
+}
+
+.loading-bar {
+    width: 0;
+    height: 10px;
+    background: linear-gradient(90deg, #ff0000, #ff6600);
+    border-radius: 5px;
+    transition: width 2s linear;
+    box-shadow: 0 0 10px rgb(60, 255, 0);
+    position: relative;
+    max-width: 300px;
+    width: 80%;
+}
+
+.loading-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, rgba(63, 179, 10, 0.4), transparent);
+    animation: loading-shine 1s infinite;
+}
+
+@keyframes loading-shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.fade-out {
+    opacity: 0;
+}
+
+#panel-historial {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#panel-historial .columna-B,
+#panel-historial .columna-I,
+#panel-historial .columna-N,
+#panel-historial .columna-G,
+#panel-historial .columna-O {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 8px;
+    border-radius: 5px;
+    margin-bottom: 5px;
 }

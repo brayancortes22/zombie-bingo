@@ -39,7 +39,7 @@ class PerfilJugador {
                         'nombre' => $row['nombre'],
                         'correo' => $row['correo'],
                         'estado' => $row['estado'],
-                        'avatar' => 'perfil1.jpeg'
+                        'avatar' => $row['avatar']
                     ]
                 ];
             } else {

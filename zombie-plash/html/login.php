@@ -60,7 +60,7 @@ if (isset($_SESSION['user_id'])) {
                 <!-- mensaje de error -->
                 <div id="generalError" class="error"></div>
                 <div class="olvidado">
-                    <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
+                    <a href="../html/restablecimientoContra.html">¿Olvidaste tu contraseña?</a>
                 </div>
                 <div class="zombie" id="z_3"></div>
             </form>

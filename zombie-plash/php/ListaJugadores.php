@@ -21,9 +21,28 @@ class ListaJugadores {
             $query = "SELECT id_registro, nombre, avatar FROM registro_usuarios WHERE id_registro != :id_usuario";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(['id_usuario' => $this->id_usuario]);
+            
+            $jugadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Modificar la ruta de las imágenes
+            foreach ($jugadores as &$jugador) {
+                if ($jugador['avatar']) {
+                    $rutaImagen = '../uploads/avatars/' . $jugador['avatar'];
+                    if (file_exists($rutaImagen)) {
+                        $jugador['avatar'] = base64_encode(file_get_contents($rutaImagen));
+                    } else {
+                        // Si no existe la imagen en uploads, buscar en img
+                        $rutaImagenDefault = '../img/' . $jugador['avatar'];
+                        if (file_exists($rutaImagenDefault)) {
+                            $jugador['avatar'] = base64_encode(file_get_contents($rutaImagenDefault));
+                        }
+                    }
+                }
+            }
+            
             return [
                 'success' => true,
-                'jugadores' => $stmt->fetchAll(PDO::FETCH_ASSOC)
+                'jugadores' => $jugadores
             ];
         } catch (Exception $e) {
             return [
