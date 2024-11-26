@@ -19,7 +19,7 @@
                 <div class="colu2">
                     <button type="button" class="bu" onclick="bingoGame.toggleEfectoOscuridad()">Oscuridad</button>
                     <button type="button" class="bu" onclick="bingoGame.toggleEfectoNumeros()">Números</button>
-                    <button type="button" class="bu" onclick="bingoGame.toggleEfectoBloqueo()">Bloqueo</button>
+                    <button type="button" class="bu" onclick="bingoGame.toggleEfectoEligeNumero()">elige numero proximo</button>
                 </div>
                 <div class="colu3"></div>
                 <div class="colu4">
@@ -29,7 +29,7 @@
                 </div>
             </div>
             <div class="fila2">
-                <div class="resultados" id="numerosSacados"></div>
+                <div id="numerosSacados" class="resultados"></div>
             </div>
             <div class="fila3">
                 <div class="izquierda"></div>
@@ -84,13 +84,15 @@
                         <button type="button" class="bh" onclick="bingoGame.nuevoCarton()">generar carton</button>
                     </div>
                     <div class="bingo">
-                        <button type="button" class="bh" onclick="bingoGame.verificarBingo()">verificar</button>
+                        <button type="button" class="bh" onclick="bingoGame.verificarBingo()">¡BINGO!</button>
                     </div>
                     <div class="copa"></div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="../js/bingo.js"></script>
+
+<script type="module" src="../js/juego/bingo.js"></script>
+
 </body>
 </html>
