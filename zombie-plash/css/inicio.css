@@ -10,7 +10,12 @@ body {
     zoom: 0.8;
     /* overflow:visible; */
 }
-
+.circulop1 img, .usuario21 img {
+    width: 100px; /* Ajusta según sea necesario */
+    height: 100px; /* Ajusta según sea necesario */
+    border-radius: 50%; /* Para hacer las imágenes circulares */
+    object-fit: cover; /* Para que la imagen se ajuste bien al contenedor */
+}
 
 /* From Uiverse.io by vinodjangid07 */ 
 .Btn {

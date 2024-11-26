@@ -153,7 +153,6 @@ class BingoGame{
             console.error('Error al sacar número:', error);
         }
     }
-
     async nuevoCarton() {
         try {
             const response = await fetch('../php/nuevoCarton.php');
@@ -344,8 +343,29 @@ class BingoGame{
         });
     }
 
+    iniciarEfectoEligeNumero() {
+        // Filtrar números que no han sido sacados
+        const numerosDisponibles = Array.from({ length: 60 }, (_, i) => i + 1).filter(
+            numero => !bingoGame.numerosSacados.includes(numero)
+        );
+
+        const contenedor = document.getElementById('numerosDisponibles');
+        contenedor.innerHTML = ''; // Limpiar contenido previo
+
+        // Crear botones para cada número disponible
+        numerosDisponibles.forEach(numero => {
+            const botonNumero = document.createElement('button');
+            botonNumero.textContent = numero;
+            botonNumero.onclick = () => this.seleccionarNumero(numero);
+            contenedor.appendChild(botonNumero);
+        });
+
+        document.getElementById('modalEligeNumero').style.display = 'block';
+    }
+
 }   
 
 
 // Exportar la instancia del juego
 window.bingoGame = new BingoGame();
+

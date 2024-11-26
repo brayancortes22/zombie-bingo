@@ -221,10 +221,12 @@ iniciarEfectoEligeNumero() {
 }
 
 seleccionarNumero(numero) {
-    bingoGame.numerosSacados.push(numero);
-    bingoGame.mostrarNumerosSacados();
-    bingoGame.verificarNumeroEnCarton(numero);
-    bingoGame.actualizarNumerosEnPanel();
+    if (!bingoGame.numerosSacados.includes(numero)) {
+        bingoGame.numerosSacados.push(numero);
+        bingoGame.mostrarNumerosSacados();
+        bingoGame.verificarNumeroEnCarton(numero);
+        bingoGame.actualizarNumerosEnPanel();
+    }
     this.cerrarModal();
 }
 

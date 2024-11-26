@@ -7,21 +7,26 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         if (data.success) {
             const amigos = data.amigos;
+            const avatarUsuario = data.avatar;
             let avatarsHTML = '';
             let nombresHTML = '';
+
+            // Mostrar el avatar del usuario
+            document.querySelector('.circulop1 img').src = `../uploads/avatars/${avatarUsuario}`;
 
             // Generar HTML para los amigos existentes (máximo 5)
             for (let i = 0; i < 5; i++) {
                 if (i < amigos.length) {
+                    const amigo = amigos[i];
                     avatarsHTML += `
                         <div class="columna">
                             <div class="usuario21">
-                                <img src="../img/${amigos[i].avatar || 'perfil1.jpeg'}" alt="Avatar">
+                                <img src="../uploads/avatars/${amigo.avatar}" alt="Avatar de ${amigo.nombre}">
                             </div>
                         </div>`;
                     nombresHTML += `
                         <div class="columna1">
-                            <strong>${amigos[i].nombre}</strong>
+                            <strong>${amigo.nombre}</strong>
                         </div>`;
                 } else {
                     // Espacios vacíos para mantener la estructura

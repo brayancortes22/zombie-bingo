@@ -7,7 +7,8 @@ if (!isset($_SESSION['id_usuario'])) {
     header("Location: login.php");
     exit();
 }
-// Resto del código de inicio.php
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -38,7 +39,7 @@ if (!isset($_SESSION['id_usuario'])) {
             <div class="primera">
             <a href="./perfiljugador.html">
         <div class="circulop1">
-            <img src="../uploads/avatars/<?php echo $avatar; ?>" alt="">
+            <img src="../uploads/avatars/<?php echo htmlspecialchars($avatar); ?>" alt="Avatar del jugador">
         </div>
     </a>
                    
