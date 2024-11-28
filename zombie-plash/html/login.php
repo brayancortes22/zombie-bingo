@@ -65,6 +65,12 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <!-- mensaje de error -->
                 <div id="generalError" class="error"></div>
+
+                <div class="olvidado">
+                    <a href="../html/restablecimientoContra.html">¿Olvidaste tu contraseña?</a>
+                </div>
+                <div class="zombie" id="z_3"></div>
+
             </form>
             </div>
             <div class="cuadro3">

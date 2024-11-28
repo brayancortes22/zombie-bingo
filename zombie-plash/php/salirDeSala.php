@@ -6,102 +6,75 @@ class SalirDeSala {
     private $pdo;
     private $id_sala;
     private $id_jugador;
-    private $response;
-    private $transactionStarted = false;
 
     public function __construct() {
         try {
             $conexion = new Conexion();
             $this->pdo = $conexion->conectar();
             
+            // Obtener datos de la petición
             $data = json_decode(file_get_contents('php://input'), true);
             $this->id_sala = $data['id_sala'] ?? null;
             $this->id_jugador = $data['id_jugador'] ?? null;
 
             // Debug
-            error_log("Datos recibidos: " . print_r($data, true));
-            
-            if (!$this->id_sala || !$this->id_jugador) {
-                throw new Exception('Datos incompletos. ID Sala: ' . $this->id_sala . ', ID Jugador: ' . $this->id_jugador);
-            }
-            
-            $this->response = ['success' => false, 'message' => ''];
+            error_log("Datos recibidos en SalirDeSala: " . print_r($data, true));
         } catch (Exception $e) {
-            $this->response = [
-                'success' => false,
-                'message' => 'Error de inicialización: ' . $e->getMessage()
-            ];
+            error_log("Error en constructor SalirDeSala: " . $e->getMessage());
         }
     }
 
     public function ejecutar() {
-        if (!$this->pdo) {
-            return $this->response;
-        }
-
         try {
-            // Verificar si el jugador está en la sala antes de iniciar la transacción
-            $query = "SELECT COUNT(*) as total FROM jugadores_en_sala 
-                     WHERE id_sala = :id_sala AND id_jugador = :id_jugador";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->execute([
-                ':id_sala' => $this->id_sala,
-                ':id_jugador' => $this->id_jugador
-            ]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($result['total'] == 0) {
-                throw new Exception("Jugador no encontrado en la sala. ID Sala: {$this->id_sala}, ID Jugador: {$this->id_jugador}");
+            $this->pdo->beginTransaction();
+
+            // 1. Obtener el ID del registro del jugador en la sala
+            $idRegistro = $this->obtenerIdJugadorEnSala();
+            if (!$idRegistro) {
+                throw new Exception('No se encontró el registro del jugador en la sala.');
             }
 
-            // Iniciar transacción solo si el jugador está en la sala
-            $this->pdo->beginTransaction();
-            $this->transactionStarted = true;
-
-            // Eliminar jugador de la sala
-            $query = "DELETE FROM jugadores_en_sala 
-                     WHERE id_sala = :id_sala AND id_jugador = :id_jugador";
+            // 2. Eliminar jugador de la sala usando el id de la tabla
+            $query = "DELETE FROM jugadores_en_sala WHERE id = :id";
             $stmt = $this->pdo->prepare($query);
-            $stmt->execute([
-                ':id_sala' => $this->id_sala,
-                ':id_jugador' => $this->id_jugador
-            ]);
+            $stmt->execute([':id' => $idRegistro]);
 
-            // Actualizar contador de jugadores
+            // 3. Actualizar contador de jugadores
             $query = "UPDATE salas 
                      SET jugadores_unidos = jugadores_unidos - 1 
                      WHERE id_sala = :id_sala";
             $stmt = $this->pdo->prepare($query);
             $stmt->execute([':id_sala' => $this->id_sala]);
 
-            // Commit solo si la transacción está activa
-            if ($this->transactionStarted) {
-                $this->pdo->commit();
-            }
-
-            $this->response = [
+            $this->pdo->commit();
+            return [
                 'success' => true,
-                'message' => 'Jugador eliminado de la sala correctamente'
+                'message' => 'Jugador eliminado correctamente'
             ];
 
         } catch (Exception $e) {
-            // Rollback solo si la transacción está activa
-            if ($this->transactionStarted) {
-                $this->pdo->rollBack();
-            }
-            $this->response = [
+            $this->pdo->rollBack();
+            error_log("Error en SalirDeSala::ejecutar: " . $e->getMessage());
+            return [
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Error al salir de la sala: ' . $e->getMessage()
             ];
-        } finally {
-            // Cerrar la conexión
-            $this->pdo = null;
         }
+    }
 
-        return $this->response;
+    private function obtenerIdJugadorEnSala() {
+        $query = "SELECT id FROM jugadores_en_sala WHERE id_sala = :id_sala AND id_jugador = :id_jugador";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute([
+            ':id_sala' => $this->id_sala,
+            ':id_jugador' => $this->id_jugador
+        ]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['id'] ?? null;
     }
 }
 
+// Configurar headers y ejecutar
 header('Content-Type: application/json');
 $salir = new SalirDeSala();
-echo json_encode($salir->ejecutar()); 
+echo json_encode($salir->ejecutar());
