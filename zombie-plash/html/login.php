@@ -65,21 +65,21 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <!-- mensaje de error -->
                 <div id="generalError" class="error"></div>
-
+<br>
                 <div class="olvidado">
                     <a href="../html/restablecimientoContra.html">¿Olvidaste tu contraseña?</a>
                 </div>
-                <div class="zombie" id="z_3"></div>
-
+                
             </form>
-            </div>
-            <div class="cuadro3">
-                 <div class="zombie" id="z_3"></div>
-            </div>
         </div>
-        <div class="olvidado">
+        <div class="cuadro3">
+        <div class="zombie" id="z_3"></div>
+        </div>
+                 
+        </div>
+        <!-- <div class="olvidado">
             <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
-            </div>
+            </div> -->
             
             <script>
                 // Función que se ejecuta cuando el formulario es enviado

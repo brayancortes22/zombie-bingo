@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-11-2024 a las 21:46:59
+-- Tiempo de generación: 28-11-2024 a las 16:29:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -45,7 +45,10 @@ INSERT INTO `amistad` (`id_amistad`, `id_jugador`, `id_amigo`, `fecha_amistad`) 
 (4, 1, 16, '2024-11-15 21:15:26'),
 (5, 1, 9, '2024-11-17 03:27:07'),
 (6, 1, 10, '2024-11-17 03:27:23'),
-(7, 7, 1, '2024-11-22 20:14:53');
+(7, 7, 1, '2024-11-22 20:14:53'),
+(8, 2, 7, '2024-11-22 22:00:01'),
+(9, 2, 10, '2024-11-22 22:00:05'),
+(10, 7, 10, '2024-11-26 19:50:02');
 
 -- --------------------------------------------------------
 
@@ -100,7 +103,11 @@ INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`
 (173, 123, 1, 'bscl'),
 (174, 123, 10, 'jhon'),
 (175, 124, 3, 'bscl-2'),
-(176, 125, 3, 'bscl-2');
+(176, 125, 3, 'bscl-2'),
+(177, 126, 10, 'jhon'),
+(178, 126, 3, 'bscl-2'),
+(179, 127, 3, 'bscl-1'),
+(180, 128, 1, 'bscl');
 
 -- --------------------------------------------------------
 
@@ -181,10 +188,10 @@ INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo
 (3, 'jhondd', '$2y$10$8gAjzhQMgOjmM0S.c5384Og5wDjmx2.wYH3RPTa0RgfYN5QysIyfG', 'wwww@gmail.co', NULL, 'perfil1.jpeg'),
 (4, 'bs', '$2y$10$6ZeQlaB2GjNHcoOcumTxTeQSjCgevvpkbzKfnlPG4vEw/gVoXRB/y', 'bsc@gmail.com', NULL, 'perfil1.jpeg'),
 (6, 'bsl-1', '$2y$10$iQU7o1RbOyLG3ie53guOYO8LuPNpXFxc8IT.tAsST0GnmWaOXLfru', 'bscl-1@gmail.com', NULL, 'perfil1.jpeg'),
-(7, 'bscl-2', '$2y$10$CIr/WjQSTAR02H1Wqs6r/uQLlWrLqY//7fr8FJo/oC49ea7HjTdoO', 'bscl-2@gmail.com', NULL, '6740e68ae2e38_foto.jpg'),
+(7, 'bscl-2', '$2y$10$CIr/WjQSTAR02H1Wqs6r/uQLlWrLqY//7fr8FJo/oC49ea7HjTdoO', 'bscl-2@gmail.com', NULL, 'avatar3.jpg'),
 (8, 'bsl-3', '$2y$10$Zr6XuSqwJZwWJf3C4gZ.1.yrFU46aWtAkk8sebGEKJi8k92YQaywa', 'bscl-3@gmail.com', NULL, 'perfil1.jpeg'),
 (9, 'bscl-4', '$2y$10$RncrORRaf/wF8GavdHIMNO2S5BQghk2XmN6/b9j9vDMxBnY/KVG7.', 'bscl-4@gmail.com', NULL, 'perfil1.jpeg'),
-(10, 'bscl-5', '$2y$10$Pm.KgzjXIutMFVt.0h8d2OgYaez6TYFPiKE7km9CWwv4ZN89Fr1rO', 'bscl-5@gmail.com', NULL, 'perfil1.jpeg'),
+(10, 'bscl-5', '$2y$10$Pm.KgzjXIutMFVt.0h8d2OgYaez6TYFPiKE7km9CWwv4ZN89Fr1rO', 'bscl-5@gmail.com', NULL, '6740fd5ceb657__a0f72250-92c3-4c5f-a3a7-f199d68a8b41.jpeg'),
 (11, 'catalina', '$2y$10$h6SZm1h9E3jO3wbbelCWr.SmtEUzbAX0chtjY3WFsG7gTXcGfvN2i', 'catalina2005cometta@gmail.com', NULL, 'perfil1.jpeg'),
 (12, 'bsl-31', '$2y$10$0y5Xft.a5SI8taVmJftfLOkE5MpqL.2PjoNlf1ddiYfZ1.nW4wbCW', 'wwwffw@gmail.co', NULL, 'perfil1.jpeg'),
 (14, 'hola283', '$2y$10$7y5yCSDFY48XwYr19/AFleoFccoPdacLEOQtGR2ckacM6Q7.ITMka', 'hola@gamail.com', NULL, 'perfil1.jpeg'),
@@ -194,7 +201,8 @@ INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo
 (18, 'pepe', '$2y$10$Fy3Sk2jd7Ao2BfNtaHJj6OWcmBTBNdDFEIf0v./aOu9EtYcu2TKw2', 'pepe@gmail.com', NULL, 'perfil1.jpeg'),
 (19, 'bscl-9', '$2y$10$0rSkwnkECYnBeuyIzsMR8.ZYRSfJY6jqVHXm4Se9UWxdjFSB5iPZW', 'bscl-9@gmail.com', NULL, 'perfil1.jpeg'),
 (20, 'pepen', '$2y$10$l2glVT3gwpw0CYCGDGliLuqiAgyfnCzL2cTIvdS2tMB/fA8omEsgm', 'bscl20062m007@gmail.com', NULL, 'perfil1.jpeg'),
-(21, 'hola2332', '$2y$10$GRyUZvIAADLTeHisTL1q4.L6S9mGnuypWsp2rEY4XhEh02Nuk.1MW', 'holas3de@gmail.com', NULL, 'perfil1.jpeg');
+(21, 'hola2332', '$2y$10$GRyUZvIAADLTeHisTL1q4.L6S9mGnuypWsp2rEY4XhEh02Nuk.1MW', 'holas3de@gmail.com', NULL, 'perfil1.jpeg'),
+(22, 'BRAYAN', '$2y$10$WSMAghJZF2cnqxCVAHq/8.To.fBws3yD.8AyFEuHJCSN4/prKtUqO', 'BRAYAN@GMAIL.COM', NULL, 'perfil1.jpeg');
 
 -- --------------------------------------------------------
 
@@ -233,7 +241,10 @@ INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `j
 (119, 1, '$2y$10$lIW5jnQp1Sy8wAgZD99v6e.EOkLoTAUZEA0JubnnvufpJQxGzbpzC', 2, 1),
 (123, 1, '$2y$10$EgKQ9.hV6LkffxiVQGQi5OMWav5bserGLfSaKYicv1s/m0nlcec0y', 2, 2),
 (124, 3, '$2y$10$/dhr/US4CXe8e691dFzkzOK5V5TGh7jN86Peir4AKQ5e0r/AUOdUi', 2, 1),
-(125, 3, '$2y$10$di47fcsaVZXEngRhDb8vSef1olZRFQ.D8eKf0dPejDa18A7pBw5/C', 2, 1);
+(125, 3, '$2y$10$di47fcsaVZXEngRhDb8vSef1olZRFQ.D8eKf0dPejDa18A7pBw5/C', 2, 1),
+(126, 10, '$2y$10$aHGVVwNVGBrQvXlYvC/ltecJwpdr0shAhMikTyQtKQSedvyN1rkAK', 22, 2),
+(127, 3, '$2y$10$q8SwSBqyZQqFvb3Eu373m.8d4MAY0/pUWSGZOmqHKkRGHyPQyHExS', 2, 1),
+(128, 1, '$2y$10$ksJDPmXYmEzDsONzpapbZOZIJOES3/D1EnT01/nNhEnhuVMp6hGhq', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -337,7 +348,7 @@ ALTER TABLE `tipo_seleccion`
 -- AUTO_INCREMENT de la tabla `amistad`
 --
 ALTER TABLE `amistad`
-  MODIFY `id_amistad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_amistad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `jugador`
@@ -349,19 +360,19 @@ ALTER TABLE `jugador`
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
 --
 ALTER TABLE `registro_usuarios`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- Restricciones para tablas volcadas
