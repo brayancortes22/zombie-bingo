@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -8,6 +9,9 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 ?>
+<!DOCTYPE html>
+<html lang="es">
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -25,45 +29,51 @@ if (isset($_SESSION['user_id'])) {
 </head>
 
 <body>
-    <div class="flex-container">
-        <div class="cuadro">
-            <div class="largo">
-                <div class="invitado">
-                    <a href="">
-                        <button type="button" class="btn success"><strong>Ver juego</strong></button>
-                    </a>
-                </div>
-                <div class="cuenta">
-                    <a href="./registrate.html">
-                        <button type="button" class="btn success"><strong>Crear cuenta</strong></button>
-                    </a>
-                </div>
+    <div class="container">
+            <div class="cuadro">
+                <div class="largo">
+                    <div class="verjuego">
+                        <a href="">
+                           <button type="button" class="btn success ver"><strong>Ver juego</strong></button>
+                        </a>
+                    </div>
+                    <div class="cuenta">
+                        <a href="./registrate.html">
+                            <button type="button" class="btn success cuentas"><strong>Crear cuenta</strong></button>
+                        </a>
+                    </div>
             </div>
-             
-            <!-- formulario  -->
-            <form id="formulario" onsubmit="redirectAfterLogin(event)">
-                <div class="texto"><strong>Iniciar sesión</strong></div>
-                <div class="zombie2">
-                <img src="../img/image-removebg-preview.png" alt="imagen">
-            </div> 
+            <div class="texto">Iniciar sesión</div>
+                <div class="todo">
+                    <div class="cuadro1">
+                        <div class="zombie2">
+                            <img src="../img/image-removebg-preview.png"  alt="imagen" class="ww">
+                        </div> 
+                    </div>
+                    <div class="cuadro2">
+                    <form id="formulario" onsubmit="redirectAfterLogin(event)">
                 <div class="form1">
-                    <label for="nombre"><strong>Usuario o correo electrónico</strong></label>
+                    <label for="nombre">Usuario o correo electrónico</label>
                     <input type="text" class="redondeo" id="nombre" name="nombre" placeholder="nombre_usu" required>
                 </div>
                 <div class="form2">
-                    <label for="contraseña"><strong>Contraseña</strong></label>
+                    <label for="contraseña">Contraseña</label>
                     <input type="password" class="redondeo" id="contraseña" name="contraseña" placeholder="contraseña_usu" required>
                 </div>
                 <div class="iniciar">
-                    <button type="submit" class="btn success"><strong>Iniciar sesión</strong></button>
+                    <button type="submit" class="btn success nj"><strong>Iniciar sesión</strong></button>
                 </div>
                 <!-- mensaje de error -->
                 <div id="generalError" class="error"></div>
-                <div class="olvidado">
-                    <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
-                </div>
-                <div class="zombie" id="z_3"></div>
             </form>
+            </div>
+            <div class="cuadro3">
+                 <div class="zombie" id="z_3"></div>
+            </div>
+        </div>
+        <div class="olvidado">
+            <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
+            </div>
             
             <script>
                 // Función que se ejecuta cuando el formulario es enviado
@@ -77,8 +87,7 @@ if (isset($_SESSION['user_id'])) {
             
         </div>
         <!-- animacion de fantasma -->
-        <div id="z_1" class="fantasma1"></div>
-        <div id="z_2" class="fantasma2"></div>
+        <!-- <div id="z_2" class="fantasma2"></div> -->
     </div>
     <script src="../json/anima.js"></script>
     <script src="../js/validar_inicio_sesion.js"></script>
