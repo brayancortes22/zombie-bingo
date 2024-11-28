@@ -284,3 +284,40 @@
 #contenedorJugadores::-webkit-scrollbar-thumb:hover {
     background: rgba(85, 85, 85, 0.7);
 }
+.jugador-item {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.avatar-jugador {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.avatar-vacio {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ccc;
+    border: 2px solid #fff;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+
+.col2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.fila-jugadores {
+    margin-bottom: 20px;
+}

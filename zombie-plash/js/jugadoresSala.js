@@ -71,9 +71,9 @@ class SalaManager {
             const filaJugadores = document.createElement('div');
             filaJugadores.className = 'fila-jugadores';
 
-            // Crear fila de círculos y nombres
-            const filaCirculos = document.createElement('div');
-            filaCirculos.className = 'row1';
+            // Crear fila de avatares y nombres
+            const filaAvatares = document.createElement('div');
+            filaAvatares.className = 'row1';
             
             const filaNombres = document.createElement('div');
             filaNombres.className = 'row2';
@@ -82,14 +82,23 @@ class SalaManager {
                 const index = i * 5 + j;
                 const jugador = jugadores[index];
 
-                // Agregar círculo
-                const colCirculo = document.createElement('div');
-                colCirculo.className = 'col2';
-                const circulo = document.createElement('div');
-                circulo.className = 'circulo';
-                circulo.style.backgroundColor = jugador ? '#00ff00' : '#ff0000';
-                colCirculo.appendChild(circulo);
-                filaCirculos.appendChild(colCirculo);
+                // Agregar avatar
+                const colAvatar = document.createElement('div');
+                colAvatar.className = 'col2';
+                
+                if (jugador) {
+                    const avatar = document.createElement('img');
+                    avatar.src = `../uploads/avatars/${jugador.avatar}`;
+                    avatar.alt = 'Avatar de ' + jugador.nombre_jugador;
+                    avatar.className = 'avatar-jugador';
+                    colAvatar.appendChild(avatar);
+                } else {
+                    const avatarVacio = document.createElement('div');
+                    avatarVacio.className = 'avatar-vacio';
+                    colAvatar.appendChild(avatarVacio);
+                }
+                
+                filaAvatares.appendChild(colAvatar);
 
                 // Agregar nombre
                 const colNombre = document.createElement('div');
@@ -98,7 +107,7 @@ class SalaManager {
                 filaNombres.appendChild(colNombre);
             }
 
-            filaJugadores.appendChild(filaCirculos);
+            filaJugadores.appendChild(filaAvatares);
             filaJugadores.appendChild(filaNombres);
             contenedor.appendChild(filaJugadores);
         }
