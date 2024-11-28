@@ -1,126 +1,230 @@
-.container-fluid{
+ .container-fluid{
     background-image: url(../img/fondo_login.jpg);
     background-size: contain;
     height: 100vh;
     display: flex;
+    justify-content: center;
+    align-items: center;
+
+    
 }
 .cuadro{
     border: solid 6px #6a5303; 
     height: 80%;
     width: 50%;
-    margin-left: 24%;
     border-radius: 30px;
     background-color: #384639;
     box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
-    margin-top: 4%;}
-    
-    @media (max-width: 600px) {
-        .cuadro{
-            height: 400px;
-            width: 200px;
-            
-        }
-          
-      }
-      .registrate{
-        text-align: center;
-        color:white;
-        font-size: 30px;
-      }
-      .formularios{
-        
-        height: 72%;
-        width: 45%;
-        margin-top: 2%;
-        margin-left: 50%;
-        display: flex;
-        flex-direction: column;
-        
-      }  
-      .redondeo{
-        border-radius: 50px;
-        height: 50px;
-        margin-top: 3px;
-      }
-     label{
-        font-size: 15px;
-        color: #26c218;
-     }
-     .largo{
-        height: 12%;
-        display: flex;
-        flex-direction: row;
-    }
-    .boton1{
-        width: 20%;
-        border-radius: 30px;
-        background-color: red;
-        margin-left: 120px;
-      }
-      a{
-
-        text-decoration: none;
-      }
-     
-    .boton2{
-        width: 20%;
-        margin-left: 24%;
-        border-radius: 30px;
-        background-color: #26c218;
-    }
-    button{
-        height: 100%;
-        width: 100%;
-        border-radius: 30px;
-  }
-  .img{
-    margin-top: -28%;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-    margin-left: 5%;
-    position: absolute;
-  }
-  img{
-    border: none;
-    height: 290px;
-  }
-  .zombie{
-    width: 20%;
-    margin-top: -30%;
-    position: absolute;
-    left: 2%;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-  }
-  .mano{
-    width: 20%;
-    position: absolute;
-    margin-top: -30%;
-    left: 78%;
-    filter: drop-shadow(0px 0px 12px rgb(81, 255, 0));
-    
+    display: flex;
+    flex-direction: column;
     
   }
-  iframe{
+  .cuadrote{
     width: 100%;
-    border: none;
-    height: 400px; /* ajusta la altura */
+    height: 100%;
+    display: flex;
     
   }
-  .erro{
-    color: red;
-}
-.correcto{
-  color:#26c218;
-}
-.error {
-    color: #ff0000;
-    font-size: 14px;
-    margin-top: 5px;
-    display: block;
-}
+  .registrate{
+    height: 8vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    color: white;
+  }
+    
+   .img{
+    height: 100%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   }
+   .datos{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    
+    
+    
+   }
+   .largos{
+    height: 382vh !important;
+    width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 48%;
+   }
+   .filas{
+    
+    height: 20%;
+    width: 100%;
 
-.error-message {
-    color: #ff0000;
-    font-size: 14px;
-    margin-top: 5px;
-    display: block;
-}
+   }
+   .redondeo{
+    border-radius: 50px;
+    width: 100%;
+    height: 53%;
+    margin-top: 3%;
+    text-align: center;
+   }
+   .formularios{
+    height: 20%;
+   }
+   .espa{
+    margin-top: 3%;
+   }
+   .boton{
+    width: 100%;
+   }
+  .boton1{
+    height: 100%;
+    width: 100%;
+    background-color: red;
+    border-radius: 50px;
+  }
+  a{
+    height: 100%;
+    width: 50%;
+  }.botona{
+  height: 100%;
+  width: 100%;
+  }
+  .boton2{
+    height: 100%;
+    width: 50%;
+    margin-left: 40%;
+    background-color: #26c218;
+    border-radius: 50px;
+  }
+  .z{
+    height: 80%;
+    margin-top: 4%;
+  }
+  label{
+    font-size: 20px;
+    color: #26c218;
+  }
+
+  @media (max-width: 700px) {
+    .container-fluid{
+      background-image: url(../img/fondo_login.jpg);
+      background-size: contain;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  
+      
+  }
+  .cuadro{
+      border: solid 6px #6a5303; 
+      height: 70%;
+      width: 100%;
+      border-radius: 30px;
+      background-color: #384639;
+      box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
+      display: flex;
+      flex-direction: column;
+      
+    }
+    .cuadrote{
+      width: 100%;
+      height: 100%;
+      display: flex;
+      
+    }
+    .registrate{
+      height: 8vh;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 40px;
+      color: white;
+    }
+      
+     .img{
+      height: 100%;
+      width: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+     }
+     .datos{
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      text-align: center;
+      
+      
+      
+     }
+     .largos{
+      height: 382vh !important;
+      width: 60%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 40%;
+     
+     }
+     .filas{
+      
+      height: 20%;
+      width: 100%;
+  
+     }
+     .redondeo{
+      border-radius: 50px;
+      width: 100%;
+      height: 53%;
+      margin-top: 3%;
+      text-align: center;
+     }
+     .formularios{
+      height: 20%;
+     }
+     .espa{
+      margin-top: 3%;
+     }
+     .boton{
+      width: 100%;
+      height: 100%;
+     }
+    .boton1{
+      width: 100%;
+      background-color: red;
+      border-radius: 50px;
+    }
+    a{
+      height: 100%;
+      height: 100%;
+      width: 50%;
+    }.botona{
+    height: 100%;
+    width: 100%;
+    }
+    .boton2{
+      height: 100%;
+      width: 50%;
+      background-color: #26c218;
+      border-radius: 50px;
+    }
+    .z{
+      height: 50%;
+      margin-top: 4%;
+    }
+    label{
+      font-size: 15px;
+      color: #26c218;
+    }
+  }

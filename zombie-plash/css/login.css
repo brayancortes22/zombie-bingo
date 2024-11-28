@@ -1,170 +1,332 @@
 
-.flex-container{
+.container{
     display: flex;
     width: 100%;
     height: 100vh;
     background-image: url(../img/fondo_login.jpg);
     background-size: contain;
-    background-position: center;
     align-items: center;
-    align-content: center;
+    justify-content: center;
 }
 
 .cuadro{
-    padding: auto;
+    
     border: solid 6px red; 
     height: 80%;
     width: 50%;
-    margin-left: 24%;
     border-radius: 30px;
-    background-color: #384639;
+    background-color: #384639cb;
     box-shadow: 10px 10px 10px red; /* sombra en la derecha y parte inferior */
     margin-top: 1%;
     
 }
-.texto{      /* iniciar sesion*/
-    color: #ffffff;
-    text-align-last: center;
-    font-size: 50px;
-    text-shadow: 1px 5px 3px #0fa120;
-    margin-top: 2%;
-    
-    letter-spacing: -1px;
-}
-.largo{             /*contenedor de invitado y cuenta*/
-    height:60px;
+.largo{
     width: 100%;
+    height: 10%;
     display: flex;
-}
-.invitado{
-    height:50px;
-    width: 20%;
-    border: solid  rgb(0, 0, 0) 1px;
-    border-radius: 50px;
-    margin-top: 3%;
-    margin-left: 4%;
-    background-color: #29b513;
-    box-shadow: 10px 3px 10px rgb(31, 153, 19); /* sombra en la derecha y parte inferior */
+    justify-content: space-between;
+    margin-top: 2%;
 }
 
+.verjuego{
+    height: 100%;
+    width: 15%;
+    border-radius: 50px;
+    margin-left: 3%;
+}
 .cuenta{
-    height:50px;
-    width: 20%;
-    border: solid  rgb(0, 0, 0) 1px;
-    margin-left: 50%;
+    height: 100%;
+    width: 16%;
     border-radius: 50px;
-    margin-top: 3%;
-    background-color: #29b513;
-    box-shadow: 10px 3px 10px rgb(31, 153, 19); /* sombra en la derecha y parte inferior */
+    margin-right: 3%;
 }
-form{
-    height: 90%;
-}
-.form1{              /*usuario o correo electronico*/
-    height: 40%;
-    width: 40%;
-    align-items: center;
-    align-content: center;
-    margin-left: 30%;
-    text-align: center;
-    color: #0ebc0a;
-    margin-top: -3%;
-    font-size: 20px;
-}
-.form2{              /*contraseña*/
-    height: 40%;
-    width: 40%;
-    align-items: center;
-    align-content: center;
-    margin-left: 30%;
-    text-align: center;
-    color: #0ebc0a;
-    margin-top: -13%;
-    font-size: 20px;
-}
-.redondeo{
-    border-radius: 50px;
-    height: 25%;
-    width: 100%;
-}
-
-.btn{
+.ver{
     height: 100%;
     width: 100%;
     border-radius: 50px;
-    text-shadow: 0.1px 3px 3px #ff0000;
     background-color: #0fa120;
-    font-size: 16px;
+    text-shadow: 1px 5px 3px #fa0505;
+    font-size: 19px;
+    color: black;
+    filter: drop-shadow(0px 0px 12px rgb(43, 43, 43));
+
+
+}
+.cuentas{
+    height: 100%;
+    width: 100%;
+    border-radius: 50px;
+    background-color: #0fa120;
+    font-size: 17px;
+    text-shadow: 1px 5px 3px #fa0505;
+
+}
+.texto{
+    height: 10%;
+    width: 100%;
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    text-shadow: 1px 5px 3px #0fa120;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.todo{
+    width: 100%;
+    height: 50vh;
+    display: flex;
+}
+.cuadro1{
+    height: 100%;
+    width: 30%;
+}
+.cuadro2{
+    height: 100%;
+    width: 40%;
+}
+.cuadro3{
+    height: 100%;
+    width: 30%;
+}
+.olvidado{
+    height: 10%;
+    text-align: center;
+    justify-content: center;
+    color: #0fa120 !important;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+.form1{
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-top:17%;
+    color: #0fa120;
+    font-size: 18px;
+    
+}
+.redondeo{
+    border-radius: 50px;
+    height: 100%;
+    text-align: center;
+    margin-top: 2%;
+    
+}
+.form2{
+    width: 100%;
+    height: 10vh;
+    font-size: 17px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-top: 3%;
+    color: #0fa120;
     
 }
 .iniciar{
-    
-    width: 20%;
-    height: 50px;
-    align-items:center ;
-    align-content: center;
-    margin-left: 40%;
-    margin-top: -4%;
-}
-.olvidado{   
-    width: 30%;
-    height: 30px;
-    align-items: center;
-    align-content: center;
-    margin-left: 38%;
-    color: white;
-    text-decoration: underline;
-    margin-top: 3%;
-}
-.fantasma1{
-    position: relative;
-    top: -30%;
-    right: 66%;
-    width: 300px;
-    height: 300px;
-
-
-}
-.fantasma2{
-    position: absolute;
-    top: 55%;
-    right: 10%;
-    transform: scaleX(-1);
-    height: 300px;
-    
-}
-
-.zombie{
-    position:absolute;
-    top: 34%;
-    right: 22%;
-    width: 300px;
-    height: 300px;
-}
-
-input{
+    height: 7vh;
+    width: 100%;
+    display: flex;
     justify-content: center;
-    text-align: center;
-    
+    margin-top: 20%;
 }
-a{
-    color: white;
-    text-decoration: none;
-}
-iframe{
-    border: none;
-    height: 300px;
-    justify-content :flex-start;
-
+.nj{
+    border-radius: 50px;
+    width: 50%;
+    background-color: #0fa120;
+    font-size: 15px;
 }
 .zombie2{
-    position: absolute;
-    width: 200px;
-    height: 200px;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-img{
-    padding: 0%;
-    height: 280px;
-    
+.ww{
+    height: 85%;
+    width: 100%;
+}
+a{
+    color: #0fa120;
+    text-decoration: none;
+    font-size: 20px;
 }
 
+@media (max-width: 700px) {
+    .container{
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        background-image: url(../img/fondo_login.jpg);
+        background-size: contain;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .cuadro{
+        
+        border: solid 6px red; 
+        height: 80%;
+        width: 100%;
+        border-radius: 30px;
+        background-color: #384639cb;
+        box-shadow: 10px 10px 10px red; /* sombra en la derecha y parte inferior */
+        margin-top: 1%;
+        
+    }
+    .largo{
+        width: 100%;
+        height: 10%;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2%;
+    }
+    
+    .verjuego{
+        height: 100%;
+        width: 27%;
+        border-radius: 50px;
+        margin-left: 3%;
+    }
+    .cuenta{
+        height: 100%;
+        width: 27%;
+        border-radius: 50px;
+        margin-right: 3%;
+    }
+    .ver{
+        height: 100%;
+        width: 100%;
+        border-radius: 50px;
+        background-color: #0fa120;
+        text-shadow: 1px 5px 3px #fa0505;
+        font-size: 19px;
+        color: black;
+        filter: drop-shadow(0px 0px 12px rgb(43, 43, 43));
+    
+    
+    }
+    .cuentas{
+        height: 100%;
+        width: 100%;
+        border-radius: 50px;
+        background-color: #0fa120;
+        font-size: 17px;
+        text-shadow: 1px 5px 3px #fa0505;
+    
+    }
+    .texto{
+        height: 10%;
+        width: 100%;
+        font-size: 30px;
+        text-align: center;
+        color: white;
+        text-shadow: 1px 5px 3px #0fa120;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5%;
+    }
+    .todo{
+        width: 100%;
+        height: 50vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 2%;
+    }
+
+    .cuadro1{
+        height: 100%;
+        width: 30%;
+    }
+    .cuadro2{
+        height: 100%;
+        width: 45%;
+    }
+    .cuadro3{
+        height: 100%;
+        width: 30%;
+    }
+    .olvidado{
+        height: 10%;
+        text-align: center;
+        justify-content: center;
+        color: #0fa120 !important;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+    }
+    .form1{
+        width: 100%;
+        height: 14vh;
+        flex-direction: column;
+        justify-content: center;
+        display: flex;
+        text-align: center;
+        
+        color: #0fa120;
+        font-size: 20px;
+        
+    }
+    .redondeo{
+        border-radius: 50px;
+        height: 100%;
+        text-align: center;
+        margin-top: 2%;
+        
+    }
+    .form2{
+        width: 100%;
+        height: 10vh;
+        font-size: 17px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        margin-top: 3%;
+        color: #0fa120;
+        font-size: 20px;
+        
+    }
+    .iniciar{
+        height: 7vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 20%;
+    }
+    .nj{
+        border-radius: 50px;
+        width: 80%;
+        background-color: #0fa120;
+        font-size: 18px;
+        text-shadow: 1px 5px 3px #fa0505;
+
+    }
+    .zombie2{
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        margin-top: 20%;
+        position: relative;
+    }
+    .ww{
+        height: 40%;
+    }
+    a{
+        color: #0fa120;
+        text-decoration: none;
+        font-size: 20px;
+    }
+    
+}
