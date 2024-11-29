@@ -1,9 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const avatarActual = document.getElementById('avatarActual');
-    const nombreCompleto = document.getElementById('nombreCompleto');
-    const userId = document.getElementById('userId');
-    const guardarPerfil = document.getElementById('guardarPerfil');
-    const fileInput = document.getElementById('fileInput');
+    // Obtener referencias a los elementos
+    const elementos = {
+        avatarActual: document.getElementById('avatarActual'),
+        nombreCompleto: document.getElementById('nombreCompleto'),
+        userId: document.getElementById('userId'),
+        guardarPerfil: document.getElementById('guardarPerfil'),
+        fileInput: document.getElementById('fileInput')
+    };
+
+    // Verificar si estamos en la página correcta
+    if (!elementos.nombreCompleto || !elementos.userId) {
+        // Si no estamos en la página de perfil, salimos silenciosamente
+        return;
+    }
+
     let selectedAvatar = null;
 
     // Obtener datos del perfil
@@ -11,12 +21,19 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                nombreCompleto.textContent = data.data.nombre;
-                userId.textContent = data.data.id;
-                avatarActual.src = `../uploads/avatars/${data.data.avatar}`;
+                // Verificar que los elementos existan antes de modificarlos
+                elementos.nombreCompleto && (elementos.nombreCompleto.textContent = data.data.nombre);
+                elementos.userId && (elementos.userId.textContent = data.data.id);
+                elementos.avatarActual && (elementos.avatarActual.src = `../uploads/avatars/${data.data.avatar}`);
+                
+                // Guardar el nombre en localStorage para uso en otras páginas
+                localStorage.setItem('nombre_usuario', data.data.nombre);
             } else {
                 console.error('Error al obtener datos del perfil:', data.message);
             }
+        })
+        .catch(error => {
+            console.error('Error al obtener datos del perfil:', error);
         });
 
     // Seleccionar avatar
@@ -25,17 +42,17 @@ document.addEventListener('DOMContentLoaded', function() {
             document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
             this.classList.add('selected');
             selectedAvatar = this.getAttribute('data-avatar');
-            avatarActual.src = `../img/${selectedAvatar}`;
+            elementos.avatarActual && (elementos.avatarActual.src = `../img/${selectedAvatar}`);
         });
     });
 
     // Previsualizar imagen subida
-    fileInput.addEventListener('change', function() {
+    elementos.fileInput.addEventListener('change', function() {
         const file = this.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = function(e) {
-                avatarActual.src = e.target.result;
+                elementos.avatarActual && (elementos.avatarActual.src = e.target.result);
                 selectedAvatar = null; // Reset selected avatar
             };
             reader.readAsDataURL(file);
@@ -43,12 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Editar nombre
-    nombreCompleto.contentEditable = true;
+    elementos.nombreCompleto.contentEditable = true;
 
     // Guardar cambios
-    guardarPerfil.addEventListener('click', function() {
-        const nombre = nombreCompleto.textContent.trim();
-        const avatar = selectedAvatar || avatarActual.src.split('/').pop();
+    elementos.guardarPerfil.addEventListener('click', function() {
+        const nombre = elementos.nombreCompleto.textContent.trim();
+        const avatar = selectedAvatar || elementos.avatarActual.src.split('/').pop();
 
         fetch('../php/PerfilJugador.php?action=actualizar', {
             method: 'POST',
