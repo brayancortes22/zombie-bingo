@@ -22,10 +22,13 @@ class ObtenerJugadores {
                         jes.id,
                         jes.id_jugador,
                         jes.nombre_jugador,
+                        ru.avatar,
                         s.max_jugadores,
                         s.jugadores_unidos
                     FROM jugadores_en_sala jes
                     JOIN salas s ON jes.id_sala = s.id_sala
+                    JOIN jugador j ON jes.id_jugador = j.id_jugador
+                    JOIN registro_usuarios ru ON j.id_registro = ru.id_registro
                     WHERE jes.id_sala = :id_sala
                     ORDER BY jes.id";
                      

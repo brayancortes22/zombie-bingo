@@ -58,7 +58,28 @@ class ListaJugadores {
             $stmt = $this->pdo->prepare($query);
             $stmt->execute(['id_jugador' => $id_jugador]);
             $jugador = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
+            if ($jugador) {
+                // Verificar y procesar el avatar
+                if ($jugador['avatar']) {
+                    $rutaImagen = '../uploads/avatars/' . $jugador['avatar'];
+                    if (file_exists($rutaImagen)) {
+                        $jugador['avatar'] = base64_encode(file_get_contents($rutaImagen));
+                    } else {
+                        $rutaImagenDefault = '../img/' . $jugador['avatar'];
+                        if (file_exists($rutaImagenDefault)) {
+                            $jugador['avatar'] = base64_encode(file_get_contents($rutaImagenDefault));
+                        } else {
+                            // Si no existe la imagen, usa un avatar predeterminado
+                            $jugador['avatar'] = base64_encode(file_get_contents('../img/perfil1.png'));
+                        }
+                    }
+                } else {
+                    // Asignar un avatar predeterminado si no hay imagen asociada
+                    $jugador['avatar'] = base64_encode(file_get_contents('../img/perfil1.png'));
+                }
+            }
+    
             return [
                 'success' => true,
                 'jugador' => $jugador
@@ -70,6 +91,7 @@ class ListaJugadores {
             ];
         }
     }
+    
 
     public function agregarAmigo($id_amigo) {
         try {

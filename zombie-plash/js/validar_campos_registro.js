@@ -59,7 +59,7 @@ class FormValidator {
 
             if (data.success) {
                 alert('Registro exitoso');
-                window.location.href = '../html/login.php';
+                window.location.href = '../html/login.html';
             } else {
                 // Mostrar errores específicos
                 if (data.errors) {

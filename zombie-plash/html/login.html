@@ -1,20 +1,5 @@
-
-<?php
-session_start();
-
-// Verificar si el usuario ya ha iniciado sesión
-if (isset($_SESSION['user_id'])) {
-    // El usuario ya ha iniciado sesión, redirigir a la página de inicio
-    header("Location: inicio.php");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="es">
-
-<!DOCTYPE html>
-<html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,21 +50,21 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <!-- mensaje de error -->
                 <div id="generalError" class="error"></div>
-
+<br>
                 <div class="olvidado">
                     <a href="../html/restablecimientoContra.html">¿Olvidaste tu contraseña?</a>
                 </div>
-                <div class="zombie" id="z_3"></div>
-
+                
             </form>
-            </div>
-            <div class="cuadro3">
-                 <div class="zombie" id="z_3"></div>
-            </div>
         </div>
-        <div class="olvidado">
+        <div class="cuadro3">
+        <div class="zombie" id="z_3"></div>
+        </div>
+                 
+        </div>
+        <!-- <div class="olvidado">
             <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
-            </div>
+            </div> -->
             
             <script>
                 // Función que se ejecuta cuando el formulario es enviado
@@ -87,8 +72,43 @@ if (isset($_SESSION['user_id'])) {
                     event.preventDefault(); // Evita que el formulario se envíe de forma normal
             
                     // Redirige a la página de cargando con el redirect a la página de inicio
-                    window.location.href = './cargando.html?redirect=./inicio.php';
+                    window.location.href = './cargando.html?redirect=./inicio.html';
                 }
+                async function handleLogin(event) {
+            event.preventDefault();
+            
+            const formData = {
+                nombre: document.getElementById('nombre').value,
+                contraseña: document.getElementById('contraseña').value
+            };
+
+            try {
+                const response = await fetch('../php/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Guardar datos en localStorage
+                    localStorage.setItem('id_jugador', data.id_jugador);
+                    localStorage.setItem('nombre_usuario', data.nombre_usuario);
+                    localStorage.setItem('avatar_usuario', data.avatar);
+                    
+                    // Redirigir a la página de carga
+                    window.location.href = './cargando.html?redirect=./inicio.html';
+                } else {
+                    document.getElementById('generalError').textContent = data.message || 'Error al iniciar sesión';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('generalError').textContent = 'Error de conexión';
+            }
+        }
             </script>
             
         </div>
@@ -103,7 +123,7 @@ if (isset($_SESSION['user_id'])) {
             event.preventDefault(); // Evita que el formulario se envíe de forma normal
     
             // Redirige a la página de cargando con el redirect a la página de inicio
-            window.location.href = './cargando.html?redirect=./inicio.php';
+            window.location.href = './cargando.html?redirect=./inicio.html';
         }
     </script>
 </body>
