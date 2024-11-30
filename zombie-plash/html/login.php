@@ -1,119 +1,109 @@
+
 <?php
 session_start();
 
-// Verificar si el usuario ha iniciado sesión
-if (!isset($_SESSION['id_usuario'])) {
-    // Si no hay sesión activa, redirigir al login
-    header("Location: login.php");
+// Verificar si el usuario ya ha iniciado sesión
+if (isset($_SESSION['user_id'])) {
+    // El usuario ya ha iniciado sesión, redirigir a la página de inicio
+    header("Location: inicio.php");
     exit();
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link rel="stylesheet" href="../css/inicio.css"><link
-    
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-        crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="icon" href="../img/image-removebg-preview.png" type="image/png">
     <link rel="stylesheet" href="../css/fuentes.css">
+        <!-- ... otros elementos ... -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-
-    <script src=""></script>
-    <title>Zombie plash</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Login</title>
 </head>
+
 <body>
-    <!-- Resto del contenido de la página de inicio -->
-    <div class="container-fluid">
-        <div class="imagen">
-            <div class="primera">
-            <a href="./perfiljugador.html">
-        <div class="circulop1">
-            <img src="../uploads/avatars/<?php echo htmlspecialchars($avatar); ?>" alt="Avatar del jugador">
+    <div class="container">
+            <div class="cuadro">
+                <div class="largo">
+                    <div class="verjuego">
+                        <a href="">
+                           <button type="button" class="btn success ver"><strong>Ver juego</strong></button>
+                        </a>
+                    </div>
+                    <div class="cuenta">
+                        <a href="./registrate.html">
+                            <button type="button" class="btn success cuentas"><strong>Crear cuenta</strong></button>
+                        </a>
+                    </div>
+            </div>
+            <div class="texto">Iniciar sesión</div>
+                <div class="todo">
+                    <div class="cuadro1">
+                        <div class="zombie2">
+                            <img src="../img/image-removebg-preview.png"  alt="imagen" class="ww">
+                        </div> 
+                    </div>
+                    <div class="cuadro2">
+                    <form id="formulario" onsubmit="redirectAfterLogin(event)">
+                <div class="form1">
+                    <label for="nombre">Usuario o correo electrónico</label>
+                    <input type="text" class="redondeo" id="nombre" name="nombre" placeholder="nombre_usu" required>
+                </div>
+                <div class="form2">
+                    <label for="contraseña">Contraseña</label>
+                    <input type="password" class="redondeo" id="contraseña" name="contraseña" placeholder="contraseña_usu" required>
+                </div>
+                <div class="iniciar">
+                    <button type="submit" class="btn success nj"><strong>Iniciar sesión</strong></button>
+                </div>
+                <!-- mensaje de error -->
+                <div id="generalError" class="error"></div>
+<br>
+                <div class="olvidado">
+                    <a href="../html/restablecimientoContra.html">¿Olvidaste tu contraseña?</a>
+                </div>
+                
+            </form>
         </div>
-    </a>
-                   
-                    
-                    <button class="Btn" onclick="cerrarSesion()">
-                        
-                        <div class="sign"><svg viewBox="0 0 512 512"><path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg></div>
-                        
-                        <div class="text">Cerrar sesión</div>
-</button>
-<h1>Bienvenido, <span id="nombreUsuario"><?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?></span>!</h1>
+        <div class="cuadro3">
+        <div class="zombie" id="z_3"></div>
+        </div>
+                 
+        </div>
+        <!-- <div class="olvidado">
+            <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
+            </div> -->
+            
+            <script>
+                // Función que se ejecuta cuando el formulario es enviado
+                function redirectAfterLogin(event) {
+                    event.preventDefault(); // Evita que el formulario se envíe de forma normal
+            
+                    // Redirige a la página de cargando con el redirect a la página de inicio
+                    window.location.href = './cargando.html?redirect=./inicio.php';
+                }
+            </script>
+            
+        </div>
+        <!-- animacion de fantasma -->
+        <!-- <div id="z_2" class="fantasma2"></div> -->
+    </div>
+    <script src="../json/anima.js"></script>
+    <script src="../js/validar_inicio_sesion.js"></script>
+    <script>
+        // Función que se ejecuta cuando el formulario es enviado
+        function redirectAfterLogin(event) {
+            event.preventDefault(); // Evita que el formulario se envíe de forma normal
+    
+            // Redirige a la página de cargando con el redirect a la página de inicio
+            window.location.href = './cargando.html?redirect=./inicio.php';
+        }
+    </script>
+</body>
+</html>
 <script>
 
 </script>
-             
-
-            </div>
-            <div class="izquierda">
-                <div class="col1">
-                <div class="sonido">
-                    <button type="button" class="bsonido" id="botonSonido" onclick="cambiarIcono()">
-                        <i class="bi bi-volume-up" id="iconoSonido"></i>
-                    </button>
-                </div>
-                    <div class="conpartir"><button type="button" class="bconpartir">
-                        <i class="bi bi-share-fill"></i>
-                    </button></div>
-                    <div class="posion"><button type="button" class="bposion">
-                        <a href="./posionesZombie.html">
-                            <i class="bi bi-capsule"></i>
-                        </a>
-                    </button></div>
-                </div>
-
-                <div class="zombie">
-                    <img src="../img/zombie_inicio.png" alt="" srcset="">
-                </div>
-                <div class="col2">
-                    <div class="crear">
-                        <button type="submit" class="bcrear" onclick="window.location.href='./creaTuSala.html'">
-                                
-                                <i class="fas fa-users">
-                                </i>
-                                <strong>Crear sala</strong></button>
-                            </div>
-                            <div onclick="window.location.href='./uniseSala.html'" class="unirse">
-                                <button type="button" class="bunirse"> 
-                            <i class="fas fa-heart">
-                            </i>
-                            <strong>Unirse a una sala</strong></button>
-                        </div>
-                        <div class="jugar" onclick="window.location.href='juego.html'">
-                            <button type="button" class="bjugar"> 
-                            <i class="fas fa-user">
-                            </i>
-                            <strong>Jugar en solitario</strong></button></div>
-                </div>
-            </div>
-            <div class="abajo">
-               <div class="titulo"><strong>Amigos agregados</strong></div>
-               <div class="filass" id="amigosAvatares">
-                <!-- Los avatares se cargarán dinámicamente aquí -->
-               </div>
-               <div class="filass1" id="amigosNombres">
-                <!-- Los nombres se cargarán dinámicamente aquí -->
-               </div>
-            </div>
-            
-        </div>
-    </div>
-    <script>
-       
-      </script>
-      <script src="../js/inicio.js"></script>
-    <script src="../js/obtenerAmigos.js"></script>
-</body>
-</html>
