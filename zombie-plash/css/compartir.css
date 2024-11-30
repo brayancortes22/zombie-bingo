@@ -1,0 +1,15 @@
+#copyButton {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #4CAF50; /* Color verde */
+    color: white; /* Texto blanco */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#copyButton:hover {
+    background-color: #45a049; /* Color verde más oscuro al pasar el mouse */
+}
+#qrCode {
+    margin-top: 20px;
+}

@@ -65,7 +65,9 @@ if (!isset($_SESSION['id_usuario'])) {
                     </button>
                 </div>
                     <div class="conpartir"><button type="button" class="bconpartir">
+                        <a href="./compartir.html">
                         <i class="bi bi-share-fill"></i>
+                        </a>
                     </button></div>
                     <div class="posion"><button type="button" class="bposion">
                         <a href="./posionesZombie.html">
