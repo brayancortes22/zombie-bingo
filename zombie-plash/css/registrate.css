@@ -78,10 +78,11 @@
     height: 20%;
    }
    .espa{
-    margin-top: 3%;
+    margin-top: 2%;
    }
    .boton{
     width: 100%;
+    height: 100%;
    }
   .boton1{
     height: 100%;
@@ -90,18 +91,19 @@
     border-radius: 50px;
   }
   a{
-    height: 100%;
-    width: 50%;
+    height: 80%;
+    width: 90%;
   }.botona{
   height: 100%;
   width: 100%;
   }
   .boton2{
-    height: 100%;
-    width: 50%;
+    height: 80%;
+    width: 90%;
     margin-left: 40%;
     background-color: #26c218;
     border-radius: 50px;
+    margin-top: 5%;
   }
   .z{
     height: 80%;
