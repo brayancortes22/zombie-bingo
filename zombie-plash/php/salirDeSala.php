@@ -8,16 +8,25 @@ class SalirDeSala {
     private $id_sala;
     private $id_jugador;
 
-    public function __construct() {
-        $conexion = new Conexion();
-        $this->pdo = $conexion->conectar();
-        $this->response = ['success' => false, 'message' => ''];
-        
-        // Obtener datos del POST
-        $datos = json_decode(file_get_contents('php://input'), true);
-        $this->id_sala = $datos['id'] ?? null;
-        $this->id_jugador = $datos['id_jugador'] ?? null;
-    }
+    // Dentro de la clase SalirDeSala
+public function __construct() {
+    $conexion = new Conexion();
+    $this->pdo = $conexion->conectar();
+    $this->response = ['success' => false, 'message' => ''];
+    
+    // Obtener y validar datos del POST
+    $datos = json_decode(file_get_contents('php://input'), true);
+    
+    // Debug
+    error_log('Datos recibidos: ' . print_r($datos, true));
+    
+    $this->id_sala = $datos['id_sala'] ?? null;
+    $this->id_jugador = $datos['id_jugador'] ?? null;
+    
+    // Debug
+    error_log('ID Sala: ' . $this->id_sala);
+    error_log('ID Jugador: ' . $this->id_jugador);
+}
 
     public function ejecutarSalida() {
         try {
