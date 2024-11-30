@@ -19,7 +19,8 @@ document.getElementById('formulario').addEventListener('submit', function(e) {
         if (data.success) {
             console.log('Inicio de sesión exitoso:', data.session_info);
             alert('Inicio de sesión exitoso. Redirigiendo...');
-            window.location.href = '../html/inicio.html'; // Asegúrate de que esta ruta sea correcta
+            localStorage.setItem('id_jugador', data.session_info["id_usuario"]);
+            window.location.href = '../html/inicio.php'; // Asegúrate de que esta ruta sea correcta
         } else {
             // Mostrar error general
             if (data.errors && data.errors.general) {

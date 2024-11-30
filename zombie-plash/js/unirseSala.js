@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     jugadores_conectados: data.jugadores_conectados,
                     max_jugadores: data.max_jugadores
                 }));
+                localStorage.setItem('id_sala', data.id_sala);
                 mensaje = '¡Te has unido a la sala con éxito!';
                 // Redirigir a la página de jugadores en sala
                 window.location.href = 'jugadoresSala.html';
