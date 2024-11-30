@@ -52,33 +52,7 @@ if (!isset($_SESSION['id_usuario'])) {
 </button>
 <h1>Bienvenido, <span id="nombreUsuario"><?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?></span>!</h1>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-        const nombreUsuario = localStorage.getItem('nombre_usuario');
-        if (nombreUsuario) {
-            document.getElementById('nombreUsuario').textContent = nombreUsuario;
-        }
-    });
 
-                    function cerrarSesion() {
-                        if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-        window.location.href = '../php/cerrar_sesion.php';
-    }
-}
-function cambiarIcono() {
-        const icono = document.getElementById('iconoSonido');
-        
-        // Cambiar el icono según el estado actual
-        if (icono.classList.contains('bi-volume-up')) {
-            icono.classList.remove('bi-volume-up');
-            icono.classList.add('bi-volume-down');
-        } else if (icono.classList.contains('bi-volume-down')) {
-            icono.classList.remove('bi-volume-down');
-            icono.classList.add('bi-volume-mute');
-        } else {
-            icono.classList.remove('bi-volume-mute');
-            icono.classList.add('bi-volume-up');
-        }
-    }
 </script>
              
 
@@ -137,10 +111,9 @@ function cambiarIcono() {
         </div>
     </div>
     <script>
-        function redireccion(){
-          window.location.href='cargando.html'
-        }
+       
       </script>
+      <script src="../js/inicio.js"></script>
     <script src="../js/obtenerAmigos.js"></script>
 </body>
 </html>
