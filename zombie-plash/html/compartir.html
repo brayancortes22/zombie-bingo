@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enlace al Juego con Código QR</title>
+    <link rel="stylesheet" href="../css/enlaceJuego.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+</head>
+<body>
+    <h1>¡Juega Ahora!</h1>
+    <a id="gameLink" href="http://localhost/zombie-bingo/zombie-plash/html/login.php" target="_blank">Jugar Ahora</a>
+    <button id="copyButton">Copiar Enlace</button>
+
+    <canvas id="qrCode"></canvas>
+
+    <script>
+        // Función para copiar el enlace al portapapeles
+        document.getElementById('copyButton').addEventListener('click', function() {
+            const link = document.getElementById('gameLink').href; // Obtiene el enlace
+            navigator.clipboard.writeText(link) // Copia el enlace al portapapeles
+                .then(() => {
+                    alert('Enlace copiado: ' + link); // Mensaje de confirmación
+                })
+                .catch(err => {
+                    console.error('Error al copiar el enlace: ', err);
+                });
+        });
+
+        // Generar el código QR
+        const qr = new QRious({
+            element: document.getElementById('qrCode'),
+            value: 'http://localhost/zombie-bingo/zombie-plash/html/juego.html',
+            size: 200 // Tamaño del código QR
+        });
+    </script>
+</body>
+</html>
