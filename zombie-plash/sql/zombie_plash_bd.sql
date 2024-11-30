@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-11-2024 a las 16:29:25
+-- Tiempo de generación: 29-11-2024 a las 21:41:24
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -91,24 +91,6 @@ CREATE TABLE `jugadores_en_sala` (
   `nombre_jugador` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `jugadores_en_sala`
---
-
-INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`) VALUES
-(162, 115, 1, 'bscl'),
-(163, 116, 1, 'bscl'),
-(164, 117, 1, 'bscl'),
-(166, 119, 1, 'bscl'),
-(173, 123, 1, 'bscl'),
-(174, 123, 10, 'jhon'),
-(175, 124, 3, 'bscl-2'),
-(176, 125, 3, 'bscl-2'),
-(177, 126, 10, 'jhon'),
-(178, 126, 3, 'bscl-2'),
-(179, 127, 3, 'bscl-1'),
-(180, 128, 1, 'bscl');
-
 -- --------------------------------------------------------
 
 --
@@ -119,33 +101,6 @@ CREATE TABLE `partida` (
   `id_partida` int(11) NOT NULL,
   `fecha_partida` date DEFAULT NULL,
   `ganador` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `perfil`
---
-
-CREATE TABLE `perfil` (
-  `id_perfil` int(11) NOT NULL,
-  `nombre` varchar(255) DEFAULT NULL,
-  `descripcion` text DEFAULT NULL,
-  `imagen` blob DEFAULT NULL,
-  `estado` varchar(255) DEFAULT NULL,
-  `tipo_articulo` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `poderes`
---
-
-CREATE TABLE `poderes` (
-  `id_poderes` int(11) NOT NULL,
-  `uso_poder` varchar(255) DEFAULT NULL,
-  `estado_poder` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -183,8 +138,8 @@ CREATE TABLE `registro_usuarios` (
 --
 
 INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo`, `estado`, `avatar`) VALUES
-(1, 'bscl', '$2y$10$vGmfIplF7fkVC8HAHDSwp.19i1qeOw6SlDJS0lqQ8ULb55VyoZiwy', 'bscl20062007@gmail.com', NULL, '6740d43f656a1_foto.jpg'),
-(2, 'jhon', '$2y$10$Yi5b4dFqPazLcPMhFja0fuoz10TS2QxCN1n4nFBeLswFxYYOE7Pga', 'jhon@d.com', NULL, '6740eb98180d7_relaciones.png'),
+(1, 'bscl', '$2y$10$vGmfIplF7fkVC8HAHDSwp.19i1qeOw6SlDJS0lqQ8ULb55VyoZiwy', 'bscl20062007@gmail.com', NULL, 'perfil1.jpeg'),
+(2, 'jhon-1', '$2y$10$Yi5b4dFqPazLcPMhFja0fuoz10TS2QxCN1n4nFBeLswFxYYOE7Pga', 'jhon@d.com', NULL, 'avatar1.jpg'),
 (3, 'jhondd', '$2y$10$8gAjzhQMgOjmM0S.c5384Og5wDjmx2.wYH3RPTa0RgfYN5QysIyfG', 'wwww@gmail.co', NULL, 'perfil1.jpeg'),
 (4, 'bs', '$2y$10$6ZeQlaB2GjNHcoOcumTxTeQSjCgevvpkbzKfnlPG4vEw/gVoXRB/y', 'bsc@gmail.com', NULL, 'perfil1.jpeg'),
 (6, 'bsl-1', '$2y$10$iQU7o1RbOyLG3ie53guOYO8LuPNpXFxc8IT.tAsST0GnmWaOXLfru', 'bscl-1@gmail.com', NULL, 'perfil1.jpeg'),
@@ -207,18 +162,6 @@ INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `rol_jugador`
---
-
-CREATE TABLE `rol_jugador` (
-  `id_rol_jugador` int(11) NOT NULL,
-  `id_participacion` int(11) DEFAULT NULL,
-  `tipo_rol` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `salas`
 --
 
@@ -227,37 +170,20 @@ CREATE TABLE `salas` (
   `id_creador` int(11) NOT NULL,
   `contraseña` varchar(255) NOT NULL,
   `max_jugadores` int(11) NOT NULL,
-  `jugadores_unidos` int(11) NOT NULL DEFAULT 1
+  `jugadores_unidos` int(11) NOT NULL DEFAULT 1,
+  `jugando` tinyint(4) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `salas`
 --
 
-INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`) VALUES
-(115, 1, '$2y$10$kbJKxBy2omEv1.6CniXb3uV7tYjxitZkeHbVU8f0Z/nuhb0oE2gUm', 2, 1),
-(116, 1, '$2y$10$lE70RsWQU3w/KJcDtOYI6u5bL8k5zRRV9InFykKjHPa2TaWFBXUK.', 5, 1),
-(117, 1, '$2y$10$9YNmowkGmL6cZBjzrq6p0.IlgCfmROheYxUd2UNuAeRG01DyOKLrK', 1, 1),
-(119, 1, '$2y$10$lIW5jnQp1Sy8wAgZD99v6e.EOkLoTAUZEA0JubnnvufpJQxGzbpzC', 2, 1),
-(123, 1, '$2y$10$EgKQ9.hV6LkffxiVQGQi5OMWav5bserGLfSaKYicv1s/m0nlcec0y', 2, 2),
-(124, 3, '$2y$10$/dhr/US4CXe8e691dFzkzOK5V5TGh7jN86Peir4AKQ5e0r/AUOdUi', 2, 1),
-(125, 3, '$2y$10$di47fcsaVZXEngRhDb8vSef1olZRFQ.D8eKf0dPejDa18A7pBw5/C', 2, 1),
-(126, 10, '$2y$10$aHGVVwNVGBrQvXlYvC/ltecJwpdr0shAhMikTyQtKQSedvyN1rkAK', 22, 2),
-(127, 3, '$2y$10$q8SwSBqyZQqFvb3Eu373m.8d4MAY0/pUWSGZOmqHKkRGHyPQyHExS', 2, 1),
-(128, 1, '$2y$10$ksJDPmXYmEzDsONzpapbZOZIJOES3/D1EnT01/nNhEnhuVMp6hGhq', 2, 1);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tipo_seleccion`
---
-
-CREATE TABLE `tipo_seleccion` (
-  `id_tipo_seleccion` int(11) NOT NULL,
-  `id_perfil` int(11) DEFAULT NULL,
-  `id_jugador` int(11) DEFAULT NULL,
-  `uso_articulo` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`, `jugando`) VALUES
+(133, 10, '$2y$10$4ixjWB5z5/mVs6mFdJMdVuXsi2lByVVq/EbYTcQMqr9.mF2cqSoVi', 2, 3, 0),
+(134, 10, '$2y$10$PW6fdCNx76FcVZ3ZrqM0FOuBy/CtRm38sYuZ76wfnJ0OeRKj51c.e', 2, 2, 0),
+(135, 1, '$2y$10$ck4FkcLP.cp.ZmedOnjwFOmq9Q8m3EIgoVeogvA5nacjXmxu7XbXO', 2, 2, 0),
+(136, 1, '$2y$10$lMZ0Uy4COXLbelh5k2FSHux8iaRcGQTIW5XkJPM6w.0hSz2AgVubu', 2, 2, 0),
+(137, 1, '$2y$10$NCJ73DpPUAUBGop3RId9qeWAVFWfXIWQ9bQ.EqHlnp7mBpV4zLaz6', 3, 1, 0);
 
 --
 -- Índices para tablas volcadas
@@ -294,18 +220,6 @@ ALTER TABLE `partida`
   ADD PRIMARY KEY (`id_partida`);
 
 --
--- Indices de la tabla `perfil`
---
-ALTER TABLE `perfil`
-  ADD PRIMARY KEY (`id_perfil`);
-
---
--- Indices de la tabla `poderes`
---
-ALTER TABLE `poderes`
-  ADD PRIMARY KEY (`id_poderes`);
-
---
 -- Indices de la tabla `recuperar_contraseña`
 --
 ALTER TABLE `recuperar_contraseña`
@@ -319,26 +233,11 @@ ALTER TABLE `registro_usuarios`
   ADD PRIMARY KEY (`id_registro`);
 
 --
--- Indices de la tabla `rol_jugador`
---
-ALTER TABLE `rol_jugador`
-  ADD PRIMARY KEY (`id_rol_jugador`),
-  ADD KEY `fk_id_participacion` (`id_participacion`);
-
---
 -- Indices de la tabla `salas`
 --
 ALTER TABLE `salas`
   ADD PRIMARY KEY (`id_sala`),
   ADD KEY `id_creador` (`id_creador`);
-
---
--- Indices de la tabla `tipo_seleccion`
---
-ALTER TABLE `tipo_seleccion`
-  ADD PRIMARY KEY (`id_tipo_seleccion`),
-  ADD KEY `fk_id_perfil` (`id_perfil`),
-  ADD KEY `fk_id_jugador` (`id_jugador`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -360,7 +259,7 @@ ALTER TABLE `jugador`
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=204;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
@@ -372,7 +271,7 @@ ALTER TABLE `registro_usuarios`
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
 
 --
 -- Restricciones para tablas volcadas
@@ -407,23 +306,10 @@ ALTER TABLE `recuperar_contraseña`
   ADD CONSTRAINT `fk_id_registro` FOREIGN KEY (`id_registro`) REFERENCES `registro_usuarios` (`id_registro`);
 
 --
--- Filtros para la tabla `rol_jugador`
---
-ALTER TABLE `rol_jugador`
-  ADD CONSTRAINT `fk_id_participacion` FOREIGN KEY (`id_participacion`) REFERENCES `partida` (`id_partida`);
-
---
 -- Filtros para la tabla `salas`
 --
 ALTER TABLE `salas`
   ADD CONSTRAINT `fk_id_creador` FOREIGN KEY (`id_creador`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `tipo_seleccion`
---
-ALTER TABLE `tipo_seleccion`
-  ADD CONSTRAINT `fk_id_jugador` FOREIGN KEY (`id_jugador`) REFERENCES `jugador` (`id_jugador`),
-  ADD CONSTRAINT `fk_id_perfil` FOREIGN KEY (`id_perfil`) REFERENCES `perfil` (`id_perfil`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
