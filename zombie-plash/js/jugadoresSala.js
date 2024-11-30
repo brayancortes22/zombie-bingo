@@ -87,7 +87,7 @@ class SalaManager {
             const response = await fetch(`../php/obtenerJugadoresSala.php?id_sala=${this.datosSala.id_sala}`);
             const data = await response.json();
             
-            console.log('Datos recibidos del servidor:', data);
+            // console.log('Datos recibidos del servidor:', data);
 
             if (!data.success) {
                 throw new Error(data.error || 'Error al obtener jugadores');
@@ -185,48 +185,77 @@ class SalaManager {
 
     async salirDeSala() {
         try {
-            if (!this.datosSala || !this.datosSala.id_sala) {
-                throw new Error('No se encontraron los datos necesarios');
-            }
-
+            // Obtener los datos almacenados
+            const datosSala = JSON.parse(localStorage.getItem('datosSala'));
+            const id_sala = datosSala?.id_sala || localStorage.getItem('id_sala');
             const id_jugador = localStorage.getItem('id_jugador');
-            if (!id_jugador) {
-                throw new Error('No se encontró el ID del jugador');
+
+            console.log('Datos para salir:', { id_sala, id_jugador }); // Debug
+
+            if (!id_sala || !id_jugador) {
+                console.error('Datos faltantes:', { id_sala, id_jugador }); // Debug
+                throw new Error('Datos incompletos para salir de la sala');
             }
 
             const response = await fetch('../php/salirDeSala.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id_sala: this.datosSala.id_sala,
+                    id_sala: id_sala,
                     id_jugador: id_jugador
                 })
             });
 
             const data = await response.json();
+            console.log('Respuesta del servidor:', data); // Debug
             
             if (data.success) {
-                // Detener la actualización automática antes de salir
-                this.detenerActualizacionAutomatica();
-                // Detener la verificación del estado de la sala antes de salir
-                this.detenerVerificacionEstadoSala();
-                // Detener la verificación del creador antes de salir
-                this.detenerVerificacionCreador();
-                // Limpiar localStorage
+                // Limpiar datos de localStorage
+                localStorage.removeItem('id_sala');
                 localStorage.removeItem('datosSala');
-                // Redireccionar al inicio
-                window.location.href = 'inicio.html';
+                window.location.href = 'inicio.php';
             } else {
-                throw new Error(data.message);
+                throw new Error(data.message || 'Error al salir de la sala');
             }
         } catch (error) {
             console.error('Error al salir de la sala:', error);
             alert('Error al salir de la sala: ' + error.message);
         }
     }
+    async cancelarSala() {
+        try {
+            // Usar el ID de usuario de la instancia
+            const queryJugador = await fetch(`../php/obtenerIdJugador.php?id_registro=${this.id_usuario}`);
+            const jugadorData = await queryJugador.json();
+            
+            if (!jugadorData.success) {
+                throw new Error('No se pudo obtener el ID del jugador');
+            }
 
+            const response = await fetch('../php/cancelarSala.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id_sala: this.datosSala.id_sala,
+                    id_creador: jugadorData.id_jugador
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                this.limpiarYRedireccionar();
+            } else {
+                throw new Error(data.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error al cancelar la sala: ' + error.message);
+        }
+    }
     async verificarEstadoJuego() {
         try {
             const datosSala = JSON.parse(localStorage.getItem('datosSala'));
@@ -262,7 +291,7 @@ class SalaManager {
 
             if (data.success) {
                 if (data.esCreador) {
-                    console.log('Usuario es creador, mostrando botón');
+                    // console.log('Usuario es creador, mostrando botón');
                     this.btnIniciarJuego.style.display = 'inline-block';
                     this.btnIniciarJuego.setAttribute('data-creador', 'true');
                 } else {

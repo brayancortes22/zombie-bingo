@@ -10,6 +10,10 @@ document.getElementById('crearSalaForm').addEventListener('submit', function(e) 
     .then(response => response.json())
     .then(data => {
         if (data.success) {
+            // Guardar el ID del jugador
+            localStorage.setItem('id_jugador', data.id_jugador);
+            localStorage.setItem('id_sala', data.id_sala);
+            
             // Guardar todos los datos relevantes en localStorage
             localStorage.setItem('datosSala', JSON.stringify({
                 id_sala: data.id_sala,
@@ -18,6 +22,8 @@ document.getElementById('crearSalaForm').addEventListener('submit', function(e) 
                 max_jugadores: data.max_jugadores,
                 jugadores_conectados: data.jugadores_conectados
             }));
+            // Guardar ID de sala específicamente
+            localStorage.setItem('id_sala', data.id_sala);
             window.location.href = 'jugadoresSala.html';
         } else {
             document.getElementById('mensaje').textContent = 'Error: ' + data.message;

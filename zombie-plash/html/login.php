@@ -77,7 +77,7 @@ if (isset($_SESSION['user_id'])) {
             <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
             </div> -->
             
-            <script>
+            <!-- <script>
                 // Función que se ejecuta cuando el formulario es enviado
                 function redirectAfterLogin(event) {
                     event.preventDefault(); // Evita que el formulario se envíe de forma normal
@@ -85,7 +85,7 @@ if (isset($_SESSION['user_id'])) {
                     // Redirige a la página de cargando con el redirect a la página de inicio
                     window.location.href = './cargando.html?redirect=./inicio.php';
                 }
-            </script>
+            </script> -->
             
         </div>
         <!-- animacion de fantasma -->
@@ -94,13 +94,13 @@ if (isset($_SESSION['user_id'])) {
     <script src="../json/anima.js"></script>
     <script src="../js/validar_inicio_sesion.js"></script>
     <script>
-        // Función que se ejecuta cuando el formulario es enviado
-        function redirectAfterLogin(event) {
-            event.preventDefault(); // Evita que el formulario se envíe de forma normal
+        // // Función que se ejecuta cuando el formulario es enviado
+        // function redirectAfterLogin(event) {
+        //     event.preventDefault(); // Evita que el formulario se envíe de forma normal
     
-            // Redirige a la página de cargando con el redirect a la página de inicio
-            window.location.href = './cargando.html?redirect=./inicio.php';
-        }
+        //     // Redirige a la página de cargando con el redirect a la página de inicio
+        //     window.location.href = './cargando.html?redirect=./inicio.php';
+        // }
     </script>
 </body>
 </html>

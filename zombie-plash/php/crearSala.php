@@ -90,13 +90,12 @@ class CrearSala {
         $this->response = [
             'success' => true,
             'id_sala' => $this->id_sala,
+            'id_jugador' => $this->id_jugador, // Añadimos esta línea
             'nombre_jugador' => $this->nombre_usuario,
             'contraseña_sala' => $this->contrasena,
             'max_jugadores' => $this->num_jugadores,
             'jugadores_conectados' => 1
         ];
-
-        $_SESSION['datosSala'] = $this->response;
     }
 
     public function crearNuevaSala() {
