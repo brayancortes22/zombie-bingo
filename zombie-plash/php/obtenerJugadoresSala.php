@@ -22,6 +22,7 @@ class ObtenerJugadores {
                         jes.id,
                         jes.id_jugador,
                         jes.nombre_jugador,
+                        jes.rol,
                         ru.avatar,
                         s.max_jugadores,
                         s.jugadores_unidos

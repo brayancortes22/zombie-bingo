@@ -35,6 +35,14 @@ class SalaManager {
 
         this.intervalId = null;
         this.verificarEstadoSalaInterval = null;
+        this.verificarCreadorInterval = null;
+        
+        // Llamar a verificarCreadorSala después de un pequeño retraso
+        // para asegurar que los datos estén cargados
+        setTimeout(() => {
+            this.verificarCreadorSala();
+        }, 100);
+        
         this.init();
     }
 
@@ -44,6 +52,7 @@ class SalaManager {
         this.actualizarJugadores();
         this.iniciarActualizacionAutomatica();
         this.iniciarVerificacionEstadoSala();
+        this.iniciarVerificacionCreador();
     }
 
     async verificarEstadoSala() {
@@ -84,9 +93,11 @@ class SalaManager {
             // Actualizar información de la sala
             this.datosSala.max_jugadores = infoSala.max_jugadores;
             this.datosSala.jugadores_conectados = infoSala.jugadores_unidos;
+            this.datosSala.jugadores = jugadores;
             localStorage.setItem('datosSala', JSON.stringify(this.datosSala));
 
             this.actualizarInterfazJugadores(jugadores);
+            this.verificarCreadorSala();
             
         } catch (error) {
             console.error('Error al obtener jugadores:', error);
@@ -120,6 +131,11 @@ class SalaManager {
                 colAvatar.className = 'col2';
                 
                 if (jugador) {
+                    // Agregar clase especial para el creador
+                    if (jugador.rol === 'creador') {
+                        colAvatar.classList.add('creador-sala');
+                    }
+                    
                     const avatar = document.createElement('img');
                     avatar.src = `../uploads/avatars/${jugador.avatar}`;
                     avatar.alt = 'Avatar de ' + jugador.nombre_jugador;
@@ -190,6 +206,8 @@ class SalaManager {
                 this.detenerActualizacionAutomatica();
                 // Detener la verificación del estado de la sala antes de salir
                 this.detenerVerificacionEstadoSala();
+                // Detener la verificación del creador antes de salir
+                this.detenerVerificacionCreador();
                 // Limpiar localStorage
                 localStorage.removeItem('datosSala');
                 // Redireccionar al inicio
@@ -228,6 +246,46 @@ class SalaManager {
             this.verificarEstadoSalaInterval = null;
         }
     }
+
+    async verificarCreadorSala() {
+        try {
+            const btnIniciarJuego = document.getElementById('btnIniciarJuego');
+            if (!btnIniciarJuego) return;
+
+            const response = await fetch(`../php/verificarCreadorSala.php?id_sala=${this.datosSala.id_sala}`);
+            const data = await response.json();
+
+            if (data.success) {
+                if (data.esCreador) {
+                    console.log('Usuario es creador, mostrando botón');
+                    btnIniciarJuego.style.display = 'inline-block';
+                } else {
+                    console.log('Usuario no es creador, ocultando botón');
+                    btnIniciarJuego.style.display = 'none';
+                }
+            } else {
+                console.error('Error al verificar creador:', data.message);
+                btnIniciarJuego.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error al verificar creador:', error);
+            btnIniciarJuego.style.display = 'none';
+        }
+    }
+
+    iniciarVerificacionCreador() {
+        // Verificar inmediatamente
+        this.verificarCreadorSala();
+        // Verificar cada 3 segundos
+        this.verificarCreadorInterval = setInterval(() => this.verificarCreadorSala(), 3000);
+    }
+
+    detenerVerificacionCreador() {
+        if (this.verificarCreadorInterval) {
+            clearInterval(this.verificarCreadorInterval);
+            this.verificarCreadorInterval = null;
+        }
+    }
 }
 
 // Inicializar cuando el DOM esté listo
@@ -235,6 +293,10 @@ document.addEventListener('DOMContentLoaded', () => {
     new SalaManager();
 });
 document.getElementById('btnIniciarJuego').addEventListener('click', async function() {
+    if (this.getAttribute('data-creador') !== 'true') {
+        return;
+    }
+
     try {
         // Obtener datos de la sala
         const datosSala = JSON.parse(localStorage.getItem('datosSala'));

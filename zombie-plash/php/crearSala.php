@@ -76,8 +76,8 @@ class CrearSala {
     }
 
     private function agregarJugadorASala() {
-        $query = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador) 
-                 VALUES (:id_sala, :id_jugador, :nombre_jugador)";
+        $query = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador, rol) 
+                 VALUES (:id_sala, :id_jugador, :nombre_jugador, 'creador')";
         $stmt = $this->pdo->prepare($query);
         $stmt->execute([
             'id_sala' => $this->id_sala,

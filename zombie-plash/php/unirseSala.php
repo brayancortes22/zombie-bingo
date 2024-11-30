@@ -88,7 +88,8 @@ class UnirseASala {
             $this->verificarSala();
             $this->verificarJugadorEnSala();
 
-            $insert = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador) VALUES (:id_sala, :id_jugador, :nombre)";
+            $insert = "INSERT INTO jugadores_en_sala (id_sala, id_jugador, nombre_jugador, rol) 
+                      VALUES (:id_sala, :id_jugador, :nombre, 'participante')";
             $stmt = $this->pdo->prepare($insert);
             $stmt->execute([
                 'id_sala' => $this->id_sala,
