@@ -34,13 +34,30 @@ class SalaManager {
         }
 
         this.intervalId = null;
+        this.verificarEstadoSalaInterval = null;
         this.init();
     }
 
-    init() {
+    async init() {
+        await this.verificarEstadoSala();
         this.mostrarDatosSala();
         this.actualizarJugadores();
         this.iniciarActualizacionAutomatica();
+        this.iniciarVerificacionEstadoSala();
+    }
+
+    async verificarEstadoSala() {
+        try {
+            const response = await fetch(`../php/obtenerEstadoSala.php?id_sala=${this.datosSala.id_sala}`);
+            const data = await response.json();
+
+            if (data.success && data.estado === 'en_juego') {
+                // Redireccionar a la página del juego
+                window.location.href = 'juego.html';
+            }
+        } catch (error) {
+            console.error('Error al verificar estado de la sala:', error);
+        }
     }
 
     mostrarDatosSala() {
@@ -171,6 +188,8 @@ class SalaManager {
             if (data.success) {
                 // Detener la actualización automática antes de salir
                 this.detenerActualizacionAutomatica();
+                // Detener la verificación del estado de la sala antes de salir
+                this.detenerVerificacionEstadoSala();
                 // Limpiar localStorage
                 localStorage.removeItem('datosSala');
                 // Redireccionar al inicio
@@ -183,6 +202,32 @@ class SalaManager {
             alert('Error al salir de la sala: ' + error.message);
         }
     }
+
+    async verificarEstadoJuego() {
+        try {
+            const datosSala = JSON.parse(localStorage.getItem('datosSala'));
+            const response = await fetch(`../php/verificarEstadoJuego.php?id_sala=${datosSala.id_sala}`);
+            const data = await response.json();
+
+            if (data.success && data.estado === 'en_juego') {
+                // Redireccionar a la página del juego
+                window.location.href = 'juego.html';
+            }
+        } catch (error) {
+            console.error('Error al verificar estado del juego:', error);
+        }
+    }
+
+    iniciarVerificacionEstadoSala() {
+        this.verificarEstadoSalaInterval = setInterval(() => this.verificarEstadoSala(), 1000);
+    }
+
+    detenerVerificacionEstadoSala() {
+        if (this.verificarEstadoSalaInterval) {
+            clearInterval(this.verificarEstadoSalaInterval);
+            this.verificarEstadoSalaInterval = null;
+        }
+    }
 }
 
 // Inicializar cuando el DOM esté listo
@@ -191,41 +236,27 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 document.getElementById('btnIniciarJuego').addEventListener('click', async function() {
     try {
-        // Obtener datos de la sala con mejor manejo de errores
-        const datosSalaStr = localStorage.getItem('datosSala');
-        if (!datosSalaStr) {
-            throw new Error('No se encontraron datos de la sala');
-        }
+        // Obtener datos de la sala
+        const datosSala = JSON.parse(localStorage.getItem('datosSala'));
 
-        let datosSala;
-        try {
-            datosSala = JSON.parse(datosSalaStr);
-        } catch (e) {
-            console.error('Error al parsear datos de la sala:', e);
-            throw new Error('Datos de sala inválidos');
-        }
-
-        if (!datosSala.id_sala) {
-            throw new Error('ID de sala no encontrado');
-        }
-
-        // Notificar al servidor para iniciar el juego
+        // Enviar solicitud al servidor para iniciar el juego
         const response = await fetch('../php/iniciarJuego.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id_sala: id_sala })
+            body: JSON.stringify({ id_sala: datosSala.id_sala })
         });
 
         const data = await response.json();
 
         if (data.success) {
-            // Redirigir a la página del juego
-            window.location.href = 'juego.html';
+            // Solo el creador de la sala redirige inmediatamente al juego
+            if (datosSala.id_jugador === datosSala.id_creador) {
+                window.location.href = 'juego.html';
+            }
         } else {
-            console.error('Error:', data.message);
-            alert('Error al iniciar el juego: ' + data.message);
+            alert(data.message || 'No se puede iniciar el juego');
         }
     } catch (error) {
         console.error('Error:', error);

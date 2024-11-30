@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-11-2024 a las 21:41:24
+-- Tiempo de generación: 30-11-2024 a las 04:54:33
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -90,6 +90,13 @@ CREATE TABLE `jugadores_en_sala` (
   `id_jugador` int(11) DEFAULT NULL,
   `nombre_jugador` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `jugadores_en_sala`
+--
+
+INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`) VALUES
+(204, 138, 1, 'bscl');
 
 -- --------------------------------------------------------
 
@@ -183,7 +190,8 @@ INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `j
 (134, 10, '$2y$10$PW6fdCNx76FcVZ3ZrqM0FOuBy/CtRm38sYuZ76wfnJ0OeRKj51c.e', 2, 2, 0),
 (135, 1, '$2y$10$ck4FkcLP.cp.ZmedOnjwFOmq9Q8m3EIgoVeogvA5nacjXmxu7XbXO', 2, 2, 0),
 (136, 1, '$2y$10$lMZ0Uy4COXLbelh5k2FSHux8iaRcGQTIW5XkJPM6w.0hSz2AgVubu', 2, 2, 0),
-(137, 1, '$2y$10$NCJ73DpPUAUBGop3RId9qeWAVFWfXIWQ9bQ.EqHlnp7mBpV4zLaz6', 3, 1, 0);
+(137, 1, '$2y$10$NCJ73DpPUAUBGop3RId9qeWAVFWfXIWQ9bQ.EqHlnp7mBpV4zLaz6', 3, 1, 0),
+(138, 1, '$2y$10$VdvEwVX0QK7jFR97tox84ez1s.8G2aSf0VXQKIYKjkChBXO.BJrrO', 2, 1, 0);
 
 --
 -- Índices para tablas volcadas
@@ -259,7 +267,7 @@ ALTER TABLE `jugador`
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=204;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=205;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
@@ -271,7 +279,7 @@ ALTER TABLE `registro_usuarios`
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=138;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=139;
 
 --
 -- Restricciones para tablas volcadas
