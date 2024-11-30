@@ -27,14 +27,28 @@ class SalaManager {
             btnSalirSala: document.getElementById('btnSalirSala')
         };
 
-        this.salirDeSala = this.salirDeSala.bind(this);
+        this.btnIniciarJuego = document.getElementById('btnIniciarJuego');
         
+        this.iniciarJuego = this.iniciarJuego.bind(this);
+        this.salirDeSala = this.salirDeSala.bind(this);
+
+        if (this.btnIniciarJuego) {
+            this.btnIniciarJuego.addEventListener('click', this.iniciarJuego);
+        }
         if (this.elementos.btnSalirSala) {
             this.elementos.btnSalirSala.addEventListener('click', this.salirDeSala);
         }
 
         this.intervalId = null;
         this.verificarEstadoSalaInterval = null;
+        this.verificarCreadorInterval = null;
+        
+        // Llamar a verificarCreadorSala después de un pequeño retraso
+        // para asegurar que los datos estén cargados
+        setTimeout(() => {
+            this.verificarCreadorSala();
+        }, 100);
+        
         this.init();
     }
 
@@ -44,6 +58,7 @@ class SalaManager {
         this.actualizarJugadores();
         this.iniciarActualizacionAutomatica();
         this.iniciarVerificacionEstadoSala();
+        this.iniciarVerificacionCreador();
     }
 
     async verificarEstadoSala() {
@@ -84,9 +99,11 @@ class SalaManager {
             // Actualizar información de la sala
             this.datosSala.max_jugadores = infoSala.max_jugadores;
             this.datosSala.jugadores_conectados = infoSala.jugadores_unidos;
+            this.datosSala.jugadores = jugadores;
             localStorage.setItem('datosSala', JSON.stringify(this.datosSala));
 
             this.actualizarInterfazJugadores(jugadores);
+            this.verificarCreadorSala();
             
         } catch (error) {
             console.error('Error al obtener jugadores:', error);
@@ -120,6 +137,11 @@ class SalaManager {
                 colAvatar.className = 'col2';
                 
                 if (jugador) {
+                    // Agregar clase especial para el creador
+                    if (jugador.rol === 'creador') {
+                        colAvatar.classList.add('creador-sala');
+                    }
+                    
                     const avatar = document.createElement('img');
                     avatar.src = `../uploads/avatars/${jugador.avatar}`;
                     avatar.alt = 'Avatar de ' + jugador.nombre_jugador;
@@ -190,6 +212,8 @@ class SalaManager {
                 this.detenerActualizacionAutomatica();
                 // Detener la verificación del estado de la sala antes de salir
                 this.detenerVerificacionEstadoSala();
+                // Detener la verificación del creador antes de salir
+                this.detenerVerificacionCreador();
                 // Limpiar localStorage
                 localStorage.removeItem('datosSala');
                 // Redireccionar al inicio
@@ -228,38 +252,83 @@ class SalaManager {
             this.verificarEstadoSalaInterval = null;
         }
     }
+
+    async verificarCreadorSala() {
+        try {
+            if (!this.btnIniciarJuego) return;
+
+            const response = await fetch(`../php/verificarCreadorSala.php?id_sala=${this.datosSala.id_sala}`);
+            const data = await response.json();
+
+            if (data.success) {
+                if (data.esCreador) {
+                    console.log('Usuario es creador, mostrando botón');
+                    this.btnIniciarJuego.style.display = 'inline-block';
+                    this.btnIniciarJuego.setAttribute('data-creador', 'true');
+                } else {
+                    console.log('Usuario no es creador, ocultando botón');
+                    this.btnIniciarJuego.style.display = 'none';
+                    this.btnIniciarJuego.removeAttribute('data-creador');
+                }
+            } else {
+                console.error('Error al verificar creador:', data.message);
+                this.btnIniciarJuego.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error al verificar creador:', error);
+            this.btnIniciarJuego.style.display = 'none';
+        }
+    }
+
+    iniciarVerificacionCreador() {
+        // Verificar inmediatamente
+        this.verificarCreadorSala();
+        // Verificar cada 3 segundos
+        this.verificarCreadorInterval = setInterval(() => this.verificarCreadorSala(), 3000);
+    }
+
+    detenerVerificacionCreador() {
+        if (this.verificarCreadorInterval) {
+            clearInterval(this.verificarCreadorInterval);
+            this.verificarCreadorInterval = null;
+        }
+    }
+
+    async iniciarJuego() {
+        try {
+            if (!this.btnIniciarJuego.hasAttribute('data-creador')) {
+                console.log('No eres el creador de la sala');
+                return;
+            }
+
+            console.log('Iniciando juego...');
+            const response = await fetch('../php/iniciarJuego.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    id_sala: this.datosSala.id_sala 
+                })
+            });
+
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+
+            if (data.success) {
+                console.log('Juego iniciado exitosamente');
+                window.location.href = 'juego.html';
+            } else {
+                alert(data.message || 'No se puede iniciar el juego');
+            }
+        } catch (error) {
+            console.error('Error al iniciar el juego:', error);
+            alert('Error al procesar la solicitud');
+        }
+    }
 }
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     new SalaManager();
-});
-document.getElementById('btnIniciarJuego').addEventListener('click', async function() {
-    try {
-        // Obtener datos de la sala
-        const datosSala = JSON.parse(localStorage.getItem('datosSala'));
-
-        // Enviar solicitud al servidor para iniciar el juego
-        const response = await fetch('../php/iniciarJuego.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id_sala: datosSala.id_sala })
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-            // Solo el creador de la sala redirige inmediatamente al juego
-            if (datosSala.id_jugador === datosSala.id_creador) {
-                window.location.href = 'juego.html';
-            }
-        } else {
-            alert(data.message || 'No se puede iniciar el juego');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error al procesar la solicitud');
-    }
 });
