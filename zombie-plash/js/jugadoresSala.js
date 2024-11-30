@@ -355,9 +355,86 @@ class SalaManager {
             alert('Error al procesar la solicitud');
         }
     }
+
+    async cerrarSala() {
+        try {
+            const datosSala = JSON.parse(localStorage.getItem('datosSala'));
+            const id_sala = datosSala?.id_sala || localStorage.getItem('id_sala');
+            const id_jugador = localStorage.getItem('id_jugador');
+
+            console.log('Datos para cerrar sala:', { id_sala, id_jugador }); // Debug
+
+            if (!id_sala || !id_jugador) {
+                console.error('Datos faltantes:', { id_sala, id_jugador });
+                throw new Error('Datos incompletos para cerrar la sala');
+            }
+
+            // Confirmar con el usuario
+            if (!confirm('¿Estás seguro de que deseas cerrar la sala? Todos los jugadores serán expulsados.')) {
+                return;
+            }
+
+            const response = await fetch('../php/cancelarSala.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: id_sala,
+                    id_jugador: id_jugador
+                })
+            });
+
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+
+            if (data.success) {
+                // Limpiar datos de localStorage
+                localStorage.removeItem('id_sala');
+                localStorage.removeItem('datosSala');
+                
+                // Redireccionar al creador al inicio
+                window.location.href = 'inicio.php';
+            } else {
+                throw new Error(data.message || 'Error al cerrar la sala');
+            }
+        } catch (error) {
+            console.error('Error al cerrar la sala:', error);
+            alert('Error al cerrar la sala: ' + error.message);
+        }
+    }
 }
 
 // Inicializar cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
     new SalaManager();
+});
+
+// Función para verificar si la sala ha sido cerrada (para los participantes)
+async function verificarEstadoSala() {
+    try {
+        const id_sala = localStorage.getItem('id_sala');
+        if (!id_sala) return;
+
+        const response = await fetch(`../php/obtenerEstadoSala.php?id_sala=${id_sala}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Si la sala ya no existe o está cerrada
+            if (!data.estado || data.estado === 'cerrada') {
+                alert('La sala ha sido cerrada por el creador');
+                localStorage.removeItem('id_sala');
+                localStorage.removeItem('datosSala');
+                window.location.href = 'inicio.php';
+            }
+        }
+    } catch (error) {
+        console.error('Error al verificar estado de sala:', error);
+    }
+}
+
+// Iniciar verificación periódica para los participantes
+document.addEventListener('DOMContentLoaded', function() {
+    // Verificar cada 5 segundos si la sala sigue activa
+    setInterval(verificarEstadoSala, 5000);
 });
