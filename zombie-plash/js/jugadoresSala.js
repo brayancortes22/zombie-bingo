@@ -24,7 +24,8 @@ class SalaManager {
             jugadoresConectados: document.getElementById('jugadoresConectados'),
             contraseñaSala: document.getElementById('contraseñaSala'),
             contenedorJugadores: document.getElementById('contenedorJugadores'),
-            btnSalirSala: document.getElementById('btnSalirSala')
+            btnSalirSala: document.getElementById('btnSalirSala'),
+            btnCerrarSala: document.querySelector('.botonrojo')
         };
 
         this.btnIniciarJuego = document.getElementById('btnIniciarJuego');
@@ -53,6 +54,14 @@ class SalaManager {
 
         // Agregar el evento para el botón de cancelar sala
         document.querySelector('.botonrojo').addEventListener('click', () => this.cerrarSala());
+
+        // Ocultar ambos botones inicialmente
+        if (this.elementos.btnCerrarSala) {
+            this.elementos.btnCerrarSala.style.display = 'none';
+        }
+        if (this.elementos.btnSalirSala) {
+            this.elementos.btnSalirSala.style.display = 'none';
+        }
     }
 
     async init() {
@@ -260,28 +269,38 @@ class SalaManager {
 
     async verificarCreadorSala() {
         try {
-            if (!this.btnIniciarJuego) return;
-
             const response = await fetch(`../php/verificarCreadorSala.php?id_sala=${this.datosSala.id_sala}`);
             const data = await response.json();
 
             if (data.success) {
                 if (data.esCreador) {
-                    // console.log('Usuario es creador, mostrando botón');
-                    this.btnIniciarJuego.style.display = 'inline-block';
-                    this.btnIniciarJuego.setAttribute('data-creador', 'true');
+                    // Para el creador: mostrar botón de iniciar juego y cerrar sala, ocultar salir
+                    if (this.btnIniciarJuego) {
+                        this.btnIniciarJuego.style.display = 'inline-block';
+                        this.btnIniciarJuego.setAttribute('data-creador', 'true');
+                    }
+                    if (this.elementos.btnCerrarSala) {
+                        this.elementos.btnCerrarSala.style.display = 'inline-block';
+                    }
+                    if (this.elementos.btnSalirSala) {
+                        this.elementos.btnSalirSala.style.display = 'none';
+                    }
                 } else {
-                    console.log('Usuario no es creador, ocultando botón');
-                    this.btnIniciarJuego.style.display = 'none';
-                    this.btnIniciarJuego.removeAttribute('data-creador');
+                    // Para participantes: ocultar botones de iniciar y cerrar, mostrar salir
+                    if (this.btnIniciarJuego) {
+                        this.btnIniciarJuego.style.display = 'none';
+                        this.btnIniciarJuego.removeAttribute('data-creador');
+                    }
+                    if (this.elementos.btnCerrarSala) {
+                        this.elementos.btnCerrarSala.style.display = 'none';
+                    }
+                    if (this.elementos.btnSalirSala) {
+                        this.elementos.btnSalirSala.style.display = 'inline-block';
+                    }
                 }
-            } else {
-                console.error('Error al verificar creador:', data.message);
-                this.btnIniciarJuego.style.display = 'none';
             }
         } catch (error) {
             console.error('Error al verificar creador:', error);
-            this.btnIniciarJuego.style.display = 'none';
         }
     }
 
