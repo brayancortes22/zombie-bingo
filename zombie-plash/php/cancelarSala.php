@@ -17,11 +17,18 @@ try {
         exit;
     }
 
-    // Eliminar registros de jugadores_en_sala
+    // 1. Primero actualizar el estado de la sala a 'cerrada'
+    $stmt = $conexion->conectar()->prepare("UPDATE salas SET jugando = -1 WHERE id_sala = ?");
+    $stmt->execute([$id_sala]);
+
+    // 2. Esperar un breve momento para que los clientes detecten el cambio
+    usleep(500000); // espera 0.5 segundos
+
+    // 3. Eliminar registros de jugadores_en_sala
     $stmt = $conexion->conectar()->prepare("DELETE FROM jugadores_en_sala WHERE id_sala = ?");
     $stmt->execute([$id_sala]);
 
-    // Eliminar la sala
+    // 4. Finalmente eliminar la sala
     $stmt = $conexion->conectar()->prepare("DELETE FROM salas WHERE id_sala = ?");
     $stmt->execute([$id_sala]);
 

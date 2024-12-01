@@ -62,6 +62,10 @@ class SalaManager {
         this.iniciarActualizacionAutomatica();
         this.iniciarVerificacionEstadoSala();
         this.iniciarVerificacionCreador();
+        this.verificarExistenciaSala();
+        
+        // Iniciar verificación periódica de existencia de sala
+        setInterval(() => this.verificarExistenciaSala(), 3000);
     }
 
     async verificarEstadoSala() {
@@ -369,6 +373,22 @@ class SalaManager {
         } catch (error) {
             console.error('Error al cerrar la sala:', error);
             alert('Error al cerrar la sala: ' + error.message);
+        }
+    }
+
+    async verificarExistenciaSala() {
+        try {
+            const response = await fetch(`../php/verificarSalaExiste.php?id_sala=${this.datosSala.id_sala}`);
+            const data = await response.json();
+
+            if (!data.existe) {
+                alert('La sala ya no existe. Serás redirigido al inicio.');
+                localStorage.removeItem('id_sala');
+                localStorage.removeItem('datosSala');
+                window.location.href = 'inicio.php';
+            }
+        } catch (error) {
+            console.error('Error al verificar existencia de sala:', error);
         }
     }
 }
