@@ -176,10 +176,8 @@ height: 40%;
     background-color: rgb(147, 208, 216);
     border-radius: 50px;
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
-    padding: 1px;
+    padding: 20px;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
 }
 
 .derecha{
@@ -298,41 +296,112 @@ height: 40%;
 }
 
 .balota {
-    background: linear-gradient(145deg, #d40606, #cf6b6b);
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    display: flex;
+    display: inline-flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-weight: bold;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    border-radius: 50%;
+    margin: 5px;
     box-shadow: 3px 3px 6px rgba(0,0,0,0.2);
     transition: all 0.5s ease;
-    flex-shrink: 0;
     position: relative;
 }
 
+.balota .letra {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.balota .numero {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ff4444;
+}
+
 .nueva-balota {
-    transform: scale(1.5);
-    background: linear-gradient(145deg, #ff9900, #ff6600);
-    color: rgb(243, 16, 16);
     animation: aparecer 0.5s ease-out;
 }
 
 .balota-saliente {
-    transform: translateX(-100px) scale(0);
-    opacity: 0;
+    animation: desaparecer 0.5s ease-out forwards;
 }
 
 @keyframes aparecer {
     from {
-        transform: translateX(100px) scale(0);
+        transform: scale(0) rotate(180deg);
         opacity: 0;
     }
     to {
-        transform: scale(1.5);
+        transform: scale(1) rotate(0deg);
         opacity: 1;
     }
+}
+
+@keyframes desaparecer {
+    from {
+        transform: scale(1);
+        opacity: 1;
+    }
+    to {
+        transform: scale(0) translateX(-100%);
+        opacity: 0;
+    }
+}
+
+#panel-historial {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.columna-B, .columna-I, .columna-N, .columna-G, .columna-O {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.columna-B h3, .columna-I h3, .columna-N h3, .columna-G h3, .columna-O h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.numeros {
+    font-size: 1.1em;
+    color: #666;
+    text-align: center;
+}
+
+#modalEligeNumero .modal-content {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+#numerosDisponibles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 5px;
+    padding: 10px;
+}
+
+#numerosDisponibles button {
+    padding: 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#numerosDisponibles button:hover {
+    background-color: #45a049;
 }
 
 .countdown-overlay {
@@ -389,24 +458,6 @@ height: 40%;
 
 .fade-out {
     opacity: 0;
-}
-
-#panel-historial {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-}
-
-#panel-historial .columna-B,
-#panel-historial .columna-I,
-#panel-historial .columna-N,
-#panel-historial .columna-G,
-#panel-historial .columna-O {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 8px;
-    border-radius: 5px;
-    margin-bottom: 5px;
 }
 
 .modal {
