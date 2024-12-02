@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-12-2024 a las 21:55:20
+-- Tiempo de generación: 02-12-2024 a las 23:09:55
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -70,66 +70,186 @@ CREATE TABLE `balotas` (
 --
 
 INSERT INTO `balotas` (`id_balota`, `numero`, `letra`, `estado`, `id_sala`) VALUES
-(61, 1, 'B', 0, 176),
-(62, 2, 'B', 0, 176),
-(63, 3, 'B', 0, 176),
-(64, 4, 'B', 0, 176),
-(65, 5, 'B', 0, 176),
-(66, 6, 'B', 0, 176),
-(67, 7, 'B', 0, 176),
-(68, 8, 'B', 0, 176),
-(69, 9, 'B', 0, 176),
-(70, 10, 'B', 0, 176),
-(71, 11, 'B', 0, 176),
-(72, 12, 'B', 0, 176),
-(73, 13, 'I', 0, 176),
-(74, 14, 'I', 0, 176),
-(75, 15, 'I', 0, 176),
-(76, 16, 'I', 0, 176),
-(77, 17, 'I', 0, 176),
-(78, 18, 'I', 0, 176),
-(79, 19, 'I', 0, 176),
-(80, 20, 'I', 0, 176),
-(81, 21, 'I', 0, 176),
-(82, 22, 'I', 0, 176),
-(83, 23, 'I', 0, 176),
-(84, 24, 'N', 0, 176),
-(85, 25, 'N', 0, 176),
-(86, 26, 'N', 0, 176),
-(87, 27, 'N', 0, 176),
-(88, 28, 'N', 0, 176),
-(89, 29, 'N', 0, 176),
-(90, 30, 'N', 0, 176),
-(91, 31, 'N', 0, 176),
-(92, 32, 'N', 0, 176),
-(93, 33, 'N', 0, 176),
-(94, 34, 'N', 0, 176),
-(95, 35, 'G', 0, 176),
-(96, 36, 'G', 0, 176),
-(97, 37, 'G', 0, 176),
-(98, 38, 'G', 0, 176),
-(99, 39, 'G', 0, 176),
-(100, 40, 'G', 0, 176),
-(101, 41, 'G', 0, 176),
-(102, 42, 'G', 0, 176),
-(103, 43, 'G', 0, 176),
-(104, 44, 'G', 0, 176),
-(105, 45, 'G', 0, 176),
-(106, 46, 'O', 0, 176),
-(107, 47, 'O', 0, 176),
-(108, 48, 'O', 0, 176),
-(109, 49, 'O', 0, 176),
-(110, 50, 'O', 0, 176),
-(111, 51, 'O', 0, 176),
-(112, 52, 'O', 0, 176),
-(113, 53, 'O', 0, 176),
-(114, 54, 'O', 0, 176),
-(115, 55, 'O', 0, 176),
-(116, 56, 'O', 0, 176),
-(117, 57, 'O', 0, 176),
-(118, 58, 'O', 0, 176),
-(119, 59, 'O', 0, 176),
-(120, 60, 'O', 0, 176);
+(1381, 1, 'B', 0, 179),
+(1382, 2, 'B', 0, 179),
+(1383, 3, 'B', 0, 179),
+(1384, 4, 'B', 0, 179),
+(1385, 5, 'B', 0, 179),
+(1386, 6, 'B', 0, 179),
+(1387, 7, 'B', 0, 179),
+(1388, 8, 'B', 0, 179),
+(1389, 9, 'B', 0, 179),
+(1390, 10, 'B', 0, 179),
+(1391, 11, 'B', 0, 179),
+(1392, 12, 'B', 0, 179),
+(1393, 13, 'I', 0, 179),
+(1394, 14, 'I', 0, 179),
+(1395, 15, 'I', 0, 179),
+(1396, 16, 'I', 0, 179),
+(1397, 17, 'I', 0, 179),
+(1398, 18, 'I', 0, 179),
+(1399, 19, 'I', 0, 179),
+(1400, 20, 'I', 0, 179),
+(1401, 21, 'I', 0, 179),
+(1402, 22, 'I', 0, 179),
+(1403, 23, 'I', 0, 179),
+(1404, 24, 'N', 0, 179),
+(1405, 25, 'N', 0, 179),
+(1406, 26, 'N', 0, 179),
+(1407, 27, 'N', 0, 179),
+(1408, 28, 'N', 0, 179),
+(1409, 29, 'N', 0, 179),
+(1410, 30, 'N', 0, 179),
+(1411, 31, 'N', 0, 179),
+(1412, 32, 'N', 0, 179),
+(1413, 33, 'N', 0, 179),
+(1414, 34, 'N', 0, 179),
+(1415, 35, 'G', 0, 179),
+(1416, 36, 'G', 0, 179),
+(1417, 37, 'G', 0, 179),
+(1418, 38, 'G', 0, 179),
+(1419, 39, 'G', 0, 179),
+(1420, 40, 'G', 0, 179),
+(1421, 41, 'G', 0, 179),
+(1422, 42, 'G', 0, 179),
+(1423, 43, 'G', 0, 179),
+(1424, 44, 'G', 0, 179),
+(1425, 45, 'G', 0, 179),
+(1426, 46, 'O', 0, 179),
+(1427, 47, 'O', 0, 179),
+(1428, 48, 'O', 0, 179),
+(1429, 49, 'O', 0, 179),
+(1430, 50, 'O', 0, 179),
+(1431, 51, 'O', 0, 179),
+(1432, 52, 'O', 0, 179),
+(1433, 53, 'O', 0, 179),
+(1434, 54, 'O', 0, 179),
+(1435, 55, 'O', 0, 179),
+(1436, 56, 'O', 0, 179),
+(1437, 57, 'O', 0, 179),
+(1438, 58, 'O', 0, 179),
+(1439, 59, 'O', 0, 179),
+(1440, 60, 'O', 0, 179),
+(1441, 1, 'B', 0, 180),
+(1442, 2, 'B', 0, 180),
+(1443, 3, 'B', 0, 180),
+(1444, 4, 'B', 0, 180),
+(1445, 5, 'B', 0, 180),
+(1446, 6, 'B', 0, 180),
+(1447, 7, 'B', 0, 180),
+(1448, 8, 'B', 0, 180),
+(1449, 9, 'B', 0, 180),
+(1450, 10, 'B', 0, 180),
+(1451, 11, 'B', 0, 180),
+(1452, 12, 'B', 0, 180),
+(1453, 13, 'I', 0, 180),
+(1454, 14, 'I', 0, 180),
+(1455, 15, 'I', 0, 180),
+(1456, 16, 'I', 0, 180),
+(1457, 17, 'I', 0, 180),
+(1458, 18, 'I', 0, 180),
+(1459, 19, 'I', 0, 180),
+(1460, 20, 'I', 0, 180),
+(1461, 21, 'I', 0, 180),
+(1462, 22, 'I', 0, 180),
+(1463, 23, 'I', 0, 180),
+(1464, 24, 'N', 0, 180),
+(1465, 25, 'N', 0, 180),
+(1466, 26, 'N', 0, 180),
+(1467, 27, 'N', 0, 180),
+(1468, 28, 'N', 0, 180),
+(1469, 29, 'N', 0, 180),
+(1470, 30, 'N', 0, 180),
+(1471, 31, 'N', 0, 180),
+(1472, 32, 'N', 0, 180),
+(1473, 33, 'N', 0, 180),
+(1474, 34, 'N', 0, 180),
+(1475, 35, 'G', 0, 180),
+(1476, 36, 'G', 0, 180),
+(1477, 37, 'G', 0, 180),
+(1478, 38, 'G', 0, 180),
+(1479, 39, 'G', 0, 180),
+(1480, 40, 'G', 0, 180),
+(1481, 41, 'G', 0, 180),
+(1482, 42, 'G', 0, 180),
+(1483, 43, 'G', 0, 180),
+(1484, 44, 'G', 0, 180),
+(1485, 45, 'G', 0, 180),
+(1486, 46, 'O', 0, 180),
+(1487, 47, 'O', 0, 180),
+(1488, 48, 'O', 0, 180),
+(1489, 49, 'O', 0, 180),
+(1490, 50, 'O', 0, 180),
+(1491, 51, 'O', 0, 180),
+(1492, 52, 'O', 0, 180),
+(1493, 53, 'O', 0, 180),
+(1494, 54, 'O', 0, 180),
+(1495, 55, 'O', 0, 180),
+(1496, 56, 'O', 0, 180),
+(1497, 57, 'O', 0, 180),
+(1498, 58, 'O', 0, 180),
+(1499, 59, 'O', 0, 180),
+(1500, 60, 'O', 0, 180),
+(1621, 1, 'B', 0, 181),
+(1622, 2, 'B', 0, 181),
+(1623, 3, 'B', 0, 181),
+(1624, 4, 'B', 0, 181),
+(1625, 5, 'B', 0, 181),
+(1626, 6, 'B', 0, 181),
+(1627, 7, 'B', 0, 181),
+(1628, 8, 'B', 0, 181),
+(1629, 9, 'B', 0, 181),
+(1630, 10, 'B', 0, 181),
+(1631, 11, 'B', 0, 181),
+(1632, 12, 'B', 0, 181),
+(1633, 13, 'I', 0, 181),
+(1634, 14, 'I', 0, 181),
+(1635, 15, 'I', 0, 181),
+(1636, 16, 'I', 0, 181),
+(1637, 17, 'I', 0, 181),
+(1638, 18, 'I', 0, 181),
+(1639, 19, 'I', 0, 181),
+(1640, 20, 'I', 0, 181),
+(1641, 21, 'I', 0, 181),
+(1642, 22, 'I', 0, 181),
+(1643, 23, 'I', 0, 181),
+(1644, 24, 'N', 0, 181),
+(1645, 25, 'N', 0, 181),
+(1646, 26, 'N', 0, 181),
+(1647, 27, 'N', 0, 181),
+(1648, 28, 'N', 0, 181),
+(1649, 29, 'N', 0, 181),
+(1650, 30, 'N', 0, 181),
+(1651, 31, 'N', 0, 181),
+(1652, 32, 'N', 0, 181),
+(1653, 33, 'N', 0, 181),
+(1654, 34, 'N', 0, 181),
+(1655, 35, 'G', 0, 181),
+(1656, 36, 'G', 0, 181),
+(1657, 37, 'G', 0, 181),
+(1658, 38, 'G', 0, 181),
+(1659, 39, 'G', 0, 181),
+(1660, 40, 'G', 0, 181),
+(1661, 41, 'G', 0, 181),
+(1662, 42, 'G', 0, 181),
+(1663, 43, 'G', 0, 181),
+(1664, 44, 'G', 0, 181),
+(1665, 45, 'G', 0, 181),
+(1666, 46, 'O', 0, 181),
+(1667, 47, 'O', 0, 181),
+(1668, 48, 'O', 0, 181),
+(1669, 49, 'O', 0, 181),
+(1670, 50, 'O', 0, 181),
+(1671, 51, 'O', 0, 181),
+(1672, 52, 'O', 0, 181),
+(1673, 53, 'O', 0, 181),
+(1674, 54, 'O', 0, 181),
+(1675, 55, 'O', 0, 181),
+(1676, 56, 'O', 0, 181),
+(1677, 57, 'O', 0, 181),
+(1678, 58, 'O', 0, 181),
+(1679, 59, 'O', 0, 181),
+(1680, 60, 'O', 0, 181);
 
 -- --------------------------------------------------------
 
@@ -178,24 +298,12 @@ CREATE TABLE `jugadores_en_sala` (
 --
 
 INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`, `rol`) VALUES
-(256, 166, 6, 'bscl-5', 'creador'),
-(257, 166, 1, 'bscl', 'participante'),
-(258, 167, 6, 'bscl-5', 'creador'),
-(259, 167, 1, 'bscl', 'participante'),
-(260, 168, 1, 'bscl', 'creador'),
-(261, 168, 6, 'bscl-5', 'participante'),
-(262, 169, 1, 'bscl', 'creador'),
-(263, 169, 6, 'bscl-5', 'participante'),
-(264, 170, 1, 'bscl', 'creador'),
-(265, 170, 6, 'bscl-5', 'participante'),
-(266, 171, 1, 'bscl', 'creador'),
-(267, 171, 6, 'bscl-5', 'participante'),
-(272, 174, 1, 'bscl', 'creador'),
-(273, 174, 6, 'bscl-5', 'participante'),
-(274, 175, 1, 'bscl', 'creador'),
-(275, 175, 6, 'bscl-5', 'participante'),
-(276, 176, 1, 'bscl', 'creador'),
-(277, 176, 6, 'bscl-5', 'participante');
+(282, 179, 1, 'bscl', 'creador'),
+(283, 179, 6, 'bscl-5', 'participante'),
+(284, 180, 1, 'bscl', 'creador'),
+(285, 180, 6, 'bscl-5', 'participante'),
+(286, 181, 1, 'bscl', 'creador'),
+(287, 181, 6, 'bscl-5', 'participante');
 
 -- --------------------------------------------------------
 
@@ -203,10 +311,14 @@ INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`
 -- Estructura de tabla para la tabla `partida`
 --
 
-CREATE TABLE `partida` (
-  `id_partida` int(11) NOT NULL,
-  `fecha_partida` date DEFAULT NULL,
-  `ganador` varchar(255) DEFAULT NULL
+CREATE TABLE IF NOT EXISTS `partida` (
+  `id_partida` int(11) NOT NULL AUTO_INCREMENT,
+  `id_sala` int(11) NOT NULL,
+  `id_ganador` int(11) NOT NULL,
+  `fecha_partida` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id_partida`),
+  FOREIGN KEY (`id_sala`) REFERENCES `salas`(`id_sala`),
+  FOREIGN KEY (`id_ganador`) REFERENCES `jugador`(`id_jugador`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -282,23 +394,18 @@ CREATE TABLE `salas` (
   `estado` enum('esperando','en_juego','finalizado') DEFAULT 'esperando',
   `jugando` tinyint(4) DEFAULT 0 COMMENT '0: esperando, 1: en juego, -1: cerrada',
   `efectos` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`efectos`)),
-  `numeros_sacados` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '[]' CHECK (json_valid(`numeros_sacados`))
+  `numeros_sacados` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '[]' CHECK (json_valid(`numeros_sacados`)),
+  `ultimo_numero_sacado` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `salas`
 --
 
-INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`, `estado`, `jugando`, `efectos`, `numeros_sacados`) VALUES
-(166, 6, '$2y$10$fZXG4QrsqqVue6JVnkM7rOpxFcEuAvtIBJA3vgZ7Tyd.BgeiYuU9m', 2, 2, 'en_juego', 0, NULL, '[]'),
-(167, 6, '$2y$10$33bv07u0pr2N/EYYZXraEORiXz8sKdaFWCVKH2EVWmtbXuX.KNaZy', 2, 2, 'en_juego', 0, '{\"oscuridad\": {\"activo\": \"1\", \"activador\": \"6\"}}', '[]'),
-(168, 1, '$2y$10$lbQxaHMCtNZXDQMXeI0c.ejrA14nA6Mh/bpA729cpou3RK7r8jAkC', 2, 2, 'en_juego', 0, NULL, '[]'),
-(169, 1, '$2y$10$IuulBZyFf9OPRrpMVShSVOVP4cNcIl4XR1DwUEOp4NNTks/IQ4TOG', 2, 2, 'en_juego', 0, '{}', '[]'),
-(170, 1, '$2y$10$Tg9EtQS5bXavKifkoUQMu.YbVT6/xyNZj78OWS.ljp.hswzDq9DF2', 2, 2, 'en_juego', 0, NULL, '[]'),
-(171, 1, '$2y$10$2NYavqolHZYdrMW48gDt0OJM73a.czSwM0R7RjU3rosR/chA/X3Ka', 2, 2, 'en_juego', 0, NULL, '[]'),
-(174, 1, '$2y$10$RpcSdbJmgUwNQ7C4pZ2Kl.Nc/ZmjgV22xn94sl8SLIOKZQDkjJMsC', 2, 2, 'en_juego', 0, NULL, '[]'),
-(175, 1, '$2y$10$/qEa1wZ.GyzgEhuAHa3r6.Jn4XO9v.WwAD8th/C2UeG0cRB7xXNge', 2, 2, 'en_juego', 0, NULL, '[]'),
-(176, 1, '$2y$10$2ag5JINuejmqlhMUnILpxuPFxCLmH25pfEPNX3l38Ixj4FWwZEp1K', 2, 2, 'en_juego', 0, NULL, '[\"8\", \"15\", \"32\", \"24\", \"49\", \"42\", \"48\", \"12\", \"42\", \"48\", \"55\", \"5\", \"56\", \"28\", \"41\", \"35\", \"10\", \"25\", \"55\", \"39\", \"6\", \"35\", \"47\", \"43\", \"1\", \"50\", \"35\", \"8\", \"58\", \"45\", \"49\", \"30\", \"42\", \"33\", \"21\", \"19\", \"24\", \"18\", \"37\", \"2\", \"9\", \"20\", \"56\", \"49\", \"58\", \"25\", \"36\", \"20\", \"35\", \"36\", \"18\", \"19\", \"28\", \"5\", \"14\", \"16\", \"60\", \"49\", \"24\", \"44\", \"15\", \"14\", \"51\", \"47\", \"59\", \"32\", \"29\", \"13\", \"31\", \"42\", \"55\", \"34\", \"23\", \"54\", \"19\", \"1\", \"44\", \"48\", \"6\", \"11\", \"37\", \"6\", \"21\", \"27\", \"27\", \"46\", \"57\", \"21\", \"48\", \"37\", \"36\", \"19\"]');
+INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`, `estado`, `jugando`, `efectos`, `numeros_sacados`, `ultimo_numero_sacado`) VALUES
+(179, 1, '$2y$10$TkjW2i2TxYGPWis/LMw7Qeb7L.uYSI4hYzRUaFYKCCoPcIRzuNhry', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-02 21:49:34'),
+(180, 1, '$2y$10$HE7tPTYp40QCMwTjBviZxuGQm7fMXG3q7lJLRg5Xe3wXzFVpdjC0C', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-02 21:59:35'),
+(181, 1, '$2y$10$.HBmVuB.TVMtY06lSWWTcend09i.lTvDu6bXSGfKYZGZCIOggSXtC', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-02 22:04:51');
 
 --
 -- Índices para tablas volcadas
@@ -375,7 +482,7 @@ ALTER TABLE `amistad`
 -- AUTO_INCREMENT de la tabla `balotas`
 --
 ALTER TABLE `balotas`
-  MODIFY `id_balota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+  MODIFY `id_balota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1681;
 
 --
 -- AUTO_INCREMENT de la tabla `jugador`
@@ -387,7 +494,7 @@ ALTER TABLE `jugador`
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=278;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=288;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
@@ -399,7 +506,7 @@ ALTER TABLE `registro_usuarios`
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
 
 --
 -- Restricciones para tablas volcadas

@@ -6,8 +6,20 @@ function generarBalotas($id_sala) {
     $pdo = $conexion->conectar();
     
     try {
-        // Log para debug
+        if (!$id_sala) {
+            throw new Exception('ID de sala no proporcionado');
+        }
+        
         error_log("Generando balotas para sala: " . $id_sala);
+        
+        // Verificar si la sala existe
+        $sql_verificar = "SELECT id_sala FROM salas WHERE id_sala = ?";
+        $stmt = $pdo->prepare($sql_verificar);
+        $stmt->execute([$id_sala]);
+        
+        if (!$stmt->fetch()) {
+            throw new Exception('La sala no existe');
+        }
         
         // Limpiar balotas existentes para esta sala
         $sql_limpiar = "DELETE FROM balotas WHERE id_sala = ?";
@@ -64,13 +76,15 @@ function generarBalotas($id_sala) {
         
         return ['success' => true, 'message' => 'Balotas generadas correctamente', 'total' => $total];
         
-    } catch (PDOException $e) {
-        error_log("Error al generar balotas: " . $e->getMessage());
-        return ['succes'=> false, 'massage'=> 'Error al generar balotas' . $e->getMessage()];
+    } catch (Exception $e) {
+        error_log("Error en generarBalotas: " . $e->getMessage());
+        return ['success' => false, 'message' => $e->getMessage()];
     }
 }
 
-// Uso del endpoint
+// Asegurar que el contenido sea JSON
+header('Content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $id_sala = $data['id_sala'] ?? null;
@@ -78,11 +92,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     error_log("POST recibido en generarBalotas.php");
     error_log("ID sala recibido: " . ($id_sala ?? 'null'));
     
-    if ($id_sala) {
-        $resultado = generarBalotas($id_sala);
-        echo json_encode($resultado);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'ID de sala no proporcionado']);
-    }
+    $resultado = generarBalotas($id_sala);
+    echo json_encode($resultado);
+    exit;
+} else {
+    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    exit;
 }
-?> 
+?>
