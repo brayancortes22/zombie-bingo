@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         var formData = new FormData(this);
 
-        fetch('../php/unirseSala.php', {
+        fetch('../php/unirse_sala/unirseSala.php', {
             method: 'POST',
             body: formData
         })

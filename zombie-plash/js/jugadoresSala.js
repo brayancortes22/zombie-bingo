@@ -79,7 +79,7 @@ class SalaManager {
 
     async verificarEstadoSala() {
         try {
-            const response = await fetch(`../php/obtenerEstadoSala.php?id_sala=${this.datosSala.id_sala}`);
+            const response = await fetch(`../php/sala/obtenerEstadoSala.php?id_sala=${this.datosSala.id_sala}`);
             const data = await response.json();
 
             if (data.success && data.estado === 'en_juego') {
@@ -100,7 +100,7 @@ class SalaManager {
 
     async actualizarJugadores() {
         try {
-            const response = await fetch(`../php/obtenerJugadoresSala.php?id_sala=${this.datosSala.id_sala}`);
+            const response = await fetch(`../php/sala/obtenerJugadoresSala.php?id_sala=${this.datosSala.id_sala}`);
             const data = await response.json();
             
             // console.log('Datos recibidos del servidor:', data);
@@ -213,7 +213,7 @@ class SalaManager {
                 throw new Error('Datos incompletos para salir de la sala');
             }
 
-            const response = await fetch('../php/salirDeSala.php', {
+            const response = await fetch('../php/sala/salirDeSala.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -244,7 +244,7 @@ class SalaManager {
     async verificarEstadoJuego() {
         try {
             const datosSala = JSON.parse(localStorage.getItem('datosSala'));
-            const response = await fetch(`../php/verificarEstadoJuego.php?id_sala=${datosSala.id_sala}`);
+            const response = await fetch(`../php/sala/verificarEstadoJuego.php?id_sala=${datosSala.id_sala}`);
             const data = await response.json();
 
             if (data.success && data.estado === 'en_juego') {
@@ -269,7 +269,7 @@ class SalaManager {
 
     async verificarCreadorSala() {
         try {
-            const response = await fetch(`../php/verificarCreadorSala.php?id_sala=${this.datosSala.id_sala}`);
+            const response = await fetch(`../php/sala/verificarCreadorSala.php?id_sala=${this.datosSala.id_sala}`);
             const data = await response.json();
 
             if (data.success) {
@@ -326,7 +326,7 @@ class SalaManager {
             }
 
             console.log('Iniciando juego...');
-            const response = await fetch('../php/iniciarJuego.php', {
+            const response = await fetch('../php/sala/iniciarJuego.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -366,7 +366,7 @@ class SalaManager {
                 return;
             }
 
-            const response = await fetch('../php/cancelarSala.php', {
+            const response = await fetch('../php/sala/cancelarSala.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -397,7 +397,7 @@ class SalaManager {
 
     async verificarExistenciaSala() {
         try {
-            const response = await fetch(`../php/verificarSalaExiste.php?id_sala=${this.datosSala.id_sala}`);
+            const response = await fetch(`../php/sala/verificarSalaExiste.php?id_sala=${this.datosSala.id_sala}`);
             const data = await response.json();
 
             if (!data.existe) {
@@ -423,7 +423,7 @@ async function verificarEstadoSala() {
         const id_sala = localStorage.getItem('id_sala');
         if (!id_sala) return;
 
-        const response = await fetch(`../php/obtenerEstadoSala.php?id_sala=${id_sala}`);
+        const response = await fetch(`../php/sala/obtenerEstadoSala.php?id_sala=${id_sala}`);
         const data = await response.json();
 
         if (data.success) {

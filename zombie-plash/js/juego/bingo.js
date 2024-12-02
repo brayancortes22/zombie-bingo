@@ -8,17 +8,50 @@ class BingoGame{
         this.numerosSacados = [];
         this.cuentaRegresiva = new CuentaRegresiva();
         this.efectos = new Efectos();
+        this.id_sala = this.obtenerIdSala();
         this.init();
         this.actualizarPanelNumeros();
     }
 
-      async init() {
+    obtenerIdSala() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('sala') || localStorage.getItem('id_sala');
+    }
+
+    async init() {
+        if (!this.id_sala) {
+            console.error('No se encontró ID de sala');
+            return;
+        }
         await this.obtenerCarton();
+        await this.generarBalotas();
         this.mostrarNumerosSacados();
         this.inicializarEventos();
         this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
             this.iniciarJuego();
         });
+    }
+
+    async generarBalotas() {
+        try {
+            console.log('Generando balotas para sala:', this.id_sala);
+            const response = await fetch('../php/juego/generarBalotas.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.id_sala
+                })
+            });
+            const data = await response.json();
+            console.log('Respuesta generarBalotas:', data);
+            if (!data.success) {
+                console.error('Error al generar balotas:', data.message);
+            }
+        } catch (error) {
+            console.error('Error al generar balotas:', error);
+        }
     }
 
     // Métodos para los efectos
@@ -40,7 +73,7 @@ class BingoGame{
 
     async obtenerCarton() {
         try {
-            const response = await fetch('../php/obtenerCarton.php');
+            const response = await fetch('../php/juego/obtenerCarton.php');
             const data = await response.json();
             this.carton = data.carton;
             this.numerosSacados = data.numerosSacados;
@@ -140,14 +173,25 @@ class BingoGame{
 
     async sacarNumero() {
         try {
-            console.log('Sacando número...');
-            const response = await fetch('../php/sacarNumero.php');
+            const response = await fetch('../php/juego/sacarNumero.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.id_sala
+                })
+            });
             const data = await response.json();
+            
             if (data.success) {
                 this.numerosSacados.push(data.numero);
                 this.mostrarNumerosSacados();
                 this.verificarNumeroEnCarton(data.numero);
                 this.actualizarNumerosEnPanel();
+            } else {
+                console.log('No hay más números disponibles');
+                this.detenerJuego();
             }
         } catch (error) {
             console.error('Error al sacar número:', error);
@@ -155,7 +199,7 @@ class BingoGame{
     }
     async nuevoCarton() {
         try {
-            const response = await fetch('../php/nuevoCarton.php');
+            const response = await fetch('../php/juego/nuevoCarton.php');
             const data = await response.json();
             if (data.success) {
                 this.carton = data.carton;
