@@ -42,7 +42,7 @@
         <strong>Ingresa el codigo de verificación</strong><br>
       </div>
       <div class="formulario">
-        <form action="../php/verificarCodigo.php" method="post" onsubmit="return concatenarCodigo()">
+        <form method="post" onsubmit="return false;">
           <div class="fila">
             <div class="col"><input type="text" id="digit1" class="cua" maxlength="1" required></div>
             <div class="col"><input type="text" id="digit2" class="cua" maxlength="1" required></div>
@@ -54,7 +54,7 @@
             <br />
             <div class="cancelar">
               <a href="./restablecimientoContra.html">
-                <button class="btn success" type="button">
+                <button type="button" class="btn success">
                   <strong>Cancelar</strong>
                 </button>
               </a>
@@ -85,14 +85,14 @@
       const codigoCompleto = digit1 + digit2 + digit3 + digit4;
       document.getElementById('codigo').value = codigoCompleto;
 
-      fetch('../php/verificarCodigo.php', {
+      fetch('../email/codigo1.php', {
         method: 'POST',
         body: new FormData(document.querySelector('form'))
       })
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            window.location.href = 'restablecimientoContra2.html';
+            window.location.href = './restablecimientoContra2.html';
           } else {
             alert(data.message);
           }
