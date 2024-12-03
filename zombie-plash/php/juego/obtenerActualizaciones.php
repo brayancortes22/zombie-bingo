@@ -6,12 +6,8 @@ function obtenerActualizaciones($id_sala) {
     $pdo = $conexion->conectar();
     
     try {
-        // Obtener números sacados y estado actual del juego
-        $sql = "SELECT b.numero, b.letra 
-                FROM balotas b 
-                WHERE b.id_sala = ? AND b.estado = 1 
-                ORDER BY b.id_balota";
-                
+        // Llamar al procedimiento almacenado para obtener balotas
+        $sql = "CALL obtener_balotas_sacadas(?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$id_sala]);
         $balotas = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -24,19 +20,12 @@ function obtenerActualizaciones($id_sala) {
         $stmt->execute([$id_sala]);
         $sala = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Formatear números sacados
-        $numerosSacados = array_map(function($balota) {
-            return [
-                'numero' => $balota['numero'],
-                'letra' => $balota['letra']
-            ];
-        }, $balotas);
-        
         return [
             'success' => true,
-            'numerosSacados' => $numerosSacados,
+            'numerosSacados' => $balotas,
             'estadoSala' => $sala['estado'],
-            'jugando' => $sala['jugando']
+            'jugando' => $sala['jugando'],
+            'ultimaActualizacion' => time()
         ];
         
     } catch (PDOException $e) {
@@ -65,12 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $resultado = obtenerActualizaciones($id_sala);
     echo json_encode($resultado);
-    exit;
-} else {
-    echo json_encode([
-        'success' => false,
-        'message' => 'Método no permitido'
-    ]);
     exit;
 }
 ?> 

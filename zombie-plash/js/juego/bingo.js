@@ -22,6 +22,24 @@ class BingoGame {
         this.inicializarEventos();
     }
 
+    async inicializarJuego() {
+        try {
+            if (!this.idSala) {
+                throw new Error('ID de sala no disponible');
+            }
+            
+            console.log('Iniciando juego para sala:', this.idSala);
+            
+            // Iniciar cuenta regresiva
+            this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
+                // Después de la cuenta regresiva, obtener el rol y comenzar según corresponda
+                this.obtenerRolJugador();
+            });
+        } catch (error) {
+            console.error('Error al inicializar el juego:', error);
+        }
+    }
+
     async obtenerRolJugador() {
         try {
             const response = await fetch('../../zombie-plash/php/juego/obtenerRolJugador.php', {
@@ -86,14 +104,17 @@ class BingoGame {
     }
 
     escucharActualizaciones() {
-        // Configurar un intervalo para verificar actualizaciones
+        // Reducir la frecuencia de las actualizaciones para evitar sobrecarga
         setInterval(async () => {
             await this.obtenerActualizaciones();
-        }, 1000);
+        }, 2000); // Cambiar a 2 segundos
     }
 
     async obtenerActualizaciones() {
+        if (this._actualizando) return; // Evitar actualizaciones simultáneas
+        
         try {
+            this._actualizando = true;
             const response = await fetch('../../zombie-plash/php/juego/obtenerActualizaciones.php', {
                 method: 'POST',
                 headers: {
@@ -105,11 +126,13 @@ class BingoGame {
             });
             
             const data = await response.json();
-            if (data.success) {
+            if (data.success && data.numerosSacados) {
                 this.actualizarInterfaz(data.numerosSacados);
             }
         } catch (error) {
             console.error('Error al obtener actualizaciones:', error);
+        } finally {
+            this._actualizando = false;
         }
     }
 
@@ -421,10 +444,10 @@ class BingoGame {
         }
     }
 
-    actualizarPanelHistorial() {
+    actualizarPanelHistorial(numerosSacados) {
         const panelIzquierdo = document.querySelector('.izquierda');
-        panelIzquierdo.innerHTML = ''; // Limpiar panel
-        
+        if (!panelIzquierdo) return;
+
         // Crear contenedor para el historial
         const historialContainer = document.createElement('div');
         historialContainer.id = 'panel-historial';
@@ -434,23 +457,28 @@ class BingoGame {
             'B': [], 'I': [], 'N': [], 'G': [], 'O': []
         };
         
-        this.numerosSacados.forEach(balota => {
+        numerosSacados.forEach(balota => {
             numerosPorLetra[balota.letra].push(balota.numero);
         });
         
-        // Crear columnas para cada letra
-        Object.entries(numerosPorLetra).forEach(([letra, numeros]) => {
-            const columna = document.createElement('div');
-            columna.className = `columna-${letra}`;
-            columna.innerHTML = `
-                <h3>${letra}</h3>
-                <div class="numeros">
-                    ${numeros.sort((a, b) => a - b).join(', ')}
-                </div>
-            `;
-            historialContainer.appendChild(columna);
+        // Crear columnas para cada letra en orden
+        ['B', 'I', 'N', 'G', 'O'].forEach(letra => {
+            const numeros = numerosPorLetra[letra];
+            if (numeros.length > 0) {
+                const columna = document.createElement('div');
+                columna.className = `columna-${letra}`;
+                columna.innerHTML = `
+                    <h3>${letra}</h3>
+                    <div class="numeros">
+                        ${numeros.sort((a, b) => a - b).join(', ')}
+                    </div>
+                `;
+                historialContainer.appendChild(columna);
+            }
         });
         
+        // Limpiar y actualizar el panel izquierdo
+        panelIzquierdo.innerHTML = '';
         panelIzquierdo.appendChild(historialContainer);
     }
 
@@ -531,36 +559,50 @@ class BingoGame {
     }
 
     actualizarInterfaz(numerosSacados) {
-        // Actualizar panel principal
         const panelNumeros = document.getElementById('numerosSacados');
         if (!panelNumeros) return;
 
-        // Limpiar panel si hay nuevos números
-        if (this.numerosSacados.length !== numerosSacados.length) {
+        // Si no hay números sacados, no hacer nada
+        if (!numerosSacados || numerosSacados.length === 0) return;
+
+        // Verificar si hay un nuevo número comparando longitudes
+        if (numerosSacados.length > this.numerosSacados.length) {
+            // Mantener solo las últimas 5 balotas
+            const ultimasBalotas = numerosSacados.slice(-5);
+            
+            // Limpiar el panel
             panelNumeros.innerHTML = '';
             
-            // Mostrar las últimas 5 balotas
-            const ultimasBalotas = numerosSacados.slice(-5);
-            ultimasBalotas.forEach(balota => {
-                const balostaElement = document.createElement('div');
-                balostaElement.className = 'balota';
-                balostaElement.innerHTML = `
+            // Agregar las balotas
+            ultimasBalotas.forEach((balota, index) => {
+                const balotaElement = document.createElement('div');
+                balotaElement.className = 'balota';
+                
+                // Solo aplicar animación a la última balota
+                if (index === ultimasBalotas.length - 1) {
+                    balotaElement.classList.add('nueva-balota');
+                    
+                    // Reproducir sonido si está disponible
+                    const audio = new Audio('../../zombie-plash/sonidos/balota.mp3');
+                    audio.play().catch(e => console.log('Error al reproducir sonido:', e));
+                }
+                
+                balotaElement.innerHTML = `
                     <span class="letra">${balota.letra}</span>
                     <span class="numero">${balota.numero}</span>
                 `;
-                panelNumeros.appendChild(balostaElement);
+                panelNumeros.appendChild(balotaElement);
             });
 
-            // Actualizar el historial en el panel izquierdo
+            // Actualizar el historial
             this.actualizarPanelHistorial(numerosSacados);
             
-            // Verificar números en el cartón
-            numerosSacados.forEach(balota => {
-                this.verificarNumeroEnCarton(balota.numero);
-            });
+            // Verificar el nuevo número en el cartón
+            const nuevoNumero = numerosSacados[numerosSacados.length - 1];
+            this.verificarNumeroEnCarton(nuevoNumero.numero);
 
             // Actualizar array local
-            this.numerosSacados = numerosSacados;
+            this.numerosSacados = [...numerosSacados];
         }
     }
 }
