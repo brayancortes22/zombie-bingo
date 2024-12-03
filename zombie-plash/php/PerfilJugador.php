@@ -56,30 +56,65 @@ class PerfilJugador {
                 throw new Exception('Usuario no autenticado');
             }
 
-            $data = json_decode(file_get_contents('php://input'), true);
-            $avatar = $data['avatar'] ?? null;
-            $nombre = $data['nombre'] ?? null;
+            $nombre = $_POST['nombre'] ?? null;
+            $avatar = null;
 
-            if (!$avatar || !$nombre) {
-                throw new Exception('Datos incompletos');
+            // Manejo de avatar predefinido
+            if (isset($_POST['avatarPredefinido'])) {
+                $avatar = $_POST['avatarPredefinido'];
+            }
+            // Manejo de archivo subido
+            else if (isset($_FILES['avatar']) && $_FILES['avatar']['error'] === UPLOAD_ERR_OK) {
+                $file = $_FILES['avatar'];
+                $fileName = uniqid() . '_' . basename($file['name']);
+                $uploadPath = '../uploads/avatars/' . $fileName;
+
+                // Verificar que sea una imagen válida
+                $imageInfo = getimagesize($file['tmp_name']);
+                if ($imageInfo === false) {
+                    throw new Exception('El archivo subido no es una imagen válida');
+                }
+
+                // Mover el archivo a la carpeta de uploads
+                if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
+                    $avatar = $fileName;
+                } else {
+                    throw new Exception('Error al guardar la imagen');
+                }
             }
 
-            $query = "UPDATE registro_usuarios 
-                     SET avatar = :avatar, nombre = :nombre
-                     WHERE id_registro = :id";
+            if (!$nombre) {
+                throw new Exception('El nombre es requerido');
+            }
+
+            // Construir la consulta SQL dinámicamente basada en si hay avatar o no
+            if ($avatar !== null) {
+                $query = "UPDATE registro_usuarios 
+                         SET avatar = :avatar, nombre = :nombre
+                         WHERE id_registro = :id";
+                $params = [
+                    'avatar' => $avatar,
+                    'nombre' => $nombre,
+                    'id' => $this->id_usuario
+                ];
+            } else {
+                $query = "UPDATE registro_usuarios 
+                         SET nombre = :nombre
+                         WHERE id_registro = :id";
+                $params = [
+                    'nombre' => $nombre,
+                    'id' => $this->id_usuario
+                ];
+            }
             
             $stmt = $this->pdo->prepare($query);
-            $success = $stmt->execute([
-                'avatar' => $avatar,
-                'nombre' => $nombre,
-                'id' => $this->id_usuario
-            ]);
+            $success = $stmt->execute($params);
 
             if ($success) {
                 return [
                     'success' => true,
                     'message' => 'Perfil actualizado correctamente',
-                    'data' => ['avatar' => $avatar, 'nombre' => $nombre]
+                    'data' => ['nombre' => $nombre]
                 ];
             } else {
                 throw new Exception('Error al actualizar el perfil');

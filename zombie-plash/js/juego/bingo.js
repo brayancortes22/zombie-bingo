@@ -20,6 +20,7 @@ class BingoGame {
         this.cuentaRegresiva = new CuentaRegresiva();
         this.intervaloBalotas = null;
         this.inicializarEventos();
+        this.verificarEfectosActivos();
     }
 
     async inicializarJuego() {
@@ -144,7 +145,7 @@ class BingoGame {
 
     async sacarNuevoNumero() {
         try {
-            console.log('Intentando sacar nuevo número para sala:', this.idSala);
+            // console.log('Intentando sacar nuevo número para sala:', this.idSala);
             const response = await fetch('/zombie-bingo/zombie-plash/php/juego/sacarNumero.php', {
                 method: 'POST',
                 headers: {
@@ -158,7 +159,7 @@ class BingoGame {
             }
 
             const data = await response.json();
-            console.log('Respuesta sacarNumero:', data);
+            // console.log('Respuesta sacarNumero:', data);
             
             if (data.success) {
                 // Guardar el número en el array de números sacados
@@ -583,8 +584,8 @@ class BingoGame {
                     balotaElement.classList.add('nueva-balota');
                     
                     // Reproducir sonido si está disponible
-                    const audio = new Audio('../../zombie-plash/sonidos/balota.mp3');
-                    audio.play().catch(e => console.log('Error al reproducir sonido:', e));
+                    // const audio = new Audio('../../zombie-plash/sonidos/balota.mp3');
+                    // audio.play().catch(e => console.log('Error al reproducir sonido:', e));
                 }
                 
                 balotaElement.innerHTML = `
@@ -603,6 +604,57 @@ class BingoGame {
 
             // Actualizar array local
             this.numerosSacados = [...numerosSacados];
+        }
+    }
+
+    async verificarEfectosActivos() {
+        try {
+            if (!this.idSala || !this.idJugador) {
+                console.error('ID de sala o jugador no disponible');
+                return;
+            }
+
+            const response = await fetch('../../zombie-plash/php/juego/obtenerEfectosActivos.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    id_jugador: this.idJugador
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const text = await response.text(); // Primero obtener el texto
+            console.log('Respuesta del servidor:', text); // Para depuración
+
+            try {
+                const data = JSON.parse(text);
+                if (data.success && data.efectos) {
+                    data.efectos.forEach(efecto => {
+                        switch (efecto.tipo_efecto) {
+                            case 'oscuridad':
+                                this.efectos.iniciarEfectoOscuridad();
+                                break;
+                            case 'numeros':
+                                this.efectos.iniciarEfectoNumeros();
+                                break;
+                            case 'elige_numero':
+                                this.efectos.iniciarEfectoEligeNumero();
+                                break;
+                        }
+                    });
+                }
+            } catch (parseError) {
+                console.error('Error al parsear JSON:', parseError);
+                console.log('Texto recibido:', text);
+            }
+        } catch (error) {
+            console.error('Error al verificar efectos:', error);
         }
     }
 }

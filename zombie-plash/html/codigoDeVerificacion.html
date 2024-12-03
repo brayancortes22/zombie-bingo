@@ -42,7 +42,7 @@
         <strong>Ingresa el codigo de verificación</strong><br>
       </div>
       <div class="formulario">
-        <form action="../php/verificarCodigo.php" method="post" onsubmit="return concatenarCodigo()">
+        <form id="formVerificacion" method="post">
           <div class="fila">
             <div class="col"><input type="text" id="digit1" class="cua" maxlength="1" required></div>
             <div class="col"><input type="text" id="digit2" class="cua" maxlength="1" required></div>
@@ -54,13 +54,15 @@
             <br />
             <div class="cancelar">
               <a href="./restablecimientoContra.html">
-                <button class="btn success" type="button">
+                <button type="button" class="btn success">
                   <strong>Cancelar</strong>
                 </button>
               </a>
             </div>
             <div class="aceptar">
-              <button class="btn success" type="submit"><strong>Aceptar</strong></button>
+              <button type="submit" class="btn success">
+                <strong>Aceptar</strong>
+              </button>
             </div>
           </div>
         </form>
@@ -76,30 +78,62 @@
   </div>
 
   <script>
-    function concatenarCodigo() {
-      const digit1 = document.getElementById('digit1').value;
-      const digit2 = document.getElementById('digit2').value;
-      const digit3 = document.getElementById('digit3').value;
-      const digit4 = document.getElementById('digit4').value;
+    document.addEventListener('DOMContentLoaded', function() {
+      const formVerificacion = document.getElementById('formVerificacion');
+      const inputs = document.querySelectorAll('.cua');
 
-      const codigoCompleto = digit1 + digit2 + digit3 + digit4;
-      document.getElementById('codigo').value = codigoCompleto;
-
-      fetch('../php/verificarCodigo.php', {
-        method: 'POST',
-        body: new FormData(document.querySelector('form'))
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            window.location.href = 'restablecimientoContra2.html';
-          } else {
-            alert(data.message);
+      // Manejar la entrada de dígitos
+      inputs.forEach((input, index) => {
+        input.addEventListener('input', function() {
+          if (this.value.length === 1) {
+            if (index < inputs.length - 1) {
+              inputs[index + 1].focus();
+            }
           }
         });
 
-      return false; // Previene el envío del formulario
-    }
+        input.addEventListener('keydown', function(e) {
+          if (e.key === 'Backspace' && !this.value && index > 0) {
+            inputs[index - 1].focus();
+          }
+        });
+      });
+
+      // Manejar el envío del formulario
+      formVerificacion.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Concatenar los dígitos
+        const codigo = Array.from(inputs).map(input => input.value).join('');
+        document.getElementById('codigo').value = codigo;
+
+        // Enviar el código al servidor
+        const formData = new FormData();
+        formData.append('codigo', codigo);
+
+        fetch('../email/codigo1.php', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error en la respuesta del servidor');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            window.location.href = './restablecimientoContra2.html';
+          } else {
+            alert(data.message || 'Código incorrecto');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error al verificar el código');
+        });
+      });
+    });
   </script>
 </body>
 

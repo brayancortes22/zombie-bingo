@@ -1,43 +1,38 @@
 <?php
 session_start();
-header('Content-Type: application/json');
+header('Content-Type: application/json; charset=utf-8');
 
 try {
-    $codigo_ingresado = $_POST['codigo'] ?? '';
-    
-    if (empty($codigo_ingresado)) {
-        throw new Exception('El código es requerido');
+    // Verificar si hay una sesión activa con el correo y código
+    if (!isset($_SESSION['codigo_verificacion']) || !isset($_SESSION['email_recuperacion'])) {
+        throw new Exception('Sesión no válida o expirada');
     }
 
-    // Verificar si el código existe en la sesión
-    if (!isset($_SESSION['codigo_verificacion'])) {
-        throw new Exception('No hay código de verificación pendiente');
+    // Verificar si se recibió el código
+    if (!isset($_POST['codigo'])) {
+        throw new Exception('No se recibió el código');
     }
 
-    // Verificar si el código ha expirado (10 minutos)
-    if (time() - $_SESSION['codigo_tiempo'] > 600) {
-        unset($_SESSION['codigo_verificacion']);
-        unset($_SESSION['email_verificacion']);
-        unset($_SESSION['codigo_tiempo']);
-        throw new Exception('El código ha expirado');
+    $codigoIngresado = $_POST['codigo'];
+    $codigoGuardado = $_SESSION['codigo_verificacion'];
+
+    // Validar que el código tenga el formato correcto
+    if (!preg_match('/^\d{4}$/', $codigoIngresado)) {
+        throw new Exception('El código debe tener 4 dígitos');
     }
 
-    // Verificar si el código es correcto
-    if ($codigo_ingresado !== $_SESSION['codigo_verificacion']) {
-        throw new Exception('Código incorrecto');
+    // Comparar los códigos
+    if ($codigoIngresado == $codigoGuardado) {
+        // Marcar el código como verificado
+        $_SESSION['codigo_verificado'] = true;
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Código verificado correctamente'
+        ]);
+    } else {
+        throw new Exception('El código ingresado es incorrecto');
     }
-
-    // Si todo está bien, limpiar las variables de sesión
-    $email_verificado = $_SESSION['email_verificacion'];
-    unset($_SESSION['codigo_verificacion']);
-    unset($_SESSION['email_verificacion']);
-    unset($_SESSION['codigo_tiempo']);
-
-    echo json_encode([
-        'success' => true,
-        'message' => 'Código verificado correctamente',
-        'email' => $email_verificado
-    ]);
 
 } catch (Exception $e) {
     echo json_encode([
@@ -45,3 +40,4 @@ try {
         'message' => $e->getMessage()
     ]);
 }
+?>
