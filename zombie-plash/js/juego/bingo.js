@@ -6,10 +6,14 @@ class BingoGame {
         // Obtener datos de la sala desde localStorage
         const datosSala = JSON.parse(localStorage.getItem('datosSala'));
         this.idSala = datosSala?.id_sala;
+        this.idJugador = localStorage.getItem('id_jugador');
+        this.rolJugador = null;
+        
         if (!this.idSala) {
             throw new Error('No se encontró el ID de la sala');
         }
         
+        this.obtenerRolJugador();
         this.numerosSacados = [];
         this.cartonActual = [];
         this.efectos = new Efectos();
@@ -18,36 +22,51 @@ class BingoGame {
         this.inicializarEventos();
     }
 
-    async inicializarJuego() {
+    async obtenerRolJugador() {
         try {
-            if (!this.idSala) {
-                throw new Error('ID de sala no disponible');
-            }
-            
-            console.log('Iniciando juego para sala:', this.idSala);
-            
-            // Generar balotas para la sala
-            await this.generarBalotas();
-            
-            // Iniciar cuenta regresiva
-            this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
-                this.comenzarJuego();
+            const response = await fetch('../../zombie-plash/php/juego/obtenerRolJugador.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    id_jugador: this.idJugador
+                })
             });
+            
+            const data = await response.json();
+            if (data.success) {
+                this.rolJugador = data.rol;
+                this.inicializarSegunRol();
+            }
         } catch (error) {
-            console.error('Error al inicializar el juego:', error);
+            console.error('Error al obtener rol:', error);
+        }
+    }
+
+    async inicializarSegunRol() {
+        if (this.rolJugador === 'creador') {
+            // Solo el creador genera balotas
+            await this.generarBalotas();
+            this.iniciarJuego();
+        } else {
+            // Los participantes solo escuchan actualizaciones
+            this.escucharActualizaciones();
         }
     }
 
     async generarBalotas() {
         try {
-            console.log('Generando balotas para sala:', this.idSala);
-            
             const response = await fetch('../php/juego/generarBalotas.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id_sala: this.idSala })
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    id_jugador: this.idJugador
+                })
             });
             
             if (!response.ok) {
@@ -66,7 +85,35 @@ class BingoGame {
         }
     }
 
-    async comenzarJuego() {
+    escucharActualizaciones() {
+        // Configurar un intervalo para verificar actualizaciones
+        setInterval(async () => {
+            await this.obtenerActualizaciones();
+        }, 1000);
+    }
+
+    async obtenerActualizaciones() {
+        try {
+            const response = await fetch('../../zombie-plash/php/juego/obtenerActualizaciones.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                this.actualizarInterfaz(data.numerosSacados);
+            }
+        } catch (error) {
+            console.error('Error al obtener actualizaciones:', error);
+        }
+    }
+
+    async iniciarJuego() {
         this.intervaloBalotas = setInterval(async () => {
             await this.sacarNuevoNumero();
         }, 5000); // Sacar número cada 5 segundos
@@ -480,6 +527,40 @@ class BingoGame {
         if (numerosCompletados === 25) {
             console.log('¡BINGO!');
             this.verificarBingo();
+        }
+    }
+
+    actualizarInterfaz(numerosSacados) {
+        // Actualizar panel principal
+        const panelNumeros = document.getElementById('numerosSacados');
+        if (!panelNumeros) return;
+
+        // Limpiar panel si hay nuevos números
+        if (this.numerosSacados.length !== numerosSacados.length) {
+            panelNumeros.innerHTML = '';
+            
+            // Mostrar las últimas 5 balotas
+            const ultimasBalotas = numerosSacados.slice(-5);
+            ultimasBalotas.forEach(balota => {
+                const balostaElement = document.createElement('div');
+                balostaElement.className = 'balota';
+                balostaElement.innerHTML = `
+                    <span class="letra">${balota.letra}</span>
+                    <span class="numero">${balota.numero}</span>
+                `;
+                panelNumeros.appendChild(balostaElement);
+            });
+
+            // Actualizar el historial en el panel izquierdo
+            this.actualizarPanelHistorial(numerosSacados);
+            
+            // Verificar números en el cartón
+            numerosSacados.forEach(balota => {
+                this.verificarNumeroEnCarton(balota.numero);
+            });
+
+            // Actualizar array local
+            this.numerosSacados = numerosSacados;
         }
     }
 }

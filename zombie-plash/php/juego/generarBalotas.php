@@ -1,13 +1,30 @@
 <?php
 require_once '../../setting/conexion-base-datos.php';
 
-function generarBalotas($id_sala) {
+function verificarRolCreador($id_sala, $id_jugador) {
+    global $conexion;
+    $pdo = $conexion->conectar();
+    
+    $sql = "SELECT rol FROM jugadores_en_sala 
+            WHERE id_sala = ? AND id_jugador = ? AND rol = 'creador'";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$id_sala, $id_jugador]);
+    
+    return $stmt->fetch() !== false;
+}
+
+function generarBalotas($id_sala, $id_jugador) {
     global $conexion;
     $pdo = $conexion->conectar();
     
     try {
         if (!$id_sala) {
             throw new Exception('ID de sala no proporcionado');
+        }
+        
+        // Verificar si el jugador es el creador
+        if (!verificarRolCreador($id_sala, $id_jugador)) {
+            throw new Exception('Solo el creador puede generar balotas');
         }
         
         error_log("Generando balotas para sala: " . $id_sala);
@@ -88,11 +105,12 @@ header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     $id_sala = $data['id_sala'] ?? null;
+    $id_jugador = $data['id_jugador'] ?? null;
     
     error_log("POST recibido en generarBalotas.php");
     error_log("ID sala recibido: " . ($id_sala ?? 'null'));
     
-    $resultado = generarBalotas($id_sala);
+    $resultado = generarBalotas($id_sala, $id_jugador);
     echo json_encode($resultado);
     exit;
 } else {

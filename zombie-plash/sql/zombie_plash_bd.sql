@@ -286,11 +286,14 @@ INSERT INTO `jugador` (`id_jugador`, `nombre`, `id_credenciales`, `id_registro`)
 --
 
 CREATE TABLE `jugadores_en_sala` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_sala` int(11) DEFAULT NULL,
   `id_jugador` int(11) DEFAULT NULL,
   `nombre_jugador` varchar(255) DEFAULT NULL,
-  `rol` enum('creador','participante') DEFAULT 'participante'
+  `rol` enum('creador','participante') DEFAULT 'participante',
+  PRIMARY KEY (`id`),
+  KEY `id_sala` (`id_sala`),
+  KEY `id_jugador` (`id_jugador`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
