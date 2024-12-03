@@ -5,6 +5,12 @@ header('Content-Type: application/json; charset=utf-8');
 require_once '../setting/conexion-base-datos.php';
 
 try {
+    // Verificar que el código haya sido verificado y tengamos el correo
+    if (!isset($_SESSION['codigo_verificado']) || !$_SESSION['codigo_verificado'] || 
+        !isset($_SESSION['email_recuperacion'])) {
+        throw new Exception('No se ha verificado el código o la sesión ha expirado');
+    }
+
     $data = json_decode(file_get_contents('php://input'), true);
     
     if (!isset($data['nuevaContrasena']) || !isset($data['confirmarContrasena'])) {
@@ -13,6 +19,7 @@ try {
 
     $nuevaContrasena = $data['nuevaContrasena'];
     $confirmarContrasena = $data['confirmarContrasena'];
+    $emailUsuario = $_SESSION['email_recuperacion'];
 
     // Validaciones
     if (strlen($nuevaContrasena) < 6) {
@@ -23,25 +30,25 @@ try {
         throw new Exception('Las contraseñas no coinciden');
     }
 
-    // Obtener el ID del usuario de la sesión
-    if (!isset($_SESSION['id_usuario'])) {
-        throw new Exception('Usuario no autenticado');
-    }
-
-    $id_usuario = $_SESSION['id_usuario'];
     $hashContrasena = password_hash($nuevaContrasena, PASSWORD_DEFAULT);
 
     $conexion = new Conexion();
     $pdo = $conexion->conectar();
 
-    $query = "UPDATE registro_usuarios SET contraseña = :contrasena WHERE id_registro = :id";
+    // Actualizar la contraseña usando el correo electrónico
+    $query = "UPDATE registro_usuarios SET contraseña = :contrasena WHERE correo = :email";
     $stmt = $pdo->prepare($query);
     $success = $stmt->execute([
         'contrasena' => $hashContrasena,
-        'id' => $id_usuario
+        'email' => $emailUsuario
     ]);
 
     if ($success) {
+        // Limpiar las variables de sesión relacionadas con la recuperación
+        unset($_SESSION['codigo_verificacion']);
+        unset($_SESSION['email_recuperacion']);
+        unset($_SESSION['codigo_verificado']);
+
         echo json_encode([
             'success' => true,
             'message' => 'Contraseña actualizada correctamente'

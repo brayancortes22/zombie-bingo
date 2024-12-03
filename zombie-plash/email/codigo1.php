@@ -3,24 +3,27 @@ session_start();
 header('Content-Type: application/json; charset=utf-8');
 
 try {
+    // Verificar si hay una sesión activa con el correo y código
+    if (!isset($_SESSION['codigo_verificacion']) || !isset($_SESSION['email_recuperacion'])) {
+        throw new Exception('Sesión no válida o expirada');
+    }
+
     // Verificar si se recibió el código
     if (!isset($_POST['codigo'])) {
-        throw new Exception('No se recibió el código de verificación');
+        throw new Exception('No se recibió el código');
     }
 
-    // Obtener el código ingresado por el usuario
     $codigoIngresado = $_POST['codigo'];
-
-    // Obtener el código almacenado en la sesión
-    if (!isset($_SESSION['codigo_verificacion'])) {
-        throw new Exception('No hay código de verificación en la sesión');
-    }
-
     $codigoGuardado = $_SESSION['codigo_verificacion'];
+
+    // Validar que el código tenga el formato correcto
+    if (!preg_match('/^\d{4}$/', $codigoIngresado)) {
+        throw new Exception('El código debe tener 4 dígitos');
+    }
 
     // Comparar los códigos
     if ($codigoIngresado == $codigoGuardado) {
-        // Guardar en sesión que el código fue verificado correctamente
+        // Marcar el código como verificado
         $_SESSION['codigo_verificado'] = true;
         
         echo json_encode([
@@ -28,8 +31,9 @@ try {
             'message' => 'Código verificado correctamente'
         ]);
     } else {
-        throw new Exception('Código incorrecto');
+        throw new Exception('El código ingresado es incorrecto');
     }
+
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,

@@ -5,6 +5,7 @@ header('Content-Type: application/json; charset=utf-8');
 require './PHPMailer-master/src/PHPMailer.php';
 require './PHPMailer-master/src/SMTP.php';
 require './PHPMailer-master/src/Exception.php';
+require_once '../setting/conexion-base-datos.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -17,12 +18,25 @@ try {
 
     $emailUsuario = $_POST['email'];
 
-    // Generar código de verificación (6 dígitos)
+    // Verificar si el correo existe en la base de datos
+    $conexion = new Conexion();
+    $pdo = $conexion->conectar();
+    
+    $query = "SELECT id_registro FROM registro_usuarios WHERE correo = :correo";
+    $stmt = $pdo->prepare($query);
+    $stmt->execute(['correo' => $emailUsuario]);
+    
+    if (!$stmt->fetch()) {
+        throw new Exception('El correo electrónico no está registrado');
+    }
+
+    // Generar código de verificación (4 dígitos)
     $codigoVerificacion = rand(1000, 9999); 
 
-    // Almacenar el código en la sesión
+    // Almacenar datos en la sesión
     $_SESSION['codigo_verificacion'] = $codigoVerificacion;
     $_SESSION['email_recuperacion'] = $emailUsuario;
+    $_SESSION['codigo_verificado'] = false;
 
     // Crear instancia de PHPMailer
     $mail = new PHPMailer(true);
@@ -66,7 +80,7 @@ try {
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'message' => "Error al enviar el código: {$e->getMessage()}"
+        'message' => "Error: {$e->getMessage()}"
     ]);
 }
 ?>
