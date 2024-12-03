@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../setting/conexion-base-datos.php';
+require '../../setting/conexion-base-datos.php';
 
 class UnirseASala {
     private $pdo;

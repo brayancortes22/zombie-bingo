@@ -1,5 +1,6 @@
 <?php
-require '../setting/conexion-base-datos.php';
+session_start();
+require '../../setting/conexion-base-datos.php';
 
 $id_sala = $_GET['id_sala'] ?? null;
 

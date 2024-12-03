@@ -3,7 +3,7 @@ document.getElementById('crearSalaForm').addEventListener('submit', function(e) 
     
     const formData = new FormData(this);
     
-    fetch('../php/crearSala.php', {
+    fetch('../php/crear_sala/crearSala.php', {
         method: 'POST',
         body: formData
     })
@@ -38,7 +38,7 @@ document.getElementById('crearSalaForm').addEventListener('submit', function(e) 
 function crearSala() {
     // ... (código existente para crear la sala)
 
-    fetch('php/crearSala.php', {
+    fetch('../php/crear_sala/crearSala.php', {
         method: 'POST',
         body: formData
     })

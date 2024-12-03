@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-require_once '../setting/conexion-base-datos.php';
+require_once '../../setting/conexion-base-datos.php';
 
 try {
     $id_sala = $_GET['id_sala'];

@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 session_start();
-require '../setting/conexion-base-datos.php';
+require '../../setting/conexion-base-datos.php';
 
 class CrearSala {
     private $pdo;

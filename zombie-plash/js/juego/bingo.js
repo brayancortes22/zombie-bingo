@@ -1,24 +1,320 @@
-// Importar las clases
-import  CuentaRegresiva  from './cuentaregresiva.js';
-import  Efectos  from './efectos.js';
+import Efectos from './efectos.js';
+import CuentaRegresiva from './cuentaregresiva.js';
 
-class BingoGame{
+class BingoGame {
     constructor() {
-        this.carton = null;
+        // Obtener datos de la sala desde localStorage
+        const datosSala = JSON.parse(localStorage.getItem('datosSala'));
+        this.idSala = datosSala?.id_sala;
+        this.idJugador = localStorage.getItem('id_jugador');
+        this.rolJugador = null;
+        
+        if (!this.idSala) {
+            throw new Error('No se encontró el ID de la sala');
+        }
+        
+        this.obtenerRolJugador();
         this.numerosSacados = [];
-        this.cuentaRegresiva = new CuentaRegresiva();
+        this.cartonActual = [];
         this.efectos = new Efectos();
-        this.init();
-        this.actualizarPanelNumeros();
+        this.cuentaRegresiva = new CuentaRegresiva();
+        this.intervaloBalotas = null;
+        this.inicializarEventos();
     }
 
-      async init() {
-        await this.obtenerCarton();
-        this.mostrarNumerosSacados();
-        this.inicializarEventos();
-        this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
+    async inicializarJuego() {
+        try {
+            if (!this.idSala) {
+                throw new Error('ID de sala no disponible');
+            }
+            
+            console.log('Iniciando juego para sala:', this.idSala);
+            
+            // Iniciar cuenta regresiva
+            this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
+                // Después de la cuenta regresiva, obtener el rol y comenzar según corresponda
+                this.obtenerRolJugador();
+            });
+        } catch (error) {
+            console.error('Error al inicializar el juego:', error);
+        }
+    }
+
+    async obtenerRolJugador() {
+        try {
+            const response = await fetch('../../zombie-plash/php/juego/obtenerRolJugador.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    id_jugador: this.idJugador
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                this.rolJugador = data.rol;
+                this.inicializarSegunRol();
+            }
+        } catch (error) {
+            console.error('Error al obtener rol:', error);
+        }
+    }
+
+    async inicializarSegunRol() {
+        if (this.rolJugador === 'creador') {
+            // Solo el creador genera balotas
+            await this.generarBalotas();
             this.iniciarJuego();
-        });
+        } else {
+            // Los participantes solo escuchan actualizaciones
+            this.escucharActualizaciones();
+        }
+    }
+
+    async generarBalotas() {
+        try {
+            const response = await fetch('../php/juego/generarBalotas.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    id_jugador: this.idJugador
+                })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            console.log('Respuesta generarBalotas:', data);
+            
+            if (!data.success) {
+                throw new Error(data.message || 'Error al generar balotas');
+            }
+        } catch (error) {
+            console.error('Error al generar balotas:', error);
+            throw error;
+        }
+    }
+
+    escucharActualizaciones() {
+        // Reducir la frecuencia de las actualizaciones para evitar sobrecarga
+        setInterval(async () => {
+            await this.obtenerActualizaciones();
+        }, 2000); // Cambiar a 2 segundos
+    }
+
+    async obtenerActualizaciones() {
+        if (this._actualizando) return; // Evitar actualizaciones simultáneas
+        
+        try {
+            this._actualizando = true;
+            const response = await fetch('../../zombie-plash/php/juego/obtenerActualizaciones.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success && data.numerosSacados) {
+                this.actualizarInterfaz(data.numerosSacados);
+            }
+        } catch (error) {
+            console.error('Error al obtener actualizaciones:', error);
+        } finally {
+            this._actualizando = false;
+        }
+    }
+
+    async iniciarJuego() {
+        this.intervaloBalotas = setInterval(async () => {
+            await this.sacarNuevoNumero();
+        }, 5000); // Sacar número cada 5 segundos
+    }
+
+    async sacarNuevoNumero() {
+        try {
+            console.log('Intentando sacar nuevo número para sala:', this.idSala);
+            const response = await fetch('/zombie-bingo/zombie-plash/php/juego/sacarNumero.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id_sala: this.idSala })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            console.log('Respuesta sacarNumero:', data);
+            
+            if (data.success) {
+                // Guardar el número en el array de números sacados
+                this.numerosSacados.push({
+                    numero: data.numero,
+                    letra: data.letra
+                });
+                
+                // Actualizar panel principal (las 5 últimas balotas)
+                const panelNumeros = document.getElementById('numerosSacados');
+                const balota = document.createElement('div');
+                balota.className = 'balota nueva-balota';
+                balota.innerHTML = `
+                    <span class="letra">${data.letra}</span>
+                    <span class="numero">${data.numero}</span>
+                `;
+                
+                panelNumeros.appendChild(balota);
+                
+                // Mantener solo las últimas 5 balotas
+                const balotas = panelNumeros.getElementsByClassName('balota');
+                if (balotas.length > 5) {
+                    balotas[0].classList.add('balota-saliente');
+                    setTimeout(() => {
+                        if (balotas[0]) {
+                            balotas[0].remove();
+                        }
+                    }, 500);
+                }
+                
+                // Remover clase nueva-balota después de la animación
+                setTimeout(() => {
+                    balota.classList.remove('nueva-balota');
+                }, 500);
+
+                // Actualizar el historial en el panel izquierdo
+                const panelIzquierdo = document.querySelector('.izquierda');
+                const historialContainer = document.createElement('div');
+                historialContainer.id = 'panel-historial';
+                
+                // Agrupar números por letra
+                const numerosPorLetra = {
+                    'B': [], 'I': [], 'N': [], 'G': [], 'O': []
+                };
+                
+                this.numerosSacados.forEach(balota => {
+                    numerosPorLetra[balota.letra].push(balota.numero);
+                });
+                
+                // Crear columnas para cada letra
+                Object.entries(numerosPorLetra).forEach(([letra, numeros]) => {
+                    if (numeros.length > 0) { // Solo mostrar letras que tengan números
+                        const columna = document.createElement('div');
+                        columna.className = `columna-${letra}`;
+                        columna.innerHTML = `
+                            <h3>${letra}</h3>
+                            <div class="numeros">
+                                ${numeros.sort((a, b) => a - b).join(', ')}
+                            </div>
+                        `;
+                        historialContainer.appendChild(columna);
+                    }
+                });
+                
+                // Limpiar y actualizar el panel izquierdo
+                panelIzquierdo.innerHTML = '';
+                panelIzquierdo.appendChild(historialContainer);
+
+                // Verificar el número en el cartón
+                this.verificarNumeroEnCarton(data.numero);
+            }
+        } catch (error) {
+            console.error('Error al sacar número:', error);
+        }
+    }
+
+    actualizarPanelNumeros(numero, letra) {
+        // Actualizar panel principal
+        const panelNumeros = document.getElementById('numerosSacados');
+        const nuevoNumero = document.createElement('div');
+        nuevoNumero.className = 'numero-sacado';
+        nuevoNumero.textContent = `${letra}-${numero}`;
+        panelNumeros.appendChild(nuevoNumero);
+
+        // Actualizar panel izquierdo
+        const panelIzquierdo = document.querySelector('.izquierda');
+        const numeroHistorial = document.createElement('div');
+        numeroHistorial.className = 'numero-historial';
+        numeroHistorial.textContent = `${letra}-${numero}`;
+        panelIzquierdo.appendChild(numeroHistorial);
+    }
+
+    async verificarBingo() {
+        try {
+            const response = await fetch('../php/juego/verificarBingo.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    carton: this.cartonActual,
+                    numeros_sacados: this.numerosSacados
+                })
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                this.mostrarGanador(data);
+            } else {
+                alert('¡Los números no coinciden! Sigue jugando.');
+            }
+        } catch (error) {
+            console.error('Error al verificar bingo:', error);
+        }
+    }
+
+    async mostrarGanador(data) {
+        // Mostrar modal con ranking
+        const modal = document.createElement('div');
+        modal.className = 'modal-ranking';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <h2>¡BINGO! Ganador: ${data.ganador}</h2>
+                <h3>Ranking de jugadores:</h3>
+                <ul>
+                    ${data.ranking.map(jugador => 
+                        `<li>${jugador.nombre} - ${jugador.aciertos} aciertos</li>`
+                    ).join('')}
+                </ul>
+                <button onclick="this.parentElement.parentElement.remove()">Cerrar</button>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+
+    async detenerJuego() {
+        try {
+            const response = await fetch('../php/juego/salirSala.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala
+                })
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                clearInterval(this.intervaloBalotas);
+                window.location.href = 'inicio.php';
+            }
+        } catch (error) {
+            console.error('Error al salir de la sala:', error);
+        }
     }
 
     // Métodos para los efectos
@@ -27,345 +323,297 @@ class BingoGame{
     }
 
     toggleEfectoNumeros() {
+        if (!this.efectos) {
+            console.error('Efectos no inicializados');
+            return;
+        }
+        
+        const btnNumeros = document.querySelector('.colu2 button:nth-child(2)');
+        if (btnNumeros.disabled) return;
+        
         this.efectos.toggleEfectoNumeros();
-    }
-
-    toggleEfectoBloqueo() {
-        this.efectos.toggleEfectoBloqueo();
+        
+        // Deshabilitar el botón temporalmente
+        btnNumeros.disabled = true;
+        setTimeout(() => {
+            btnNumeros.disabled = false;
+        }, 10000); // 10 segundos
     }
 
     toggleEfectoEligeNumero() {
-        this.efectos.iniciarEfectoEligeNumero();
-    }
-
-    async obtenerCarton() {
-        try {
-            const response = await fetch('../php/obtenerCarton.php');
-            const data = await response.json();
-            this.carton = data.carton;
-            this.numerosSacados = data.numerosSacados;
-            this.mostrarCarton();
-        } catch (error) {
-            console.error('Error al obtener el cartón:', error);
+        if (!this.efectos) {
+            console.error('Efectos no inicializados');
+            return;
         }
-    }
-
-
-    mostrarCarton() {
-        const letras = ['B', 'I', 'N', 'G', 'O'];
-        letras.forEach((letra, columnaIndex) => {
-            const numeros = this.carton[letra];
-            numeros.forEach((numero, filaIndex) => {
-                const celda = document.querySelector(
-                    `#cartonBingo .fila5:nth-child(${filaIndex + 1}) .columna1:nth-child(${columnaIndex + 1})`
-                );
-                if (celda) {
-                    // Asigna solo el número a la celda
-                    celda.textContent = numero;
-                    if (this.numerosSacados.includes(numero)) {
-                        celda.classList.add('marcado');
-                    } else {
-                        celda.classList.remove('marcado');
-                    }
-                }
-            });
-        });
-    }
-
-    mostrarNumerosSacados() {
-        const resultados = document.getElementById('numerosSacados');
-        if (!resultados) return;
-    
-        // Obtener el último número sacado
-        const ultimoNumero = this.numerosSacados[this.numerosSacados.length - 1];
         
-        if (ultimoNumero) {
-            let letra;
-            if (ultimoNumero >= 1 && ultimoNumero <= 12) letra = 'B';
-            else if (ultimoNumero >= 13 && ultimoNumero <= 23) letra = 'I';
-            else if (ultimoNumero >= 24 && ultimoNumero <= 34) letra = 'N';
-            else if (ultimoNumero >= 35 && ultimoNumero <= 45) letra = 'G';
-            else if (ultimoNumero >= 46 && ultimoNumero <= 60) letra = 'O';
-    
-            // Crear elemento para la nueva balota
-            const nuevaBalota = document.createElement('div');
-            nuevaBalota.className = 'balota nueva-balota';
-            nuevaBalota.textContent = `${letra}${ultimoNumero}`;
-    
-            // Insertar la nueva balota a la derecha
-            resultados.appendChild(nuevaBalota);
-    
-            // Mover las balotas y eliminar la primera si hay más de 4
-            setTimeout(() => {
-                nuevaBalota.classList.remove('nueva-balota');
-                const balotas = resultados.getElementsByClassName('balota');
-                if (balotas.length > 5) {
-                    const primeraBalota = balotas[0];
-                    primeraBalota.classList.add('balota-saliente');
-                    setTimeout(() => {
-                        resultados.removeChild(primeraBalota);
-                    }, 100);
-                }
-            }, 500);
-        }
-    }
-
-    iniciarJuego() {
-        console.log('Iniciando juego...');
-        // Inicia el intervalo para sacar un número cada 5 segundos
-        this.intervalId = setInterval(() => {
-            this.sacarNumero();
-        }, 5000);
-    }
-
-    detenerJuego() {
-        // Detiene el intervalo
-        clearInterval(this.intervalId);
-        // limpia el registro de los numeros sacados
-        this.numerosSacados = [];
-        this.mostrarNumerosSacados();
-
-    }
-    inicializarEventos() {
-        document.querySelectorAll('.columna1').forEach(celda => {
-            celda.addEventListener('click', () => this.marcarNumero(celda));
+        const numerosDisponibles = Array.from({ length: 60 }, (_, i) => i + 1)
+            .filter(num => !this.numerosSacados.some(balota => balota.numero === num));
+        
+        const modal = document.getElementById('modalEligeNumero');
+        const contenedor = document.getElementById('numerosDisponibles');
+        contenedor.innerHTML = '';
+        
+        numerosDisponibles.forEach(numero => {
+            const boton = document.createElement('button');
+            boton.textContent = numero;
+            boton.onclick = () => this.seleccionarNumeroManual(numero);
+            contenedor.appendChild(boton);
         });
+        
+        modal.style.display = 'block';
     }
 
-    marcarNumero(celda) {
-        // Alterna la clase 'marcado' en la celda
-        celda.classList.toggle('marcado');
-    }
-
-
-    async sacarNumero() {
+    async seleccionarNumeroManual(numero) {
         try {
-            console.log('Sacando número...');
-            const response = await fetch('../php/sacarNumero.php');
+            const response = await fetch('../php/juego/seleccionarNumero.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    numero: numero
+                })
+            });
+            
             const data = await response.json();
             if (data.success) {
-                this.numerosSacados.push(data.numero);
-                this.mostrarNumerosSacados();
-                this.verificarNumeroEnCarton(data.numero);
-                this.actualizarNumerosEnPanel();
+                document.getElementById('modalEligeNumero').style.display = 'none';
+                this.numerosSacados.push({
+                    numero: data.numero,
+                    letra: data.letra
+                });
+                this.actualizarPanelNumeros(data.numero, data.letra);
+                this.actualizarPanelHistorial();
             }
         } catch (error) {
-            console.error('Error al sacar número:', error);
+            console.error('Error al seleccionar número:', error);
         }
     }
+
+    inicializarEventos() {
+        // Aquí puedes agregar los event listeners necesarios
+    }
+
     async nuevoCarton() {
         try {
-            const response = await fetch('../php/nuevoCarton.php');
-            const data = await response.json();
-            if (data.success) {
-                this.carton = data.carton;
-                this.numerosSacados = [];
-                this.mostrarCarton();
-                this.mostrarNumerosSacados();
-            }
+            const rangos = {
+                'B': { min: 1, max: 12 },
+                'I': { min: 13, max: 23 },
+                'N': { min: 24, max: 34 },
+                'G': { min: 35, max: 45 },
+                'O': { min: 46, max: 60 }
+            };
+
+            const carton = {};
+            const cartonElement = document.getElementById('cartonBingo');
+            const filas = cartonElement.getElementsByClassName('fila5');
+
+            // Generar números aleatorios para cada columna
+            Object.keys(rangos).forEach((letra, columnIndex) => {
+                const { min, max } = rangos[letra];
+                const numerosDisponibles = Array.from(
+                    { length: max - min + 1 }, 
+                    (_, i) => min + i
+                );
+                
+                // Mezclar números
+                for (let i = numerosDisponibles.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [numerosDisponibles[i], numerosDisponibles[j]] = 
+                    [numerosDisponibles[j], numerosDisponibles[i]];
+                }
+                
+                // Seleccionar 5 números para la columna
+                carton[letra] = numerosDisponibles.slice(0, 5);
+                
+                // Llenar el cartón visual
+                for (let fila = 0; fila < 5; fila++) {
+                    const celda = filas[fila].children[columnIndex];
+                    celda.textContent = carton[letra][fila];
+                    celda.dataset.numero = carton[letra][fila];
+                    celda.dataset.letra = letra;
+                }
+            });
+
+            this.cartonActual = carton;
+            return true;
         } catch (error) {
             console.error('Error al generar nuevo cartón:', error);
+            return false;
         }
     }
 
-    verificarNumeroEnCarton(numero) {
-        document.querySelectorAll('.columna1').forEach(celda => {
-            if (parseInt(celda.textContent.slice(1)) === numero) {
-                celda.classList.add('numero-sacado');
-            }
-        });
-    }
-// verificcion del grito bingo!!
-    verificarBingo() {
-        const mensajeValidacion = document.createElement('div');
-        mensajeValidacion.className = 'mensaje-validacion';
-        
-        // Primero verificar que todas las celdas marcadas correspondan a números sacados
-        const celdasMarcadas = document.querySelectorAll('.columna1.marcado');
-        let esValido = true;
-        
-        // Verificar que los números marcados hayan sido sacados
-        celdasMarcadas.forEach(celda => {
-            const numero = parseInt(celda.textContent);
-            if (!this.numerosSacados.includes(numero)) {
-                esValido = false;
-                mensajeValidacion.textContent = `El número ${numero} está marcado pero no ha sido sacado`;
-                mensajeValidacion.classList.add('mensaje-error');
-                return;
-            }
-        });
-
-        // Si los números marcados son válidos, verificar si hay bingo
-        if (esValido) {
-            let bingoEncontrado = this.verificarFilas() || 
-                                 this.verificarColumnas() || 
-                                 this.verificarDiagonales();
-
-            if (bingoEncontrado) {
-                mensajeValidacion.textContent = '¡BINGO! ¡Has ganado!';
-                mensajeValidacion.classList.add('mensaje-exito');
-                this.detenerJuego();
-            } else {
-                mensajeValidacion.textContent = 'No hay bingo válido. Sigue jugando.';
-                mensajeValidacion.classList.add('mensaje-error');
-            }
-        }
-
-        // Mostrar el mensaje
-        const mensajeAnterior = document.querySelector('.mensaje-validacion');
-        if (mensajeAnterior) {
-            mensajeAnterior.remove();
-        }
-        document.querySelector('.bingo').appendChild(mensajeValidacion);
-
-        // Eliminar el mensaje después de 3 segundos
-        setTimeout(() => {
-            mensajeValidacion.remove();
-        }, 3000);
-    }
-
-    verificarFilas() {
-        for (let i = 0; i < 5; i++) {
-            const fila = document.querySelectorAll(`.fila5:nth-child(${i + 1}) .columna1`);
-            if (this.verificarLineaConNumerosSacados(Array.from(fila))) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    verificarColumnas() {
-        for (let i = 0; i < 5; i++) {
-            const columna = Array.from(document.querySelectorAll('.fila5')).map(
-                fila => fila.children[i]
-            );
-            if (this.verificarLineaConNumerosSacados(columna)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    verificarDiagonales() {
-        // Diagonal principal
-        const diagonal1 = Array.from(document.querySelectorAll('.fila5')).map(
-            (fila, i) => fila.children[i]
-        );
-        
-        // Diagonal secundaria
-        const diagonal2 = Array.from(document.querySelectorAll('.fila5')).map(
-            (fila, i) => fila.children[4 - i]
-        );
-
-        return this.verificarLineaConNumerosSacados(diagonal1) || 
-               this.verificarLineaConNumerosSacados(diagonal2);
-    }
-
-    verificarLineaConNumerosSacados(celdas) {
-        return celdas.every(celda => {
-            const numero = parseInt(celda.textContent);
-            return celda.classList.contains('marcado') && this.numerosSacados.includes(numero);
-        });
-        }
-
-    actualizarPanelNumeros(numero) {
+    actualizarPanelHistorial(numerosSacados) {
         const panelIzquierdo = document.querySelector('.izquierda');
         if (!panelIzquierdo) return;
 
-        // Crear el panel si no existe
-        if (!document.getElementById('panel-historial')) {
-            const panel = document.createElement('div');
-            panel.id = 'panel-historial';
-            panel.style.height = '100%';
-            panel.style.padding = '8px';
-            panel.style.display = 'flex';
-            panel.style.flexDirection = 'column';
-            panel.style.color = 'black';
-            panel.style.fontSize = '20px';
-
-            // Crear contenedores para cada letra
-            ['B', 'I', 'N', 'G', 'O'].forEach(letra => {
+        // Crear contenedor para el historial
+        const historialContainer = document.createElement('div');
+        historialContainer.id = 'panel-historial';
+        
+        // Agrupar números por letra
+        const numerosPorLetra = {
+            'B': [], 'I': [], 'N': [], 'G': [], 'O': []
+        };
+        
+        numerosSacados.forEach(balota => {
+            numerosPorLetra[balota.letra].push(balota.numero);
+        });
+        
+        // Crear columnas para cada letra en orden
+        ['B', 'I', 'N', 'G', 'O'].forEach(letra => {
+            const numeros = numerosPorLetra[letra];
+            if (numeros.length > 0) {
                 const columna = document.createElement('div');
                 columna.className = `columna-${letra}`;
-                columna.style.marginBottom = '10px';
-                
-                const titulo = document.createElement('div');
-                titulo.textContent = letra;
-                titulo.style.fontWeight = 'bold';
-                titulo.style.marginBottom = '5px';
-                
-                const numeros = document.createElement('div');
-                numeros.id = `numeros-${letra}`;
-                numeros.style.display = 'flex';
-                numeros.style.flexWrap = 'wrap';
-                numeros.style.gap = '5px';
-                
-                columna.appendChild(titulo);
-                columna.appendChild(numeros);
-                panel.appendChild(columna);
+                columna.innerHTML = `
+                    <h3>${letra}</h3>
+                    <div class="numeros">
+                        ${numeros.sort((a, b) => a - b).join(', ')}
+                    </div>
+                `;
+                historialContainer.appendChild(columna);
+            }
+        });
+        
+        // Limpiar y actualizar el panel izquierdo
+        panelIzquierdo.innerHTML = '';
+        panelIzquierdo.appendChild(historialContainer);
+    }
+
+    verificarNumeroEnCarton(numero) {
+        try {
+            // Buscar la celda que contiene el número
+            const celdas = document.querySelectorAll('.columna1');
+            celdas.forEach(celda => {
+                if (celda.dataset.numero === numero.toString()) {
+                    celda.classList.add('marcado');
+                }
             });
 
-            panelIzquierdo.appendChild(panel);
+            // Verificar si hay línea o bingo
+            this.verificarPatrones();
+        } catch (error) {
+            console.error('Error al verificar número en cartón:', error);
+        }
+    }
+
+    verificarPatrones() {
+        const filas = document.getElementById('cartonBingo').getElementsByClassName('fila5');
+        let numerosCompletados = 0;
+
+        // Verificar filas
+        for (let i = 0; i < filas.length; i++) {
+            const celdas = filas[i].getElementsByClassName('columna1');
+            let celdasMarcadas = 0;
+            
+            for (let j = 0; j < celdas.length; j++) {
+                if (celdas[j].classList.contains('marcado')) {
+                    celdasMarcadas++;
+                    numerosCompletados++;
+                }
+            }
+            
+            if (celdasMarcadas === 5) {
+                console.log('¡Línea completada!');
+            }
         }
 
-        // Actualizar el método mostrarNumerosSacados para incluir la actualización del panel
-        this.actualizarNumerosEnPanel();
-    }
-
-    actualizarNumerosEnPanel() {
-        // Limpiar todos los contenedores de números
-        ['B', 'I', 'N', 'G', 'O'].forEach(letra => {
-            const contenedor = document.getElementById(`numeros-${letra}`);
-            if (contenedor) {
-                contenedor.innerHTML = '';
+        // Verificar columnas
+        for (let i = 0; i < 5; i++) {
+            let celdasMarcadas = 0;
+            for (let j = 0; j < filas.length; j++) {
+                const celda = filas[j].getElementsByClassName('columna1')[i];
+                if (celda.classList.contains('marcado')) {
+                    celdasMarcadas++;
+                }
             }
-        });
-
-        // Organizar y mostrar los números por columna
-        this.numerosSacados.forEach(numero => {
-            let letra;
-            if (numero <= 12) letra = 'B';
-            else if (numero <= 23) letra = 'I';
-            else if (numero <= 34) letra = 'N';
-            else if (numero <= 45) letra = 'G';
-            else if (numero <= 60) letra = 'O';
-
-            const contenedor = document.getElementById(`numeros-${letra}`);
-            if (contenedor) {
-                const numeroElement = document.createElement('span');
-                numeroElement.textContent = numero;
-                // numeroElement.style.backgroundColor = '#ff6b6b';
-                numeroElement.style.padding = '2px 5px';
-                numeroElement.style.borderRadius = '3px';
-                numeroElement.style.marginRight = '3px';
-                contenedor.appendChild(numeroElement);
+            if (celdasMarcadas === 5) {
+                console.log('¡Columna completada!');
             }
-        });
+        }
+
+        // Verificar diagonales
+        let diagonalPrincipal = 0;
+        let diagonalSecundaria = 0;
+        
+        for (let i = 0; i < 5; i++) {
+            if (filas[i].getElementsByClassName('columna1')[i].classList.contains('marcado')) {
+                diagonalPrincipal++;
+            }
+            if (filas[i].getElementsByClassName('columna1')[4-i].classList.contains('marcado')) {
+                diagonalSecundaria++;
+            }
+        }
+
+        if (diagonalPrincipal === 5 || diagonalSecundaria === 5) {
+            console.log('¡Diagonal completada!');
+        }
+
+        // Verificar bingo (todos los números marcados)
+        if (numerosCompletados === 25) {
+            console.log('¡BINGO!');
+            this.verificarBingo();
+        }
     }
 
-    iniciarEfectoEligeNumero() {
-        // Filtrar números que no han sido sacados
-        const numerosDisponibles = Array.from({ length: 60 }, (_, i) => i + 1).filter(
-            numero => !bingoGame.numerosSacados.includes(numero)
-        );
+    actualizarInterfaz(numerosSacados) {
+        const panelNumeros = document.getElementById('numerosSacados');
+        if (!panelNumeros) return;
 
-        const contenedor = document.getElementById('numerosDisponibles');
-        contenedor.innerHTML = ''; // Limpiar contenido previo
+        // Si no hay números sacados, no hacer nada
+        if (!numerosSacados || numerosSacados.length === 0) return;
 
-        // Crear botones para cada número disponible
-        numerosDisponibles.forEach(numero => {
-            const botonNumero = document.createElement('button');
-            botonNumero.textContent = numero;
-            botonNumero.onclick = () => this.seleccionarNumero(numero);
-            contenedor.appendChild(botonNumero);
-        });
+        // Verificar si hay un nuevo número comparando longitudes
+        if (numerosSacados.length > this.numerosSacados.length) {
+            // Mantener solo las últimas 5 balotas
+            const ultimasBalotas = numerosSacados.slice(-5);
+            
+            // Limpiar el panel
+            panelNumeros.innerHTML = '';
+            
+            // Agregar las balotas
+            ultimasBalotas.forEach((balota, index) => {
+                const balotaElement = document.createElement('div');
+                balotaElement.className = 'balota';
+                
+                // Solo aplicar animación a la última balota
+                if (index === ultimasBalotas.length - 1) {
+                    balotaElement.classList.add('nueva-balota');
+                    
+                    // Reproducir sonido si está disponible
+                    const audio = new Audio('../../zombie-plash/sonidos/balota.mp3');
+                    audio.play().catch(e => console.log('Error al reproducir sonido:', e));
+                }
+                
+                balotaElement.innerHTML = `
+                    <span class="letra">${balota.letra}</span>
+                    <span class="numero">${balota.numero}</span>
+                `;
+                panelNumeros.appendChild(balotaElement);
+            });
 
-        document.getElementById('modalEligeNumero').style.display = 'block';
+            // Actualizar el historial
+            this.actualizarPanelHistorial(numerosSacados);
+            
+            // Verificar el nuevo número en el cartón
+            const nuevoNumero = numerosSacados[numerosSacados.length - 1];
+            this.verificarNumeroEnCarton(nuevoNumero.numero);
+
+            // Actualizar array local
+            this.numerosSacados = [...numerosSacados];
+        }
     }
+}
 
-}   
-
-
-// Exportar la instancia del juego
-window.bingoGame = new BingoGame();
-
+// Inicializar el juego
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const bingoGame = new BingoGame();
+        window.bingoGame = bingoGame; // Hacer accesible globalmente
+        bingoGame.inicializarJuego();
+    } catch (error) {
+        console.error('Error al crear instancia de BingoGame:', error);
+    }
+});
