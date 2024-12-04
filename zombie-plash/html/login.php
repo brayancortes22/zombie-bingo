@@ -71,12 +71,7 @@ if (isset($_SESSION['user_id'])) {
         <div class="cuadro3">
         <div class="zombie" id="z_3"></div>
         </div>
-                 
         </div>
-        <!-- <div class="olvidado">
-            <a href="../email/codigo1.php">¿Olvidaste tu contraseña?</a>
-            </div> -->
-            
             <script>
                 // Función que se ejecuta cuando el formulario es enviado
                 function redirectAfterLogin(event) {
@@ -88,8 +83,6 @@ if (isset($_SESSION['user_id'])) {
             </script>
             
         </div>
-        <!-- animacion de fantasma -->
-        <!-- <div id="z_2" class="fantasma2"></div> -->
     </div>
       <!-- Otros elementos del head -->
       <script src="/zombie-bingo/zombie-plash/sound/audio.js"></script>

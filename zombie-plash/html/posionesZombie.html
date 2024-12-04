@@ -18,7 +18,17 @@
     <title>Posciones</title>
 </head>
 <body>
-  
+  <script>
+    // Verificar si el usuario ha iniciado sesión
+    fetch('../php/verificar_sesion.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.autenticado) {
+                alert('Debes iniciar sesión');
+                window.location.href = './login.php';
+            }
+        });
+</script>
     <div class="container-fluid">
         <div class="imagen">
           <a href="./inicio.php">

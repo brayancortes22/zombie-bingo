@@ -17,16 +17,14 @@
     <title>Crea tu sala</title>
 </head>
 <body>
-    <audio id="audio-juego" src="../musica/esta.mp3" loop></audio>
-
     <script>
         // Verificar si el usuario ha iniciado sesión
         fetch('../php/verificar_sesion.php')
             .then(response => response.json())
             .then(data => {
                 if (!data.autenticado) {
-                    alert('Debes iniciar sesión para crear una sala');
-                    window.location.href = './login.html';
+                    alert('Debes iniciar sesión');
+                    window.location.href = './login.php';
                 }
             });
     </script>

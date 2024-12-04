@@ -11,7 +11,17 @@
     <title>Crea tu sala</title>
 </head>
 <body>
-    <audio id="miAudio" src="../musica/musica.mp3" type="audio/mpeg" autoplay loop></audio>
+    <script>
+        // Verificar si el usuario ha iniciado sesión
+        fetch('../php/verificar_sesion.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.autenticado) {
+                    alert('Debes iniciar sesión');
+                    window.location.href = './login.php';
+                }
+            });
+    </script>
     <div class="container-fluid">
         <div class="imagen">
             <div class="cuadro">
