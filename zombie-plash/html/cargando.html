@@ -14,7 +14,12 @@
             </div>
         </div>
     </div>
-
+    <script src="../sound/audio.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        audioManager.play('game');
+    });
+    </script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const params = new URLSearchParams(window.location.search);

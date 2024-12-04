@@ -16,7 +16,13 @@ body {
     border-radius: 50%; /* Para hacer las imágenes circulares */
     object-fit: cover; /* Para que la imagen se ajuste bien al contenedor */
 }
-
+.nombre{
+    position: absolute;
+    margin-left: 70%;
+    display: flex;
+    justify-content: end;
+    align-items: end;
+}
 /* From Uiverse.io by vinodjangid07 */ 
 .Btn {
     display: flex;

@@ -18,9 +18,7 @@
     <title>Posciones</title>
 </head>
 <body>
-  <audio autoplay id="audio-juego" >
-    <source src="../musica/esta.mp3" type="audio/mpeg">
-  </audio>
+  
     <div class="container-fluid">
         <div class="imagen">
           <a href="./inicio.php">
@@ -64,5 +62,11 @@
           </div>
         </div>
     </div>
+    <script src="../sound/audio.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        audioManager.play('game');
+    });
+    </script>
 </body>
 </html>

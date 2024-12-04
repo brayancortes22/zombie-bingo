@@ -70,30 +70,70 @@
 
     <div class="content">
         <h1>Bienvenido a Zombie Plash</h1>
-        <button class="btn-start" onclick="window.location.href='html/login.php'">
+
+        <button class="btn-start" onclick="manejarInicio()">
             Comenzar
         </button>
     </div>
 
+    <script src="./sound/audio.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Efecto fade-in para el video
-            setTimeout(() => {
-                document.querySelector('.video-container').classList.add('fade-in');
-            }, 100);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Efecto fade-in para el video
+        setTimeout(() => {
+            document.querySelector('.video-container').classList.add('fade-in');
+        }, 100);
 
-            // Efecto de aparición para el contenido
-            setTimeout(() => {
-                document.querySelector('.content').classList.add('appear');
-            }, 1500);
+        // Efecto de aparición para el contenido
+        setTimeout(() => {
+            document.querySelector('.content').classList.add('appear');
+        }, 1500);
 
-            // Efecto de distorsión para el video
-            const video = document.getElementById('bgVideo');
-            video.addEventListener('play', function() {
-                // Añadir efectos CSS adicionales después de que el video comience
-                video.style.animation = 'distortion 8s infinite alternate';
-            });
+        // Efecto de distorsión para el video
+        const video = document.getElementById('bgVideo');
+        video.addEventListener('play', function() {
+            video.style.animation = 'distortion 8s infinite alternate';
         });
+    });
+
+    let audioContext = null;
+
+    async function manejarInicio() {
+        try {
+            // Crear el AudioContext solo cuando el usuario hace clic
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Crear el elemento de audio
+            const audio = new Audio();
+            audio.src = '/zombie-bingo/zombie-plash/sound/sonido_juego.mp3';
+            audio.loop = true;
+            
+            // Conectar el audio al contexto
+            const source = audioContext.createMediaElementSource(audio);
+            source.connect(audioContext.destination);
+            
+            // Reanudar el contexto y reproducir
+            if (audioContext.state === 'suspended') {
+                await audioContext.resume();
+            }
+            
+            await audio.play();
+            console.log('Audio iniciado correctamente');
+            
+            // Redirigir después de asegurarnos que el audio está sonando
+            setTimeout(() => {
+                window.location.href = 'html/login.php';
+            }, 1000); // Aumentamos el delay para asegurar que el audio comience
+            
+        } catch (error) {
+            console.log("Error al reproducir audio:", error);
+            window.location.href = 'html/login.php';
+        }
+    }
+
+    // Eliminamos el listener global ya que ahora manejamos todo en manejarInicio()
     </script>
 
     <style>
@@ -109,5 +149,14 @@
             }
         }
     </style>
+
+     <!-- poner el foter abajo decoradito-->
+     <footer>
+        sonido proporcionado por: Sound Effect by 
+        <a href="https://pixabay.com/es/users/alexisortizsofield-17523164/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=160137">Alexis Sofield</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=160137">Pixabay</a>
+     </footer>
 </body>
 </html>
+
+
+

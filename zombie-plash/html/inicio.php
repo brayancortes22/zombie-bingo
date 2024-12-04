@@ -50,18 +50,18 @@ if (!isset($_SESSION['id_usuario'])) {
                         
                         <div class="text">Cerrar sesión</div>
 </button>
+<div class="nombre">    
 <h1>Bienvenido, <span id="nombreUsuario"><?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?></span>!</h1>
+</div>
 <script>
 
 </script>
-             
-
             </div>
             <div class="izquierda">
                 <div class="col1">
                 <div class="sonido">
-                    <button type="button" class="bsonido" id="botonSonido" onclick="cambiarIcono()">
-                        <i class="bi bi-volume-up" id="iconoSonido"></i>
+                    <button type="button" class="bsonido" id="botonSonido" onclick="toggleAudio()">
+                    <i class="bi bi-volume-up" id="iconoSonido"></i>
                     </button>
                 </div>
                     <div class="conpartir"><button type="button" class="bconpartir">
@@ -112,9 +112,12 @@ if (!isset($_SESSION['id_usuario'])) {
             
         </div>
     </div>
-    <script>
-       
-      </script>
+    <script src="../sound/audio.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    audioManager.play('game');
+});
+</script>
       <script src="../js/inicio.js"></script>
     <script src="../js/obtenerAmigos.js"></script>
 </body>
