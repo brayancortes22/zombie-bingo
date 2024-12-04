@@ -109,7 +109,9 @@ if (!isset($_SESSION['id_usuario'])) {
             
         </div>
     </div>
-    <script src="../sound/audio.js"></script>
+    <!-- Otros elementos del head -->
+    <script src="/zombie-bingo/zombie-plash/sound/audio.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     let isMuted = localStorage.getItem('audioMuted') === 'true';
