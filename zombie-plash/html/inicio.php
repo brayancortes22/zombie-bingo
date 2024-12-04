@@ -53,9 +53,6 @@ if (!isset($_SESSION['id_usuario'])) {
 <div class="nombre">    
 <h1>Bienvenido, <span id="nombreUsuario"><?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?></span>!</h1>
 </div>
-<script>
-
-</script>
             </div>
             <div class="izquierda">
                 <div class="col1">
@@ -112,12 +109,72 @@ if (!isset($_SESSION['id_usuario'])) {
             
         </div>
     </div>
-    <script src="../sound/audio.js"></script>
+    <!-- Otros elementos del head -->
+    <script src="/zombie-bingo/zombie-plash/sound/audio.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    audioManager.play('game');
+    let isMuted = localStorage.getItem('audioMuted') === 'true';
+    const iconoSonido = document.getElementById('iconoSonido');
+    let isToggling = false; // Prevenir múltiples clics
+
+    if (!window.audioManager) {
+        window.audioManager = new AudioManager();
+    }
+
+    // Establecer icono inicial
+    if (isMuted) {
+        iconoSonido.classList.remove('bi-volume-up');
+        iconoSonido.classList.add('bi-volume-mute');
+    }
+
+    window.toggleAudio = async function() {
+        if (isToggling) return; // Evitar múltiples clics
+        isToggling = true;
+        
+        if (!isMuted) {
+            await window.audioManager.mute();
+            iconoSonido.classList.remove('bi-volume-up');
+            iconoSonido.classList.add('bi-volume-mute');
+        } else {
+            await window.audioManager.unmute();
+            iconoSonido.classList.remove('bi-volume-mute');
+            iconoSonido.classList.add('bi-volume-up');
+        }
+        
+        isMuted = !isMuted;
+        
+        // Permitir el siguiente toggle después de un breve delay
+        setTimeout(() => {
+            isToggling = false;
+        }, 200);
+    };
 });
 </script>
+
+<style>
+.bsonido {
+    background: red;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    transition: all 0.3s ease;
+    /* Prevenir selección de texto al hacer doble clic */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.bsonido:hover {
+    transform: scale(1.1);
+}
+
+.bi-volume-up, .bi-volume-mute {
+    font-size: 24px;
+    color: #fff;
+    transition: all 0.3s ease;
+    pointer-events: none; /* Evitar problemas con el icono interno */
+}
+</style>
       <script src="../js/inicio.js"></script>
     <script src="../js/obtenerAmigos.js"></script>
 </body>

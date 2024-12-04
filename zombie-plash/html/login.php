@@ -91,7 +91,9 @@ if (isset($_SESSION['user_id'])) {
         <!-- animacion de fantasma -->
         <!-- <div id="z_2" class="fantasma2"></div> -->
     </div>
-    <script src="../sound/audio.js"></script>
+      <!-- Otros elementos del head -->
+      <script src="/zombie-bingo/zombie-plash/sound/audio.js"></script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     audioManager.play('game');
