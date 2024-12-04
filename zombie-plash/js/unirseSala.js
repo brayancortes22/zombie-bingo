@@ -15,31 +15,25 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Respuesta del servidor:', data); // Debug
             
             if (data.success) {
-                // Guardar el ID del jugador si no existe
-                if (!localStorage.getItem('id_jugador')) {
-                    localStorage.setItem('id_jugador', data.id_jugador);
-                }
-                
-                // Guardar datos de la sala
+                // Guardar datos completos en localStorage
                 localStorage.setItem('datosSala', JSON.stringify({
                     id_sala: data.id_sala,
+                    id_jugador: data.id_jugador,
+                    nombre_jugador: data.nombre_jugador,
                     contraseña_sala: data.contraseña_sala,
+                    max_jugadores: data.max_jugadores,
                     jugadores_conectados: data.jugadores_conectados,
-                    max_jugadores: data.max_jugadores
+                    rol: 'participante' // Importante: añadir el rol
                 }));
-                
-                // Guardar ID de sala específicamente
-                localStorage.setItem('id_sala', data.id_sala);
-                
-                console.log('Datos guardados:', { // Debug
-                    datosSala: localStorage.getItem('datosSala'),
-                    id_sala: localStorage.getItem('id_sala'),
-                    id_jugador: localStorage.getItem('id_jugador')
-                });
                 
                 window.location.href = 'jugadoresSala.html';
             } else {
-                mostrarMensaje(data.message || 'Error al unirse a la sala');
+                Swal.fire({
+                    title: 'Error',
+                    text: data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
             }
         })
         .catch(error => {
@@ -55,5 +49,10 @@ function mostrarMensaje(mensaje) {
     if (mensajeElement) {
         mensajeElement.textContent = mensaje;
     }
-    alert(mensaje);
+    Swal.fire({
+        title: 'Información',
+        text: mensaje,
+        icon: 'info',
+        confirmButtonText: 'Aceptar'
+    });
 }

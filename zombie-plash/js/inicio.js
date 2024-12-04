@@ -1,15 +1,19 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const nombreUsuario = localStorage.getItem('nombre_usuario');
-    if (nombreUsuario) {
-        document.getElementById('nombreUsuario').textContent = nombreUsuario;
-    }
-});
+function cerrarSesion() {
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: '¿Estás seguro de que quieres cerrar sesión?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, cerrar sesión',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            sessionStorage.clear();
+            window.location.href = '../php/cerrar_sesion.php';
+        }
+    });
+}
 
-                function cerrarSesion() {
-                    if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
-    window.location.href = '../php/cerrar_sesion.php';
-}
-}
 function cambiarIcono() {
     const icono = document.getElementById('iconoSonido');
     
@@ -25,7 +29,3 @@ function cambiarIcono() {
         icono.classList.add('bi-volume-up');
     }
 }
-
-function redireccion(){
-    window.location.href='cargando.html'
-  }

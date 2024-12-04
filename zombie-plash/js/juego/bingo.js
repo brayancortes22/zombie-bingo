@@ -559,6 +559,7 @@ class BingoGame {
         }
     }
 
+
     actualizarInterfaz(numerosSacados) {
         const panelNumeros = document.getElementById('numerosSacados');
         if (!panelNumeros) return;
@@ -582,10 +583,6 @@ class BingoGame {
                 // Solo aplicar animación a la última balota
                 if (index === ultimasBalotas.length - 1) {
                     balotaElement.classList.add('nueva-balota');
-                    
-                    // Reproducir sonido si está disponible
-                    // const audio = new Audio('../../zombie-plash/sonidos/balota.mp3');
-                    // audio.play().catch(e => console.log('Error al reproducir sonido:', e));
                 }
                 
                 balotaElement.innerHTML = `
@@ -598,14 +595,27 @@ class BingoGame {
             // Actualizar el historial
             this.actualizarPanelHistorial(numerosSacados);
             
-            // Verificar el nuevo número en el cartón
-            const nuevoNumero = numerosSacados[numerosSacados.length - 1];
-            this.verificarNumeroEnCarton(nuevoNumero.numero);
+            // Permitir a los jugadores marcar manualmente
+            this.permitirMarcaManual();
 
             // Actualizar array local
             this.numerosSacados = [...numerosSacados];
         }
     }
+
+    permitirMarcaManual() {
+        const celdas = document.querySelectorAll('#cartonBingo .celda');
+        celdas.forEach(celda => {
+            celda.onclick = () => {
+                if (celda.classList.contains('marcado')) {
+                    celda.classList.remove('marcado');
+                } else {
+                    celda.classList.add('marcado');
+                }
+            };
+        });
+    }
+
 
     async verificarEfectosActivos() {
         try {

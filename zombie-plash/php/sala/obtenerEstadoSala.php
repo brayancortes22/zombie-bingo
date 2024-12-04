@@ -1,22 +1,39 @@
 <?php
+session_start();
 require '../../setting/conexion-base-datos.php';
 
-$id_sala = $_GET['id_sala'] ?? null;
+try {
+    $conexion = new Conexion();
+    $pdo = $conexion->conectar();
 
-if (!$id_sala) {
-    echo json_encode(['success' => false, 'message' => 'ID de sala no proporcionado']);
-    exit();
+    $id_sala = $_GET['id_sala'] ?? null;
+
+    if (!$id_sala) {
+        throw new Exception('ID de sala no proporcionado');
+    }
+
+    // Verificar si la sala existe y obtener su estado
+    $stmt = $pdo->prepare("SELECT estado FROM salas WHERE id_sala = ?");
+    $stmt->execute([$id_sala]);
+    $sala = $stmt->fetch();
+
+    if (!$sala) {
+        // Si la sala no existe, considerarla como cerrada
+        echo json_encode([
+            'success' => true,
+            'estado' => 'cerrada'
+        ]);
+        exit;
+    }
+
+    echo json_encode([
+        'success' => true,
+        'estado' => $sala['estado']
+    ]);
+
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => $e->getMessage()
+    ]);
 }
-
-$pdo = (new Conexion())->conectar();
-$query = "SELECT estado FROM salas WHERE id_sala = :id_sala";
-$stmt = $pdo->prepare($query);
-$stmt->execute(['id_sala' => $id_sala]);
-$sala = $stmt->fetch();
-
-if (!$sala) {
-    echo json_encode(['success' => false, 'message' => 'Sala no encontrada']);
-    exit();
-}
-
-echo json_encode(['success' => true, 'estado' => $sala['estado']]); 

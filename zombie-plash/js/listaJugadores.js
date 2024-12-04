@@ -84,7 +84,12 @@ class ListaJugadoresManager {
             if (data.success && data.jugador) {
                 this.mostrarJugadores([data.jugador]);
             } else {
-                alert('Jugador no encontrado');
+                Swal.fire({
+                    title: 'Jugador no encontrado',
+                    text: 'No se encontró ningún jugador con ese ID.',
+                    icon: 'info',
+                    confirmButtonText: 'Aceptar'
+                });
             }
         } catch (error) {
             console.error('Error:', error);
@@ -95,7 +100,12 @@ class ListaJugadoresManager {
         try {
             if (this.amigos.has(idAmigo)) {
                 // Si ya es amigo, mostrar mensaje
-                alert('Ya son amigos');
+                Swal.fire({
+                    title: 'Información',
+                    text: 'Ya son amigos',
+                    icon: 'info',
+                    confirmButtonText: 'Aceptar'
+                });
                 return;
             }
 
@@ -123,13 +133,28 @@ class ListaJugadoresManager {
                 // Opcional: Agregar clase para estilos adicionales
                 iconElement.closest('.icono').classList.add('amigo-agregado');
                 
-                alert('Amigo agregado correctamente');
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'Amigo agregado correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                });
             } else {
-                alert(data.message || 'Error al agregar amigo');
+                Swal.fire({
+                    title: 'Error',
+                    text: data.message || 'Error al agregar amigo',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error al agregar amigo');
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al agregar amigo',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         }
     }
 }

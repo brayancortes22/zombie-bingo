@@ -1,40 +1,81 @@
 <?php
-header('Content-Type: application/json');
-require_once '../../setting/conexion-base-datos.php';
+session_start();
+require '../../setting/conexion-base-datos.php';
 
-try {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $id_sala = $data['id_sala'];
-    $id_jugador = $data['id_jugador'];
+// Habilitar logs de error
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-    // Verificar si el usuario es el creador de la sala
-    $stmt = $conexion->conectar()->prepare("SELECT id_creador FROM salas WHERE id_sala = ? AND id_creador = ?");
-    $stmt->execute([$id_sala, $id_jugador]);
-    $result = $stmt->fetch();
+class CancelarSala {
+    private $pdo;
+    private $response;
 
-    if (!$result) {
-        echo json_encode(['success' => false, 'message' => 'No tienes permiso para cerrar esta sala']);
-        exit;
+    public function __construct() {
+        $conexion = new Conexion();
+        $this->pdo = $conexion->conectar();
+        $this->response = ['success' => false, 'message' => ''];
     }
 
-    // 1. Primero actualizar el estado de la sala a 'cerrada'
-    $stmt = $conexion->conectar()->prepare("UPDATE salas SET jugando = -1 WHERE id_sala = ?");
-    $stmt->execute([$id_sala]);
+    public function cancelar() {
+        try {
+            // Log de la solicitud recibida
+            $rawData = file_get_contents('php://input');
+            error_log('Datos recibidos: ' . $rawData);
+            
+            $datos = json_decode($rawData, true);
+            $id_sala = $datos['id_sala'] ?? null;
+            $id_jugador = $datos['id_jugador'] ?? null;
 
-    // 2. Esperar un breve momento para que los clientes detecten el cambio
-    usleep(500000); // espera 0.5 segundos
+            error_log("ID Sala: $id_sala, ID Jugador: $id_jugador");
 
-    // 3. Eliminar registros de jugadores_en_sala
-    $stmt = $conexion->conectar()->prepare("DELETE FROM jugadores_en_sala WHERE id_sala = ?");
-    $stmt->execute([$id_sala]);
+            if (!$id_sala || !$id_jugador) {
+                throw new Exception('Datos incompletos');
+            }
 
-    // 4. Finalmente eliminar la sala
-    $stmt = $conexion->conectar()->prepare("DELETE FROM salas WHERE id_sala = ?");
-    $stmt->execute([$id_sala]);
+            // Verificar si es el creador
+            $query = "SELECT rol FROM jugadores_en_sala 
+                     WHERE id_sala = :id_sala AND id_jugador = :id_jugador";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute([
+                'id_sala' => $id_sala,
+                'id_jugador' => $id_jugador
+            ]);
+            $jugador = $stmt->fetch();
 
-    echo json_encode(['success' => true, 'message' => 'Sala cancelada exitosamente']);
+            error_log('Resultado verificación creador: ' . print_r($jugador, true));
 
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+            if (!$jugador || $jugador['rol'] !== 'creador') {
+                throw new Exception('No tienes permisos para cancelar la sala');
+            }
+
+            // Iniciar transacción
+            $this->pdo->beginTransaction();
+
+            // Eliminar jugadores de la sala
+            $stmt = $this->pdo->prepare("DELETE FROM jugadores_en_sala WHERE id_sala = :id_sala");
+            $stmt->execute(['id_sala' => $id_sala]);
+
+            // Eliminar la sala
+            $stmt = $this->pdo->prepare("DELETE FROM salas WHERE id_sala = :id_sala");
+            $stmt->execute(['id_sala' => $id_sala]);
+
+            $this->pdo->commit();
+            $this->response = ['success' => true, 'message' => 'Sala cancelada exitosamente'];
+
+        } catch (Exception $e) {
+            error_log('Error en cancelarSala: ' . $e->getMessage());
+            if ($this->pdo->inTransaction()) {
+                $this->pdo->rollBack();
+            }
+            $this->response = ['success' => false, 'message' => $e->getMessage()];
+        }
+
+        return $this->response;
+    }
 }
+
+header('Content-Type: application/json');
+$cancelar = new CancelarSala();
+echo json_encode($cancelar->cancelar());
 ?>

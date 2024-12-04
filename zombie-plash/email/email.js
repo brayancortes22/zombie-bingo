@@ -30,12 +30,22 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success) {
                 window.location.href = './restablecimientoContra2.html';
             } else {
-                alert(data.message || 'Código incorrecto');
+                Swal.fire({
+                    title: 'Código incorrecto',
+                    text: data.message || 'El código ingresado es incorrecto.',
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error al verificar el código');
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al verificar el código',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         });
     });
 
