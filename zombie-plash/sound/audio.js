@@ -1,7 +1,7 @@
 // Primero definimos una variable global para el audio
 const globalAudio = new Audio();
 globalAudio.loop = true;
-globalAudio.src = '/zombie-bingo/zombie-plash/sound/sonido_juego.mp3';
+globalAudio.src = '/zombie-bingo/zombie-plash/sound/sonido_juego3.mp3';
 
 class AudioManager {
     constructor() {
