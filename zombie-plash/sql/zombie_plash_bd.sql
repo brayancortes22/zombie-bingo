@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-12-2024 a las 18:18:24
+-- Tiempo de generación: 04-12-2024 a las 03:38:19
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -92,6 +92,28 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `sacar_balota` (IN `sala_id` INT)   
     COMMIT;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `verificar_efectos_activos` (IN `p_id_sala` INT, IN `p_id_jugador` INT)   BEGIN
+    SELECT 
+        ea.id,
+        ea.tipo_efecto,
+        ea.jugador_origen,
+        ea.jugador_destino,
+        ea.duracion,
+        UNIX_TIMESTAMP(ea.fecha_aplicacion) as timestamp_aplicacion
+    FROM efectos_aplicados ea
+    WHERE ea.id_sala = p_id_sala 
+        AND ea.jugador_destino = p_id_jugador
+        AND ea.jugador_origen != p_id_jugador
+        AND ea.fecha_aplicacion >= NOW() - INTERVAL (ea.duracion/1000) SECOND
+        AND NOT EXISTS (
+            -- Verificar si el efecto ya fue procesado
+            SELECT 1 
+            FROM efectos_procesados ep 
+            WHERE ep.id_efecto = ea.id 
+            AND ep.id_jugador = p_id_jugador
+        );
+END$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------
@@ -122,7 +144,10 @@ INSERT INTO `amistad` (`id_amistad`, `id_jugador`, `id_amigo`, `fecha_amistad`) 
 (8, 2, 7, '2024-11-22 22:00:01'),
 (9, 2, 10, '2024-11-22 22:00:05'),
 (10, 7, 10, '2024-11-26 19:50:02'),
-(11, 1, 19, '2024-11-30 06:12:45');
+(11, 1, 19, '2024-11-30 06:12:45'),
+(12, 10, 4, '2024-12-03 21:51:58'),
+(13, 10, 1, '2024-12-03 21:51:58'),
+(14, 10, 15, '2024-12-03 21:54:41');
 
 -- --------------------------------------------------------
 
@@ -144,66 +169,186 @@ CREATE TABLE `balotas` (
 --
 
 INSERT INTO `balotas` (`id_balota`, `numero`, `letra`, `estado`, `orden_salida`, `id_sala`) VALUES
-(4861, 1, 'B', 1, 28, 199),
-(4862, 2, 'B', 1, 53, 199),
-(4863, 3, 'B', 1, 48, 199),
-(4864, 4, 'B', 1, 46, 199),
-(4865, 5, 'B', 1, 33, 199),
-(4866, 6, 'B', 1, 37, 199),
-(4867, 7, 'B', 1, 51, 199),
-(4868, 8, 'B', 1, 30, 199),
-(4869, 9, 'B', 1, 36, 199),
-(4870, 10, 'B', 1, 16, 199),
-(4871, 11, 'B', 1, 40, 199),
-(4872, 12, 'B', 1, 42, 199),
-(4873, 13, 'I', 1, 11, 199),
-(4874, 14, 'I', 1, 15, 199),
-(4875, 15, 'I', 1, 10, 199),
-(4876, 16, 'I', 1, 39, 199),
-(4877, 17, 'I', 1, 52, 199),
-(4878, 18, 'I', 1, 17, 199),
-(4879, 19, 'I', 1, 18, 199),
-(4880, 20, 'I', 1, 20, 199),
-(4881, 21, 'I', 1, 44, 199),
-(4882, 22, 'I', 1, 34, 199),
-(4883, 23, 'I', 1, 1, 199),
-(4884, 24, 'N', 1, 14, 199),
-(4885, 25, 'N', 1, 22, 199),
-(4886, 26, 'N', 1, 25, 199),
-(4887, 27, 'N', 1, 8, 199),
-(4888, 28, 'N', 1, 19, 199),
-(4889, 29, 'N', 1, 43, 199),
-(4890, 30, 'N', 1, 35, 199),
-(4891, 31, 'N', 1, 59, 199),
-(4892, 32, 'N', 1, 56, 199),
-(4893, 33, 'N', 1, 12, 199),
-(4894, 34, 'N', 1, 41, 199),
-(4895, 35, 'G', 1, 5, 199),
-(4896, 36, 'G', 1, 55, 199),
-(4897, 37, 'G', 1, 24, 199),
-(4898, 38, 'G', 1, 58, 199),
-(4899, 39, 'G', 1, 13, 199),
-(4900, 40, 'G', 1, 38, 199),
-(4901, 41, 'G', 1, 7, 199),
-(4902, 42, 'G', 1, 31, 199),
-(4903, 43, 'G', 1, 49, 199),
-(4904, 44, 'G', 1, 4, 199),
-(4905, 45, 'G', 1, 9, 199),
-(4906, 46, 'O', 1, 29, 199),
-(4907, 47, 'O', 1, 23, 199),
-(4908, 48, 'O', 1, 6, 199),
-(4909, 49, 'O', 1, 32, 199),
-(4910, 50, 'O', 1, 27, 199),
-(4911, 51, 'O', 1, 57, 199),
-(4912, 52, 'O', 1, 54, 199),
-(4913, 53, 'O', 1, 21, 199),
-(4914, 54, 'O', 1, 2, 199),
-(4915, 55, 'O', 1, 50, 199),
-(4916, 56, 'O', 1, 26, 199),
-(4917, 57, 'O', 1, 45, 199),
-(4918, 58, 'O', 1, 47, 199),
-(4919, 59, 'O', 1, 3, 199),
-(4920, 60, 'O', 1, 60, 199);
+(6781, 1, 'B', 1, 54, 201),
+(6782, 2, 'B', 1, 14, 201),
+(6783, 3, 'B', 1, 37, 201),
+(6784, 4, 'B', 1, 38, 201),
+(6785, 5, 'B', 1, 48, 201),
+(6786, 6, 'B', 1, 43, 201),
+(6787, 7, 'B', 1, 57, 201),
+(6788, 8, 'B', 1, 55, 201),
+(6789, 9, 'B', 1, 45, 201),
+(6790, 10, 'B', 1, 25, 201),
+(6791, 11, 'B', 1, 20, 201),
+(6792, 12, 'B', 1, 56, 201),
+(6793, 13, 'I', 1, 4, 201),
+(6794, 14, 'I', 1, 36, 201),
+(6795, 15, 'I', 1, 21, 201),
+(6796, 16, 'I', 1, 39, 201),
+(6797, 17, 'I', 1, 24, 201),
+(6798, 18, 'I', 1, 15, 201),
+(6799, 19, 'I', 1, 51, 201),
+(6800, 20, 'I', 1, 29, 201),
+(6801, 21, 'I', 1, 59, 201),
+(6802, 22, 'I', 1, 50, 201),
+(6803, 23, 'I', 1, 8, 201),
+(6804, 24, 'N', 1, 28, 201),
+(6805, 25, 'N', 1, 7, 201),
+(6806, 26, 'N', 1, 31, 201),
+(6807, 27, 'N', 1, 5, 201),
+(6808, 28, 'N', 1, 47, 201),
+(6809, 29, 'N', 1, 32, 201),
+(6810, 30, 'N', 1, 41, 201),
+(6811, 31, 'N', 1, 16, 201),
+(6812, 32, 'N', 1, 6, 201),
+(6813, 33, 'N', 1, 53, 201),
+(6814, 34, 'N', 1, 34, 201),
+(6815, 35, 'G', 1, 52, 201),
+(6816, 36, 'G', 1, 3, 201),
+(6817, 37, 'G', 1, 10, 201),
+(6818, 38, 'G', 1, 13, 201),
+(6819, 39, 'G', 1, 23, 201),
+(6820, 40, 'G', 1, 60, 201),
+(6821, 41, 'G', 1, 40, 201),
+(6822, 42, 'G', 1, 49, 201),
+(6823, 43, 'G', 1, 42, 201),
+(6824, 44, 'G', 1, 18, 201),
+(6825, 45, 'G', 1, 11, 201),
+(6826, 46, 'O', 1, 46, 201),
+(6827, 47, 'O', 1, 35, 201),
+(6828, 48, 'O', 1, 30, 201),
+(6829, 49, 'O', 1, 44, 201),
+(6830, 50, 'O', 1, 2, 201),
+(6831, 51, 'O', 1, 58, 201),
+(6832, 52, 'O', 1, 12, 201),
+(6833, 53, 'O', 1, 9, 201),
+(6834, 54, 'O', 1, 33, 201),
+(6835, 55, 'O', 1, 26, 201),
+(6836, 56, 'O', 1, 1, 201),
+(6837, 57, 'O', 1, 27, 201),
+(6838, 58, 'O', 1, 17, 201),
+(6839, 59, 'O', 1, 19, 201),
+(6840, 60, 'O', 1, 22, 201),
+(6901, 1, 'B', 1, 28, 202),
+(6902, 2, 'B', 1, 14, 202),
+(6903, 3, 'B', 1, 33, 202),
+(6904, 4, 'B', 1, 29, 202),
+(6905, 5, 'B', 1, 37, 202),
+(6906, 6, 'B', 1, 46, 202),
+(6907, 7, 'B', 1, 25, 202),
+(6908, 8, 'B', 1, 39, 202),
+(6909, 9, 'B', 1, 27, 202),
+(6910, 10, 'B', 1, 20, 202),
+(6911, 11, 'B', 1, 36, 202),
+(6912, 12, 'B', 1, 53, 202),
+(6913, 13, 'I', 1, 56, 202),
+(6914, 14, 'I', 1, 60, 202),
+(6915, 15, 'I', 1, 34, 202),
+(6916, 16, 'I', 1, 38, 202),
+(6917, 17, 'I', 1, 42, 202),
+(6918, 18, 'I', 1, 54, 202),
+(6919, 19, 'I', 1, 59, 202),
+(6920, 20, 'I', 1, 45, 202),
+(6921, 21, 'I', 1, 3, 202),
+(6922, 22, 'I', 1, 5, 202),
+(6923, 23, 'I', 1, 21, 202),
+(6924, 24, 'N', 1, 52, 202),
+(6925, 25, 'N', 1, 49, 202),
+(6926, 26, 'N', 1, 18, 202),
+(6927, 27, 'N', 1, 58, 202),
+(6928, 28, 'N', 1, 41, 202),
+(6929, 29, 'N', 1, 57, 202),
+(6930, 30, 'N', 1, 7, 202),
+(6931, 31, 'N', 1, 6, 202),
+(6932, 32, 'N', 1, 1, 202),
+(6933, 33, 'N', 1, 48, 202),
+(6934, 34, 'N', 1, 31, 202),
+(6935, 35, 'G', 1, 50, 202),
+(6936, 36, 'G', 1, 51, 202),
+(6937, 37, 'G', 1, 19, 202),
+(6938, 38, 'G', 1, 35, 202),
+(6939, 39, 'G', 1, 43, 202),
+(6940, 40, 'G', 1, 44, 202),
+(6941, 41, 'G', 1, 55, 202),
+(6942, 42, 'G', 1, 17, 202),
+(6943, 43, 'G', 1, 16, 202),
+(6944, 44, 'G', 1, 40, 202),
+(6945, 45, 'G', 1, 22, 202),
+(6946, 46, 'O', 1, 32, 202),
+(6947, 47, 'O', 1, 24, 202),
+(6948, 48, 'O', 1, 10, 202),
+(6949, 49, 'O', 1, 23, 202),
+(6950, 50, 'O', 1, 11, 202),
+(6951, 51, 'O', 1, 15, 202),
+(6952, 52, 'O', 1, 4, 202),
+(6953, 53, 'O', 1, 47, 202),
+(6954, 54, 'O', 1, 13, 202),
+(6955, 55, 'O', 1, 30, 202),
+(6956, 56, 'O', 1, 8, 202),
+(6957, 57, 'O', 1, 2, 202),
+(6958, 58, 'O', 1, 9, 202),
+(6959, 59, 'O', 1, 12, 202),
+(6960, 60, 'O', 1, 26, 202),
+(7021, 1, 'B', 0, NULL, 203),
+(7022, 2, 'B', 1, 14, 203),
+(7023, 3, 'B', 1, 2, 203),
+(7024, 4, 'B', 1, 4, 203),
+(7025, 5, 'B', 0, NULL, 203),
+(7026, 6, 'B', 0, NULL, 203),
+(7027, 7, 'B', 0, NULL, 203),
+(7028, 8, 'B', 0, NULL, 203),
+(7029, 9, 'B', 0, NULL, 203),
+(7030, 10, 'B', 0, NULL, 203),
+(7031, 11, 'B', 0, NULL, 203),
+(7032, 12, 'B', 0, NULL, 203),
+(7033, 13, 'I', 0, NULL, 203),
+(7034, 14, 'I', 0, NULL, 203),
+(7035, 15, 'I', 1, 10, 203),
+(7036, 16, 'I', 1, 16, 203),
+(7037, 17, 'I', 0, NULL, 203),
+(7038, 18, 'I', 1, 18, 203),
+(7039, 19, 'I', 0, NULL, 203),
+(7040, 20, 'I', 0, NULL, 203),
+(7041, 21, 'I', 0, NULL, 203),
+(7042, 22, 'I', 1, 11, 203),
+(7043, 23, 'I', 0, NULL, 203),
+(7044, 24, 'N', 0, NULL, 203),
+(7045, 25, 'N', 0, NULL, 203),
+(7046, 26, 'N', 0, NULL, 203),
+(7047, 27, 'N', 1, 12, 203),
+(7048, 28, 'N', 0, NULL, 203),
+(7049, 29, 'N', 0, NULL, 203),
+(7050, 30, 'N', 0, NULL, 203),
+(7051, 31, 'N', 0, NULL, 203),
+(7052, 32, 'N', 0, NULL, 203),
+(7053, 33, 'N', 1, 1, 203),
+(7054, 34, 'N', 0, NULL, 203),
+(7055, 35, 'G', 0, NULL, 203),
+(7056, 36, 'G', 1, 8, 203),
+(7057, 37, 'G', 0, NULL, 203),
+(7058, 38, 'G', 1, 3, 203),
+(7059, 39, 'G', 0, NULL, 203),
+(7060, 40, 'G', 1, 7, 203),
+(7061, 41, 'G', 1, 9, 203),
+(7062, 42, 'G', 0, NULL, 203),
+(7063, 43, 'G', 0, NULL, 203),
+(7064, 44, 'G', 0, NULL, 203),
+(7065, 45, 'G', 1, 13, 203),
+(7066, 46, 'O', 0, NULL, 203),
+(7067, 47, 'O', 0, NULL, 203),
+(7068, 48, 'O', 0, NULL, 203),
+(7069, 49, 'O', 1, 22, 203),
+(7070, 50, 'O', 1, 17, 203),
+(7071, 51, 'O', 1, 19, 203),
+(7072, 52, 'O', 1, 21, 203),
+(7073, 53, 'O', 0, NULL, 203),
+(7074, 54, 'O', 1, 6, 203),
+(7075, 55, 'O', 1, 5, 203),
+(7076, 56, 'O', 1, 20, 203),
+(7077, 57, 'O', 1, 15, 203),
+(7078, 58, 'O', 0, NULL, 203),
+(7079, 59, 'O', 0, NULL, 203),
+(7080, 60, 'O', 0, NULL, 203);
 
 --
 -- Disparadores `balotas`
@@ -234,7 +379,8 @@ CREATE TABLE `efectos_aplicados` (
   `tipo_efecto` varchar(50) NOT NULL,
   `jugador_origen` int(11) NOT NULL,
   `jugador_destino` int(11) NOT NULL,
-  `fecha_aplicacion` datetime NOT NULL
+  `fecha_aplicacion` datetime NOT NULL DEFAULT current_timestamp(),
+  `duracion` int(11) NOT NULL DEFAULT 10000
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -263,7 +409,8 @@ INSERT INTO `jugador` (`id_jugador`, `nombre`, `id_credenciales`, `id_registro`)
 (6, 'bscl-5', NULL, 10),
 (7, 'bsl-31', NULL, 12),
 (9, 'pepen', NULL, 20),
-(10, 'jhon', NULL, 2);
+(10, 'jhon', NULL, 2),
+(11, 'brayan_cortes', NULL, 24);
 
 -- --------------------------------------------------------
 
@@ -284,24 +431,13 @@ CREATE TABLE `jugadores_en_sala` (
 --
 
 INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`, `rol`) VALUES
-(300, 188, 1, 'bscl', 'creador'),
-(301, 188, 6, 'bscl-5', 'participante'),
-(302, 189, 1, 'bscl', 'creador'),
-(303, 189, 6, 'bscl-5', 'participante'),
-(304, 190, 1, 'bscl', 'creador'),
-(305, 190, 6, 'bscl-5', 'participante'),
-(311, 194, 1, 'bscl', 'creador'),
-(312, 194, 6, 'bscl-5', 'participante'),
-(313, 195, 1, 'bscl', 'creador'),
-(314, 195, 6, 'bscl-5', 'participante'),
-(315, 196, 1, 'bscl', 'creador'),
-(316, 196, 6, 'bscl-5', 'participante'),
-(317, 197, 1, 'bscl', 'creador'),
-(318, 197, 6, 'bscl-5', 'participante'),
-(319, 198, 6, 'bscl-5', 'creador'),
-(320, 198, 1, 'bscl', 'participante'),
-(321, 199, 1, 'bscl', 'creador'),
-(322, 199, 6, 'bscl-5', 'participante');
+(325, 201, 1, 'bscl', 'creador'),
+(326, 201, 6, 'bscl-5', 'participante'),
+(327, 202, 1, 'bscl', 'creador'),
+(328, 202, 6, 'bscl-5', 'participante'),
+(329, 203, 1, 'bscl', 'creador'),
+(330, 203, 6, 'bscl-5', 'participante'),
+(332, 205, 11, 'brayan_cortes', 'creador');
 
 -- --------------------------------------------------------
 
@@ -352,7 +488,7 @@ CREATE TABLE `registro_usuarios` (
 --
 
 INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo`, `estado`, `avatar`, `ultima_conexion`) VALUES
-(1, 'bscl', '$2y$10$vGmfIplF7fkVC8HAHDSwp.19i1qeOw6SlDJS0lqQ8ULb55VyoZiwy', 'bscl20062007@gmail.com', NULL, '8AADdGIAGBTuzcdYs+8qgWGZRwM4wsHPdR7L4nhyABLFIAAGikXyfhZZuiZo1cLpyisOQ9gAliYzzVV64AEjLWLAAAA', NULL),
+(1, 'bscl', '$2y$10$d4Mukc4CVyvuAzSnC6RMmO3fBTRyG.CO7D0WmtlNxJ3C1GYk7FMNu', 'bscl20062007@gmail.com', NULL, '674f73d101bd3_1733260241.png', NULL),
 (2, 'jhon-1', '$2y$10$Yi5b4dFqPazLcPMhFja0fuoz10TS2QxCN1n4nFBeLswFxYYOE7Pga', 'jhon@d.com', NULL, 'avatar1.jpg', NULL),
 (3, 'jhondd', '$2y$10$8gAjzhQMgOjmM0S.c5384Og5wDjmx2.wYH3RPTa0RgfYN5QysIyfG', 'wwww@gmail.co', NULL, 'perfil1.jpeg', NULL),
 (4, 'bs', '$2y$10$6ZeQlaB2GjNHcoOcumTxTeQSjCgevvpkbzKfnlPG4vEw/gVoXRB/y', 'bsc@gmail.com', NULL, 'perfil1.jpeg', NULL),
@@ -360,7 +496,7 @@ INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo
 (7, 'bscl-2', '$2y$10$CIr/WjQSTAR02H1Wqs6r/uQLlWrLqY//7fr8FJo/oC49ea7HjTdoO', 'bscl-2@gmail.com', NULL, 'avatar3.jpg', NULL),
 (8, 'bsl-3', '$2y$10$Zr6XuSqwJZwWJf3C4gZ.1.yrFU46aWtAkk8sebGEKJi8k92YQaywa', 'bscl-3@gmail.com', NULL, 'perfil1.jpeg', NULL),
 (9, 'bscl-4', '$2y$10$RncrORRaf/wF8GavdHIMNO2S5BQghk2XmN6/b9j9vDMxBnY/KVG7.', 'bscl-4@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(10, 'bscl-5', '$2y$10$Pm.KgzjXIutMFVt.0h8d2OgYaez6TYFPiKE7km9CWwv4ZN89Fr1rO', 'bscl-5@gmail.com', NULL, '6740fd5ceb657__a0f72250-92c3-4c5f-a3a7-f199d68a8b41.jpeg', NULL),
+(10, 'bscl-5', '$2y$10$Pm.KgzjXIutMFVt.0h8d2OgYaez6TYFPiKE7km9CWwv4ZN89Fr1rO', 'bscl-5@gmail.com', NULL, '674f7cfe0d069_kaka.png', NULL),
 (11, 'catalina', '$2y$10$h6SZm1h9E3jO3wbbelCWr.SmtEUzbAX0chtjY3WFsG7gTXcGfvN2i', 'catalina2005cometta@gmail.com', NULL, 'perfil1.jpeg', NULL),
 (12, 'bsl-31', '$2y$10$0y5Xft.a5SI8taVmJftfLOkE5MpqL.2PjoNlf1ddiYfZ1.nW4wbCW', 'wwwffw@gmail.co', NULL, 'perfil1.jpeg', NULL),
 (14, 'hola283', '$2y$10$7y5yCSDFY48XwYr19/AFleoFccoPdacLEOQtGR2ckacM6Q7.ITMka', 'hola@gamail.com', NULL, 'perfil1.jpeg', NULL),
@@ -372,7 +508,8 @@ INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo
 (20, 'pepen', '$2y$10$l2glVT3gwpw0CYCGDGliLuqiAgyfnCzL2cTIvdS2tMB/fA8omEsgm', 'bscl20062m007@gmail.com', NULL, 'perfil1.jpeg', NULL),
 (21, 'hola2332', '$2y$10$GRyUZvIAADLTeHisTL1q4.L6S9mGnuypWsp2rEY4XhEh02Nuk.1MW', 'holas3de@gmail.com', NULL, 'perfil1.jpeg', NULL),
 (22, 'BRAYAN', '$2y$10$WSMAghJZF2cnqxCVAHq/8.To.fBws3yD.8AyFEuHJCSN4/prKtUqO', 'BRAYAN@GMAIL.COM', NULL, 'perfil1.jpeg', NULL),
-(23, 'holaaas', '$2y$10$1HgMC1TYJWNN4tFm5vbm.eY8bAmJWwSIgwstZNkn33sxH.TQLVCVe', 'bscl2006200ww7@gmail.com', NULL, 'perfil1.jpeg', NULL);
+(23, 'holaaas', '$2y$10$1HgMC1TYJWNN4tFm5vbm.eY8bAmJWwSIgwstZNkn33sxH.TQLVCVe', 'bscl2006200ww7@gmail.com', NULL, 'perfil1.jpeg', NULL),
+(24, 'brayan_cortes', '$2y$10$gv2pvMCicPPA9O6tC9Jz8.Q0qga9WZWJhQhXen9oK5WCYkb6Bja56', 'brayanstidcorteslombana@gmail.com', NULL, '674fbda95de36_Imagen de WhatsApp 2024-12-03 a las 21.25.16_87333a8c.jpg', NULL);
 
 -- --------------------------------------------------------
 
@@ -398,15 +535,10 @@ CREATE TABLE `salas` (
 --
 
 INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`, `estado`, `jugando`, `efectos`, `numeros_sacados`, `ultimo_numero_sacado`) VALUES
-(188, 1, '$2y$10$aj4mWYapApIasnNDldytHe69fTmswCnMOVOVqeH4JxkGKXcbde4l.', 2, 1, 'en_juego', 0, NULL, '[\"48\", \"2\", \"6\", \"7\", \"34\", \"36\", \"21\", \"45\", \"12\", \"23\", \"11\", \"13\", \"5\", \"59\", \"27\", \"50\", \"18\", \"49\", \"52\", \"16\", \"37\", \"47\", \"1\", \"43\", \"39\", \"17\", \"54\", \"46\", \"53\", \"44\", \"15\", \"30\", \"56\", \"38\", \"3\", \"20\", \"32\", \"58\", \"35\", \"14\", \"41\", \"31\", \"26\", \"25\", \"4\", \"60\", \"19\", \"33\", \"9\", \"8\", \"57\", \"40\", \"42\", \"55\", \"28\", \"24\", \"51\", \"10\", \"29\", \"22\", \"29\", \"4\", \"34\", \"6\", \"23\", \"26\", \"60\", \"11\", \"13\", \"8\", \"35\", \"28\", \"3\", \"22\", \"2\", \"47\"]', '2024-12-03 00:32:41'),
-(189, 1, '$2y$10$5QyDgReQjLCTkXudzlKo5uUKXU21bksSoFI6t06qvKMnBO75klTWm', 2, 2, 'en_juego', 0, NULL, '[\"36\", \"27\", \"22\", \"33\", \"10\", \"30\", \"4\", \"45\", \"18\", \"14\", \"21\", \"50\", \"28\", \"2\", \"56\", \"53\", \"55\", \"25\", \"47\", \"42\", \"5\", \"37\", \"9\", \"38\", \"1\", \"12\", \"24\", \"19\", \"3\", \"8\", \"29\", \"23\", \"40\", \"39\", \"57\", \"41\", \"49\", \"52\", \"17\", \"34\", \"7\", \"35\", \"58\", \"51\", \"32\", \"13\", \"48\", \"46\", \"31\", \"16\", \"15\", \"60\", \"59\", \"11\", \"44\", \"54\", \"43\", \"26\", \"20\", \"6\"]', '2024-12-03 00:45:03'),
-(190, 1, '$2y$10$riUOBtetgwxryJpdIxua8OEcf0PTRhk4Ek1U0JbXYAJWAwcy/fZ8W', 2, 2, 'en_juego', 0, NULL, '[\"39\", \"36\", \"41\", \"30\", \"1\", \"49\", \"50\", \"24\", \"25\", \"46\", \"23\", \"22\", \"14\", \"27\", \"11\", \"3\", \"43\", \"20\", \"59\", \"47\", \"4\", \"10\", \"51\", \"12\", \"53\", \"31\", \"21\", \"16\", \"15\", \"9\", \"54\", \"7\", \"33\", \"5\", \"60\", \"18\", \"19\", \"40\", \"44\", \"55\", \"26\", \"8\", \"29\", \"42\", \"58\", \"48\", \"52\", \"13\", \"38\", \"34\", \"17\", \"37\", \"56\", \"6\", \"2\", \"45\", \"57\", \"35\", \"28\", \"32\"]', '2024-12-03 00:55:16'),
-(194, 1, '$2y$10$VEAIdnOlg25.3m/SWRtgDOS2m85VQxSzFbHryzeYKG6qZ//5/BA8G', 2, 1, 'en_juego', 0, NULL, '[\"29\", \"34\", \"4\", \"7\", \"52\", \"5\", \"47\", \"13\", \"56\", \"41\", \"15\", \"58\", \"35\", \"18\", \"53\", \"23\", \"36\", \"45\", \"22\", \"54\", \"6\", \"17\", \"51\", \"10\", \"42\", \"49\", \"28\", \"40\", \"27\", \"57\", \"32\", \"24\", \"2\", \"8\", \"55\", \"12\", \"60\", \"59\", \"20\", \"21\", \"48\", \"38\", \"26\", \"50\", \"44\", \"1\", \"9\", \"37\", \"46\", \"31\", \"25\", \"19\", \"3\", \"11\", \"43\", \"33\", \"39\", \"30\", \"16\", \"14\", \"55\", \"28\", \"15\", \"27\", \"22\", \"33\", \"42\", \"11\", \"55\", \"43\", \"39\", \"54\", \"6\", \"7\", \"8\", \"5\", \"16\", \"44\", \"59\", \"45\", \"35\", \"47\", \"49\", \"30\", \"2\", \"52\", \"38\", \"9\", \"60\", \"40\", \"37\", \"21\", \"24\", \"10\", \"51\", \"53\", \"56\", \"46\", \"3\", \"57\", \"18\", \"19\", \"32\", \"4\", \"50\", \"23\", \"31\", \"17\", \"34\", \"1\", \"41\", \"29\", \"12\", \"36\", \"20\", \"58\", \"48\", \"25\", \"13\", \"14\", \"26\", \"38\", \"50\", \"14\", \"1\", \"51\", \"55\", \"16\", \"30\", \"42\", \"31\", \"41\", \"19\", \"40\", \"10\", \"20\", \"8\", \"4\", \"9\", \"11\"]', '2024-12-03 02:08:09'),
-(195, 1, '$2y$10$Fay6TjMu1GT9iAsDsxi6EO8Aev8ydCUGgdizKW/zE4RLParcEetnq', 2, 2, 'en_juego', 0, NULL, '[\"35\", \"39\", \"22\", \"46\", \"36\", \"20\", \"37\", \"47\", \"59\", \"18\", \"21\", \"24\", \"51\", \"58\", \"4\", \"44\", \"11\", \"10\", \"53\", \"28\", \"9\", \"33\", \"57\", \"19\", \"7\", \"29\", \"17\", \"2\", \"31\", \"48\", \"32\", \"54\", \"6\", \"25\", \"15\", \"26\", \"55\", \"41\", \"60\", \"52\", \"1\", \"49\", \"12\", \"42\", \"23\", \"45\", \"50\", \"30\", \"8\", \"5\", \"38\", \"16\", \"27\", \"3\", \"40\", \"43\", \"34\", \"14\", \"13\", \"56\"]', '2024-12-03 02:28:23'),
-(196, 1, '$2y$10$e7xJAzt360KkrOybfkacoeEKfxij5owkRer0OUFs4kHqH7ccRHwkO', 2, 1, 'en_juego', 0, NULL, '[\"39\", \"57\", \"58\", \"20\", \"51\", \"46\", \"59\", \"16\", \"19\", \"9\", \"4\", \"41\", \"40\", \"18\", \"23\", \"15\", \"8\", \"36\", \"60\", \"31\", \"47\", \"17\", \"42\", \"45\", \"21\", \"44\", \"25\", \"34\", \"33\", \"38\", \"43\", \"3\", \"32\", \"11\", \"29\", \"24\", \"37\", \"56\", \"22\", \"50\", \"54\", \"14\", \"55\", \"10\", \"5\", \"49\", \"2\", \"30\", \"35\", \"39\", \"28\", \"26\", \"6\", \"13\", \"7\", \"52\", \"27\", \"53\", \"48\", \"1\", \"12\", \"59\", \"35\", \"59\", \"30\", \"16\", \"51\", \"49\", \"54\", \"41\", \"47\", \"38\", \"24\", \"37\", \"14\", \"3\", \"45\", \"22\", \"55\", \"5\", \"40\", \"9\", \"12\", \"28\", \"7\", \"33\", \"18\", \"29\", \"4\", \"32\", \"36\", \"34\", \"19\", \"1\", \"46\", \"52\", \"58\", \"20\", \"21\", \"44\", \"23\", \"10\", \"57\", \"13\", \"53\", \"27\", \"11\", \"48\", \"15\", \"26\", \"42\", \"39\", \"60\", \"6\", \"43\", \"56\", \"31\", \"50\", \"8\", \"25\", \"17\", \"2\", \"52\", \"58\", \"2\", \"47\", \"34\", \"10\", \"43\", \"31\", \"51\", \"42\", \"56\", \"14\", \"54\", \"28\", \"45\", \"53\", \"50\", \"27\", \"11\", \"35\", \"44\", \"24\", \"33\", \"22\", \"37\", \"39\", \"41\", \"29\", \"1\", \"15\", \"26\", \"5\", \"36\", \"38\", \"4\", \"55\", \"17\", \"12\", \"3\", \"60\", \"52\", \"30\", \"32\", \"46\", \"18\", \"16\", \"25\", \"59\", \"9\", \"13\", \"20\", \"48\", \"7\", \"21\", \"8\", \"40\", \"23\", \"19\", \"57\", \"6\", \"49\"]', '2024-12-03 02:51:07'),
-(197, 1, '$2y$10$54LQcllFvWljGbwO0K4fPOD2L/tG9H9xwghNtE27EDFbtib3lRtOm', 2, 1, 'en_juego', 0, NULL, '[]', '2024-12-03 03:09:58'),
-(198, 6, '$2y$10$NdlJnbdrnZ6sWMW2yc2UrO5k9Q5YY0ZHQQx9fG/MN61TaXmUAUS6G', 2, 1, 'en_juego', 0, NULL, '[]', '2024-12-03 03:31:59'),
-(199, 1, '$2y$10$S/Aw0ttCyBuPN0byOilJF.uRpA.sEwGhwXdLcEtO0gPf3eA6Njzra', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-03 17:03:20');
+(201, 1, '$2y$10$RdYfR2h1bb2hUZ5cqwXNTu4.//MlHMuvi1x2VEr4CDwtYStkihmTi', 2, 1, 'en_juego', 0, NULL, '[]', '2024-12-03 20:09:25'),
+(202, 1, '$2y$10$ndWrCo8KLPDWQ7Da8BsUtuJwnXnFwZe6Fm2xYddNbDOt7LgJNjENe', 2, 1, 'en_juego', 0, NULL, '[]', '2024-12-03 20:23:33'),
+(203, 1, '$2y$10$2YW1YUMoyP//dl9DQ6b.PeOPGNFEguGNkDvlRlPtoHh69sAm04Tfq', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-03 20:38:49'),
+(205, 11, '$2y$10$v4QRK9qTsRHKsi6cc3DIrew6Qj0TH3797cNkriIbP3d.TrluJamFG', 2, 1, 'esperando', 0, NULL, '[]', '2024-12-04 02:35:33');
 
 --
 -- Índices para tablas volcadas
@@ -433,7 +565,9 @@ ALTER TABLE `balotas`
 --
 ALTER TABLE `efectos_aplicados`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_sala` (`id_sala`);
+  ADD KEY `id_sala` (`id_sala`),
+  ADD KEY `jugador_origen` (`jugador_origen`),
+  ADD KEY `jugador_destino` (`jugador_destino`);
 
 --
 -- Indices de la tabla `jugador`
@@ -487,31 +621,31 @@ ALTER TABLE `salas`
 -- AUTO_INCREMENT de la tabla `amistad`
 --
 ALTER TABLE `amistad`
-  MODIFY `id_amistad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_amistad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT de la tabla `balotas`
 --
 ALTER TABLE `balotas`
-  MODIFY `id_balota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4921;
+  MODIFY `id_balota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7081;
 
 --
 -- AUTO_INCREMENT de la tabla `efectos_aplicados`
 --
 ALTER TABLE `efectos_aplicados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=323;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
 
 --
 -- AUTO_INCREMENT de la tabla `partida`
@@ -523,13 +657,13 @@ ALTER TABLE `partida`
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
 --
 ALTER TABLE `registro_usuarios`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=200;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
 
 --
 -- Restricciones para tablas volcadas
@@ -552,7 +686,9 @@ ALTER TABLE `balotas`
 -- Filtros para la tabla `efectos_aplicados`
 --
 ALTER TABLE `efectos_aplicados`
-  ADD CONSTRAINT `efectos_aplicados_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`);
+  ADD CONSTRAINT `efectos_aplicados_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE,
+  ADD CONSTRAINT `efectos_aplicados_ibfk_2` FOREIGN KEY (`jugador_origen`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE,
+  ADD CONSTRAINT `efectos_aplicados_ibfk_3` FOREIGN KEY (`jugador_destino`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `jugador`

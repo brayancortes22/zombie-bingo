@@ -76,23 +76,28 @@ h1{
 }
 .largo{
     width: 100%;
-    height: 20%;
+    height: auto;
+    padding: 10px 0;
     border-bottom: solid 3px rgb(255, 255, 255);
     display: flex;
-    margin-bottom: 5%;
-    margin-right: 80%;
+    align-items: center;
+    margin-bottom: 20px;
 }
 .zo{
-    width: 30%;
-    height: 100%;
-    margin-left: 100px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: rgb(175, 128, 220);
+    padding-left: 15px;
 }
 .nombre{
-    width: 30%;
-    height: 100%;
-    text-align: center;
-    color:blueviolet;
+    min-width: 120px;
+    padding-right: 15px;
+    color: blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 }
 .row{
     width: 80%;
@@ -418,4 +423,32 @@ h1{
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(-20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+.editar {
+    display: flex;
+    align-items: center;
+}
+
+.bi-pencil-square {
+    font-size: 20px;
+    color: blueviolet;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bi-pencil-square:hover {
+    color: rgb(175, 128, 220);
+    transform: scale(1.1);
+}
+
+#nombreCompleto {
+    margin: 0;
+    font-size: 1.2em;
+    color: rgb(175, 128, 220);
+}
+
+.nombre h2, .zo h2 {
+    margin: 0;
+    font-size: 1.2em;
 }

@@ -91,17 +91,15 @@ if (isset($_SESSION['user_id'])) {
         <!-- animacion de fantasma -->
         <!-- <div id="z_2" class="fantasma2"></div> -->
     </div>
+    <script src="../sound/audio.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    audioManager.play('game');
+});
+</script>
     <script src="../json/anima.js"></script>
     <script src="../js/validar_inicio_sesion.js"></script>
-    <script>
-        // // Función que se ejecuta cuando el formulario es enviado
-        // function redirectAfterLogin(event) {
-        //     event.preventDefault(); // Evita que el formulario se envíe de forma normal
     
-        //     // Redirige a la página de cargando con el redirect a la página de inicio
-        //     window.location.href = './cargando.html?redirect=./inicio.php';
-        // }
-    </script>
 </body>
 </html>
 <script>
