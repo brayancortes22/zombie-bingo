@@ -9,40 +9,58 @@ class AudioManager {
             game: '/zombie-bingo/zombie-plash/sound/sonido_juego.mp3'
         };
 
-        this.isMuted = false;
-        this.currentTrack = null;
-        this.audio.volume = 0.5;
-        
-        this.audioContext = null;
-        try {
-            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        } catch (e) {
-            console.log('Web Audio API no soportada');
-        }
+        this.isMuted = localStorage.getItem('audioMuted') === 'true';
+        this.previousVolume = parseFloat(localStorage.getItem('audioVolume')) || 0.5;
+        this.audio.volume = this.isMuted ? 0 : this.previousVolume;
+        this.isToggling = false;
+
+        this.playBackgroundMusic();
     }
 
-    async play(trackName) {
-        if (!this.tracks[trackName]) return;
-
+    async playBackgroundMusic() {
         try {
-            if (this.audioContext) {
-                await this.audioContext.resume();
-            }
-            
-            this.audio.src = this.tracks[trackName];
+            this.audio.src = this.tracks.menu;
             await this.audio.play();
-            console.log('Audio reproduciendo exitosamente');
-            
+            if (this.isMuted) {
+                this.audio.volume = 0;
+            }
         } catch (error) {
-            console.error('Error al reproducir audio:', error);
+            console.log('Error al reproducir música:', error);
         }
     }
 
-    toggleMute() {
-        this.isMuted = !this.isMuted;
-        this.audio.volume = this.isMuted ? 0 : 0.5;
-        return this.isMuted;
+    async mute() {
+        if (this.isToggling) return;
+        this.isToggling = true;
+        
+        this.previousVolume = this.audio.volume;
+        this.audio.volume = 0;
+        this.isMuted = true;
+        
+        localStorage.setItem('audioMuted', 'true');
+        localStorage.setItem('audioVolume', this.previousVolume.toString());
+        
+        setTimeout(() => {
+            this.isToggling = false;
+        }, 200);
+    }
+
+    async unmute() {
+        if (this.isToggling) return;
+        this.isToggling = true;
+        
+        this.audio.volume = this.previousVolume;
+        this.isMuted = false;
+        
+        localStorage.setItem('audioMuted', 'false');
+        localStorage.setItem('audioVolume', this.previousVolume.toString());
+        
+        setTimeout(() => {
+            this.isToggling = false;
+        }, 200);
     }
 }
 
-const audioManager = new AudioManager(); 
+if (typeof window.audioManager === 'undefined') {
+    window.audioManager = new AudioManager();
+} 
