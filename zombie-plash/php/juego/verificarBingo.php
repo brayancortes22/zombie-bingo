@@ -1,111 +1,147 @@
 <?php
-session_start();
-require_once '../../setting/conexion-base-datos.php';
+// Habilitar temporalmente la visualización de errores para depuración
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
-// Asegurarse de que no haya salida antes del JSON
-error_reporting(0);
-ini_set('display_errors', 0);
-header('Content-Type: application/json');
+// Definir constantes para las rutas
+define('LOG_DIR', __DIR__ . '/../logs');
+define('CONEXION_FILE', __DIR__ . '/../../setting/conexion-base-datos.php');
+
+// Asegurarse de que el directorio de logs existe
+if (!file_exists(LOG_DIR)) {
+    mkdir(LOG_DIR, 0777, true);
+}
+
+// Configurar logging detallado
+ini_set('log_errors', 1);
+ini_set('error_log', LOG_DIR . '/php-errors.log');
+
+// Función para logging personalizado
+function logError($message, $context = []) {
+    global $logDir;
+    $logMessage = date('Y-m-d H:i:s') . " - " . $message . " - Context: " . json_encode($context) . "\n";
+    error_log($logMessage, 3, LOG_DIR . '/php-errors.log');
+}
+
+// Función para enviar respuesta JSON
+function sendJsonResponse($data, $statusCode = 200) {
+    http_response_code($statusCode);
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    exit;
+}
 
 try {
-    $data = json_decode(file_get_contents('php://input'), true);
+    logError("Iniciando verificación de bingo");
     
-    if (!isset($data['id_sala']) || !isset($data['id_jugador']) || !isset($data['numeros_marcados'])) {
-        throw new Exception('Datos incompletos');
+    // Verificar que el archivo de conexión existe
+    if (!file_exists(CONEXION_FILE)) {
+        throw new Exception("Archivo de conexión no encontrado en: " . CONEXION_FILE);
+    }
+    
+    require_once CONEXION_FILE;
+    
+    // Obtener y validar el input JSON
+    $jsonInput = file_get_contents('php://input');
+    logError("JSON recibido", ['input' => $jsonInput]);
+    
+    if (empty($jsonInput)) {
+        throw new Exception('No se recibieron datos JSON');
+    }
+    
+    $datos = json_decode($jsonInput, true);
+    
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception('Error al decodificar JSON de entrada: ' . json_last_error_msg());
     }
 
-    $idSala = $data['id_sala'];
-    $idJugador = $data['id_jugador'];
-    $numerosMarcados = $data['numeros_marcados'];
+    // Validar datos requeridos
+    if (!isset($datos['id_sala']) || !isset($datos['id_jugador']) || !isset($datos['numeros_marcados'])) {
+        throw new Exception('Faltan datos requeridos');
+    }
 
-    $conexion = new Conexion();
-    $pdo = $conexion->conectar();
+    $idSala = $datos['id_sala'];
+    $idJugador = $datos['id_jugador'];
+    $numerosMarcados = $datos['numeros_marcados'];
 
-    // Iniciar transacción
-    $pdo->beginTransaction();
+    // Validar que los datos no estén vacíos
+    if (empty($idSala) || empty($idJugador) || empty($numerosMarcados)) {
+        throw new Exception('Los datos no pueden estar vacíos');
+    }
 
-    // 1. Verificar que todos los números marcados hayan salido
-    $stmt = $pdo->prepare("
-        SELECT COUNT(*) as total 
-        FROM balotas 
-        WHERE id_sala = ? 
-        AND estado = 1 
-        AND numero = ? 
-        AND letra = ?
-    ");
+    logError("Datos procesados", [
+        'idSala' => $idSala,
+        'idJugador' => $idJugador,
+        'numerosMarcados' => $numerosMarcados
+    ]);
 
-    $todosValidos = true;
+    // Crear conexión
+    $conexionObj = new Conexion();
+    $conexion = $conexionObj->conectar();
+
+    // Verificar números sacados
+    $sql = "SELECT numero FROM balotas WHERE id_sala = ? AND estado = 1";
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([$idSala]);
+    $numerosSacados = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+    if (empty($numerosSacados)) {
+        throw new Exception('No hay números sacados en esta sala');
+    }
+
+    logError("Números sacados obtenidos", ['numerosSacados' => $numerosSacados]);
+
+    // Verificar números marcados
     foreach ($numerosMarcados as $numero) {
-        $stmt->execute([$idSala, $numero['numero'], $numero['letra']]);
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($result['total'] == 0) {
-            $todosValidos = false;
-            break;
+        if (!in_array($numero, $numerosSacados)) {
+            throw new Exception("El número $numero no ha sido sacado todavía");
         }
     }
 
-    if (!$todosValidos) {
-        throw new Exception('Algunos números marcados no han salido');
-    }
+    // Actualizar estado de la sala
+    $sql = "UPDATE salas SET estado = 'finalizado' WHERE id_sala = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([$idSala]);
 
-    // 2. Registrar la victoria
-    $stmt = $pdo->prepare("
-        INSERT INTO partida (id_sala, id_ganador, fecha_partida) 
-        VALUES (?, ?, CURRENT_TIMESTAMP)
-    ");
-    $stmt->execute([$idSala, $idJugador]);
-
-    // 3. Obtener el ranking final
-    $stmt = $pdo->prepare("
-        SELECT 
-            j.nombre_jugador as ganador,
-            COUNT(ns.id) as numeros_acertados,
-            ROW_NUMBER() OVER (ORDER BY COUNT(ns.id) DESC) as posicion
-        FROM jugadores_en_sala j
-        LEFT JOIN numeros_seleccionados ns ON j.id_jugador = ns.id_jugador AND j.id_sala = ns.id_sala
-        WHERE j.id_sala = ?
-        GROUP BY j.id_jugador, j.nombre_jugador
-        ORDER BY numeros_acertados DESC
-    ");
+    // Obtener ranking
+    $sql = "SELECT 
+                j.nombre_jugador,
+                COUNT(b.id_balota) as aciertos
+            FROM jugadores_en_sala j
+            LEFT JOIN balotas b ON b.id_sala = j.id_sala AND b.estado = 1
+            WHERE j.id_sala = ?
+            GROUP BY j.id_jugador, j.nombre_jugador
+            ORDER BY aciertos DESC";
+    $stmt = $conexion->prepare($sql);
     $stmt->execute([$idSala]);
     $ranking = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // 4. Actualizar estado de la sala
-    $stmt = $pdo->prepare("
-        UPDATE salas 
-        SET estado = 'finalizado', 
-            jugando = -1
-        WHERE id_sala = ?
-    ");
-    $stmt->execute([$idSala]);
+    logError("Ranking obtenido", ['ranking' => $ranking]);
 
-    // Confirmar transacción
-    $pdo->commit();
-
-    // Obtener nombre del ganador
-    $stmt = $pdo->prepare("
-        SELECT nombre_jugador 
-        FROM jugadores_en_sala 
-        WHERE id_sala = ? AND id_jugador = ?
-    ");
-    $stmt->execute([$idSala, $idJugador]);
-    $ganador = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    echo json_encode([
+    // Enviar respuesta exitosa
+    sendJsonResponse([
         'success' => true,
-        'ganador' => $ganador['nombre_jugador'],
+        'mensaje' => '¡Bingo válido!',
         'ranking' => $ranking
     ]);
 
+} catch (PDOException $e) {
+    logError("Error de base de datos", [
+        'error' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
+    sendJsonResponse([
+        'success' => false,
+        'error' => 'Error de base de datos. Por favor, contacte al administrador.'
+    ], 500);
 } catch (Exception $e) {
-    if (isset($pdo) && $pdo->inTransaction()) {
-        $pdo->rollBack();
-    }
-    
-    http_response_code(400);
-    echo json_encode([
+    logError("Error general", [
+        'error' => $e->getMessage(),
+        'trace' => $e->getTraceAsString()
+    ]);
+    sendJsonResponse([
         'success' => false,
         'error' => $e->getMessage()
-    ]);
+    ], 400);
 }
 ?> 

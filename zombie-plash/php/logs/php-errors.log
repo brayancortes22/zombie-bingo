@@ -1,0 +1,15 @@
+[05-Dec-2024 08:57:44 Europe/Berlin] 2024-12-05 08:57:44 - Iniciando verificación de bingo - Context: []
+[05-Dec-2024 08:57:44 Europe/Berlin] 2024-12-05 08:57:44 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\",\"id_jugador\":13,\"numeros_marcados\":[28]}"}
+[05-Dec-2024 08:57:44 Europe/Berlin] 2024-12-05 08:57:44 - Datos procesados - Context: {"idSala":"244","idJugador":13,"numerosMarcados":[28]}
+[05-Dec-2024 08:57:44 Europe/Berlin] 2024-12-05 08:57:44 - Números sacados obtenidos - Context: {"numerosSacados":[28]}
+[05-Dec-2024 08:57:44 Europe/Berlin] 2024-12-05 08:57:44 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":1},{"nombre_jugador":"bscl","aciertos":1}]}
+[05-Dec-2024 08:57:44 Europe/Berlin] 2024-12-05 08:57:44 - Respuesta enviada exitosamente - Context: {"response":{"success":true,"mensaje":"\u00a1Bingo v\u00e1lido!","ranking":[{"nombre_jugador":"brayan_22","aciertos":1},{"nombre_jugador":"bscl","aciertos":1}]}}
+[05-Dec-2024 09:02:36 Europe/Berlin] PHP Warning:  Undefined variable $logDir in C:\xampp\htdocs\zombie-bingo\zombie-plash\php\juego\verificarBingo.php on line 19
+[05-Dec-2024 09:02:36 Europe/Berlin] PHP Warning:  error_log(/php-errors.log): Failed to open stream: Permission denied in C:\xampp\htdocs\zombie-bingo\zombie-plash\php\juego\verificarBingo.php on line 19
+[05-Dec-2024 09:02:36 Europe/Berlin] PHP Warning:  Undefined variable $logDir in C:\xampp\htdocs\zombie-bingo\zombie-plash\php\juego\verificarBingo.php on line 19
+[05-Dec-2024 09:02:36 Europe/Berlin] PHP Warning:  error_log(/php-errors.log): Failed to open stream: Permission denied in C:\xampp\htdocs\zombie-bingo\zombie-plash\php\juego\verificarBingo.php on line 19
+2024-12-05 09:06:13 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:06:13 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\",\"id_jugador\":13,\"numeros_marcados\":[54]}"}
+2024-12-05 09:06:13 - Datos procesados - Context: {"idSala":"244","idJugador":13,"numerosMarcados":[54]}
+2024-12-05 09:06:13 - Números sacados obtenidos - Context: {"numerosSacados":[2,12,40,42,54,74]}
+2024-12-05 09:06:13 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":6},{"nombre_jugador":"bscl","aciertos":6}]}

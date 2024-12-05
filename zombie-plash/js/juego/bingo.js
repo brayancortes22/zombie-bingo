@@ -156,9 +156,6 @@ class BingoGame {
             balotaElement.className = 'balota';
             if (index === balotas.length - 1) {
                 balotaElement.classList.add('nueva-balota');
-                // Reproducir sonido para la nueva balota
-                const audio = new Audio('../assets/sounds/nueva_balota.mp3');
-                audio.play();
             }
             
             balotaElement.innerHTML = `
@@ -166,7 +163,6 @@ class BingoGame {
                 <span class="numero">${balota.numero}</span>
             `;
             
-            // Agregar animación de entrada
             balotaElement.style.animation = 'balotaEntrada 0.5s ease-out';
             
             panelNumeros.appendChild(balotaElement);
@@ -325,34 +321,98 @@ class BingoGame {
         panelIzquierdo.appendChild(numeroHistorial);
     }
 
+    obtenerNumerosMarcados() {
+        const numerosMarcados = [];
+        const celdas = document.querySelectorAll('.columna1');
+        
+        celdas.forEach(celda => {
+            if (celda.classList.contains('marcado')) {
+                const numero = parseInt(celda.textContent);
+                if (!isNaN(numero)) {
+                    numerosMarcados.push(numero);
+                }
+            }
+        });
+        
+        return numerosMarcados;
+    }
+
     async verificarBingo() {
         try {
-            const numerosMarcados = obtenerNumerosMarcados(); // Función que obtiene los números marcados
+            const numerosMarcados = this.obtenerNumerosMarcados();
             
-            const response = await fetch('php/juego/verificarBingo.php', {
+            // Verificar que hay números marcados
+            if (numerosMarcados.length === 0) {
+                await Swal.fire({
+                    title: 'Error',
+                    text: 'Debes marcar al menos un número para verificar el bingo',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                return;
+            }
+
+            // Verificar que tenemos todos los datos necesarios
+            if (!this.idSala || !this.idJugador) {
+                throw new Error('Faltan datos de la sala o jugador');
+            }
+
+            console.log('Enviando datos:', {
+                id_sala: this.idSala,
+                id_jugador: this.idJugador,
+                numeros_marcados: numerosMarcados
+            });
+
+            const response = await fetch('../php/juego/verificarBingo.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id_sala: idSala,
-                    id_jugador: idJugador,
+                    id_sala: this.idSala,
+                    id_jugador: this.idJugador,
                     numeros_marcados: numerosMarcados
                 })
             });
 
-            const data = await response.json();
-            
-            if (data.success) {
-                // Mostrar el modal con el ranking
-                mostrarModalRanking(data.ranking, data.ganador);
-                await finalizarJuego();
-            } else {
-                alert(data.error || 'Error al verificar el bingo');
+            // Depuración
+            const responseText = await response.text();
+            console.log('Respuesta cruda del servidor:', responseText);
+            try {
+                const data = JSON.parse(responseText);
+                
+                if (data.success) {
+                    await Swal.fire({
+                        title: '¡BINGO!',
+                        text: '¡Felicitaciones! Has ganado la partida',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                    
+                    if (data.ranking) {
+                        await this.finalizarJuego(data);
+                    }
+                } else {
+                    await Swal.fire({
+                        title: 'Error',
+                        text: data.error || 'Los números marcados no son correctos',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            } catch (error) {
+                console.error('Error al parsear JSON:', error);
+                console.log('Texto recibido:', responseText);
+                throw error;
             }
         } catch (error) {
             console.error('Error al verificar bingo:', error);
-            alert('Error al verificar el bingo. Por favor, inténtalo de nuevo.');
+            await Swal.fire({
+                title: 'Error',
+                text: 'Hubo un error al verificar el bingo. Por favor, inténtalo de nuevo.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     }
 
