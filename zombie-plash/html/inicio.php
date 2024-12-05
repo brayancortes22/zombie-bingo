@@ -31,6 +31,8 @@ if (!isset($_SESSION['id_usuario'])) {
 
     <script src=""></script>
     <title>Zombie plash</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <!-- Resto del contenido de la página de inicio -->
@@ -50,8 +52,9 @@ if (!isset($_SESSION['id_usuario'])) {
                         
                         <div class="text">Cerrar sesión</div>
 </button>
-<div class="nombre">    
-<h1>Bienvenido, <span id="nombreUsuario"><?php echo htmlspecialchars($_SESSION['nombre_usuario']); ?></span>!</h1>
+<div class="nombre">   
+    <script src="../js/nombreUsuario.js"></script>
+<h1>Bienvenido, <h2><strong id="nombreCompleto"><span>Cargando...</span></strong></h2>
 </div>
             </div>
             <div class="izquierda">
@@ -90,11 +93,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             </i>
                             <strong>Unirse a una sala</strong></button>
                         </div>
-                        <div class="jugar" onclick="window.location.href='juego.html'">
-                            <button type="button" class="bjugar"> 
-                            <i class="fas fa-user">
-                            </i>
-                            <strong>Jugar en solitario</strong></button></div>
+                        
                 </div>
             </div>
             <div class="abajo">

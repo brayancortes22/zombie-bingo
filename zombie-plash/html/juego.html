@@ -8,9 +8,32 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="../css/fuentes.css">
     <title>Juego</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <audio id="audio-juego" src="../musica/fondo.mp3" loop></audio> 
+    <script>
+        // Verificar si el usuario ha iniciado sesión
+        fetch('../php/verificar_sesion.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.autenticado) {
+                    alert('Debes iniciar sesión');
+                    window.location.href = './login.php';
+                }
+            });
+        
+        // Código para pruebas (temporal)
+        window.testGenerarBalotas = async function() {
+            try {
+                const bingoGame = new BingoGame();
+                await bingoGame.generarBalotas();
+                console.log('Prueba completada exitosamente');
+            } catch (error) {
+                console.error('Error en la prueba:', error);
+            }
+        }
+    </script>
     <div class="container-fluid">
         <div class="imagen">
             <div class="fila">
@@ -86,10 +109,10 @@
                 </div>
                 <div class="derecha">
                     <div class="bingo">
-                        <button type="button" class="bh" onclick="bingoGame.nuevoCarton()">generar carton</button>
+                        <button id="btnGenerarCarton" onclick="window.bingoGame.nuevoCarton()">Generar Cartón (15s)</button>
                     </div>
                     <div class="bingo">
-                        <button type="button" class="bh" onclick="bingoGame.verificarBingo()">¡BINGO!</button>
+                        <button type="button" class="bh" onclick="window.bingoGame.verificarBingo()">¡BINGO!</button>
                     </div>
                     <div class="copa"></div>
                 </div>

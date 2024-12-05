@@ -56,8 +56,21 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Actualizar el DOM
             document.getElementById('amigosAvatares').innerHTML = avatarsHTML;
             document.getElementById('amigosNombres').innerHTML = nombresHTML;
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudieron cargar los amigos.',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         }
     } catch (error) {
         console.error('Error al cargar amigos:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'Error al cargar amigos: ' + error.message,
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
     }
 });

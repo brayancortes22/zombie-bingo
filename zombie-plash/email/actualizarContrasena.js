@@ -9,12 +9,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Validaciones del lado del cliente
         if (nuevaContrasena.length < 6) {
-            alert('La contraseña debe tener al menos 6 caracteres');
+            Swal.fire({
+                title: 'Error',
+                text: 'La contraseña debe tener al menos 6 caracteres',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
             return;
         }
 
         if (nuevaContrasena !== confirmarContrasena) {
-            alert('Las contraseñas no coinciden');
+            Swal.fire({
+                title: 'Error',
+                text: 'Las contraseñas no coinciden',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
             return;
         }
 
@@ -37,15 +47,31 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             if (data.success) {
-                alert('Contraseña actualizada correctamente');
-                window.location.href = '../html/login.php';
+                Swal.fire({
+                    title: 'Éxito',
+                    text: 'Contraseña actualizada correctamente',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    window.location.href = '../html/login.php';
+                });
             } else {
-                alert('Error: ' + data.message);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error: ' + data.message,
+                    icon: 'error',
+                    confirmButtonText: 'Aceptar'
+                });
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Error al actualizar la contraseña');
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al actualizar la contraseña',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         });
     });
 }); 

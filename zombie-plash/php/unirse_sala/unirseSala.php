@@ -107,9 +107,12 @@ class UnirseASala {
                 'success' => true,
                 'message' => 'Te has unido a la sala con éxito.',
                 'id_sala' => $this->id_sala,
+                'id_jugador' => $this->id_jugador,
+                'nombre_jugador' => $this->nombre_usuario,
                 'contraseña_sala' => $this->contraseña,
                 'jugadores_conectados' => $this->sala_info['jugadores_unidos'] + 1,
-                'max_jugadores' => $this->sala_info['max_jugadores']
+                'max_jugadores' => $this->sala_info['max_jugadores'],
+                'rol' => 'participante'
             ];
         } catch (Exception $e) {
             $this->response = ['success' => false, 'message' => $e->getMessage()];

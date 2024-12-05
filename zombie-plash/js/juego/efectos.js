@@ -1,37 +1,89 @@
 class Efectos {
-    constructor() {
+    constructor(bingoGame) {
+        this.bingoGame = bingoGame;
         this.efectoOscuridadActivo = false;
         this.efectoNumerosActivo = false;
-        this.efectoBloqueoActivo = false;
         this.efectoEligeNumeroActivo = false;
-        this.idJugador = localStorage.getItem('id_jugador');
-        this.idSala = JSON.parse(localStorage.getItem('datosSala'))?.id_sala;
+        this.duracionEfecto = 10000; // 10 segundos
+        this.cooldownPoder = 120000; // 2 minutos
+        this.cooldownEfectoRecibido = 5000; // 5 segundos
+        this.poderEnUso = false;
     }
 
-    async aplicarEfectoAJugadores(tipoEfecto) {
+    async verificarPuedeUsarPoder() {
         try {
-            const response = await fetch('../../zombie-plash/php/juego/aplicarEfecto.php', {
+            const response = await fetch('../php/juego/verificarPoder.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    id_sala: this.idSala,
-                    jugador_origen: this.idJugador,
+                    id_sala: this.bingoGame.idSala,
+                    id_jugador: this.bingoGame.idJugador
+                })
+            });
+
+            const data = await response.json();
+            return data.puede_usar;
+        } catch (error) {
+            console.error('Error al verificar poder:', error);
+            return false;
+        }
+    }
+
+    async aplicarEfectoAJugadores(tipoEfecto) {
+        if (this.poderEnUso) {
+            alert('Ya hay un poder en uso');
+            return false;
+        }
+
+        const puedeUsar = await this.verificarPuedeUsarPoder();
+        if (!puedeUsar) {
+            alert('Debes esperar para usar otro poder');
+            return false;
+        }
+
+        try {
+            // Si es el poder de elegir número, no lo enviamos a otros jugadores
+            if (tipoEfecto === 'elige_numero') {
+                this.poderEnUso = true;
+                this.deshabilitarTodosPoderes();
+                this.iniciarEfectoEligeNumero();
+                
+                setTimeout(() => {
+                    this.poderEnUso = false;
+                    this.habilitarTodosPoderes();
+                }, this.cooldownPoder);
+                
+                return true;
+            }
+
+            // Para otros efectos, aplicar a los demás jugadores
+            const response = await fetch('../php/juego/aplicarEfecto.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.bingoGame.idSala,
+                    jugador_origen: this.bingoGame.idJugador,
                     tipo_efecto: tipoEfecto
                 })
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const data = await response.json();
             if (data.success) {
-                console.log(`Efecto ${tipoEfecto} aplicado a ${data.jugadores_afectados} jugadores`);
+                this.poderEnUso = true;
+                this.deshabilitarTodosPoderes();
+                
+                setTimeout(() => {
+                    this.poderEnUso = false;
+                    this.habilitarTodosPoderes();
+                }, this.cooldownPoder);
+                
                 return true;
             } else {
-                console.error('Error al aplicar efecto:', data.error);
+                alert(data.error || 'Error al aplicar el efecto');
                 return false;
             }
         } catch (error) {
@@ -40,27 +92,18 @@ class Efectos {
         }
     }
 
-    toggleEfectos() {
-        this.efectoOscuridadActivo = !this.efectoOscuridadActivo;
-        this.efectoNumerosActivo = !this.efectoNumerosActivo;
-        this.efectoBloqueoActivo = !this.efectoBloqueoActivo;
-        if (this.efectoOscuridadActivo) {
-            this.aplicarEfectoAJugadores('oscuridad');
-            this.iniciarEfectoOscuridad();
-        } else {
-            this.detenerEfectoOscuridad();
-        }
-        if (this.efectoNumerosActivo) {
-            this.aplicarEfectoAJugadores('numeros');
-            this.iniciarEfectoNumeros();
-        } else {
-            this.detenerEfectoNumeros();
-        }
-        if (this.efectoBloqueoActivo) {
-            this.iniciarEfectoBloqueo();
-        } else {
-            this.detenerEfectoBloqueo();
-        }
+    deshabilitarTodosPoderes() {
+        const botones = document.querySelectorAll('.bu[onclick*="toggleEfecto"]');
+        botones.forEach(boton => {
+            boton.disabled = true;
+        });
+    }
+
+    habilitarTodosPoderes() {
+        const botones = document.querySelectorAll('.bu[onclick*="toggleEfecto"]');
+        botones.forEach(boton => {
+            boton.disabled = false;
+        });
     }
 
     async toggleEfectoOscuridad() {
@@ -68,271 +111,202 @@ class Efectos {
             const aplicado = await this.aplicarEfectoAJugadores('oscuridad');
             if (aplicado) {
                 this.efectoOscuridadActivo = true;
-                const btnOscuridad = document.querySelector('.colu2 button:nth-child(1)');
-                if (btnOscuridad) {
-                    btnOscuridad.textContent = 'Oscuridad Activa';
-                    btnOscuridad.classList.add('activo');
-                    btnOscuridad.disabled = true;
-                    setTimeout(() => {
-                        btnOscuridad.disabled = false;
-                        btnOscuridad.textContent = 'Oscuridad';
-                        btnOscuridad.classList.remove('activo');
-                        this.efectoOscuridadActivo = false;
-                    }, 10000);
-                }
+                this.iniciarEfectoOscuridad();
             }
         }
     }
 
-    toggleEfectoNumeros() {
-        this.efectoNumerosActivo = !this.efectoNumerosActivo;
-        if (this.efectoNumerosActivo) {
-            this.aplicarEfectoAJugadores('numeros');
-        }
-        const btnNumeros = document.querySelector('.colu2 button:nth-child(2)');
-        
-        if (this.efectoNumerosActivo) {
-            this.iniciarEfectoNumeros();
-            if (btnNumeros) {
-                btnNumeros.textContent = 'Números Activos';
-                btnNumeros.classList.add('activo');
-                btnNumeros.disabled = true;
-                setTimeout(() => {
-                    btnNumeros.disabled = false;
-                    btnNumeros.textContent = 'Números';
-                    btnNumeros.classList.remove('activo');
-                }, 10000);
-            }
-        } else {
-            this.detenerEfectoNumeros();
-            if (btnNumeros) {
-                btnNumeros.textContent = 'Números';
-                btnNumeros.classList.remove('activo');
+    async toggleEfectoNumeros() {
+        if (!this.efectoNumerosActivo) {
+            const aplicado = await this.aplicarEfectoAJugadores('numeros');
+            if (aplicado) {
+                this.efectoNumerosActivo = true;
+                this.iniciarEfectoNumeros();
             }
         }
     }
 
-    toggleEfectoBloqueo() {
-        this.efectoBloqueoActivo = !this.efectoBloqueoActivo;
-        const btnBloqueo = document.querySelector('.colu2 button:nth-child(3)');
-        
-        if (this.efectoBloqueoActivo) {
-            this.iniciarEfectoBloqueo();
-            btnBloqueo.textContent = 'Bloqueo Activo';
-            btnBloqueo.classList.add('none');
-        } else {
-            this.detenerEfectoBloqueo();
-            btnBloqueo.textContent = 'Bloqueo';
-            btnBloqueo.classList.remove('none');
-        }
-    }
-
-    toggleEfectoEligeNumero() {
+    async toggleEfectoEligeNumero() {
         if (this.efectoEligeNumeroActivo) {
-            this.aplicarEfectoAJugadores('elige_numero');
+            alert('Ya estás usando este poder');
+            return;
         }
-        this.efectoEligeNumeroActivo = !this.efectoEligeNumeroActivo;
-        const btnEligeNumero = document.querySelector('.colu2 button:nth-child(4)');
-        
-        if (this.efectoEligeNumeroActivo) {
+
+        const aplicado = await this.aplicarEfectoAJugadores('elige_numero');
+        if (aplicado) {
+            this.efectoEligeNumeroActivo = true;
             this.iniciarEfectoEligeNumero();
-            if (btnEligeNumero) {
-                btnEligeNumero.textContent = 'Elige Número Activo';
-                btnEligeNumero.classList.add('activo');
-                btnEligeNumero.disabled = true;
-                setTimeout(() => {
-                    btnEligeNumero.disabled = false;
-                    btnEligeNumero.textContent = 'Elige Número';
-                    btnEligeNumero.classList.remove('activo');
-                }, 10000);
-            }
-        } else {
-            this.detenerEfectoEligeNumero();
-            if (btnEligeNumero) {
-                btnEligeNumero.textContent = 'Elige Número';
-                btnEligeNumero.classList.remove('activo');
-            }
         }
     }
 
     iniciarEfectoOscuridad() {
-        let overlay = document.getElementById('zombie-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'zombie-overlay';
-            overlay.style.position = 'fixed';
-            overlay.style.top = '0';
-            overlay.style.left = '0';
-            overlay.style.width = '100%';
-            overlay.style.height = '100%';
-            overlay.style.backgroundColor = 'rgba(0, 0, 0)';
-            overlay.style.zIndex = '9999';
-            overlay.style.transition = 'opacity 0.3s';
-            overlay.style.pointerEvents = 'none';
-            document.body.appendChild(overlay);
-        }
+        if (this.efectoOscuridadActivo) return;
+        
+        // Crear overlay oscuro
+        const overlay = document.createElement('div');
+        overlay.id = 'zombie-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            pointer-events: none;
+        `;
 
-        let videoElement = document.getElementById('zombie-video');
-        if (!videoElement) {
-            videoElement = document.createElement('video');
-            videoElement.id = 'zombie-video';
-            videoElement.style.position = 'fixed';
-            videoElement.style.top = '0';
-            videoElement.style.left = '0';
-            videoElement.style.width = '100%';
-            videoElement.style.height = '100%';
-            videoElement.style.objectFit = 'cover';
-            videoElement.style.zIndex = '10000';
-            videoElement.style.opacity = '0';
-            videoElement.style.transition = 'opacity 0.3s';
-            
-            const sourceMP4 = document.createElement('source');
-            sourceMP4.src = '../videos/efecto1.mp4';
-            sourceMP4.type = 'video/mp4';
-            
-            const sourceWebM = document.createElement('source');
-            sourceWebM.src = '../videos/efecto1.webm';
-            sourceWebM.type = 'video/webm';
-            
-            videoElement.appendChild(sourceMP4);
-            videoElement.appendChild(sourceWebM);
-            
-            videoElement.muted = true;
-            videoElement.preload = 'auto';
-            
-            videoElement.onerror = (e) => {
-                console.error('Error en el video:', videoElement.error);
-            };
+        // Agregar video de zombie
+        const video = document.createElement('video');
+        video.id = 'zombie-video';
+        video.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1001;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.5;
+        `;
+        video.src = '../assets/videos/zombie_effect.mp4';
+        video.autoplay = true;
+        video.loop = true;
+        video.muted = true;
 
-            document.body.appendChild(videoElement);
-        }
+        document.body.appendChild(overlay);
+        document.body.appendChild(video);
 
-        videoElement.load();
-        videoElement.oncanplaythrough = () => {
-            videoElement.style.opacity = '1';
-            videoElement.play().catch(e => console.error('Error al reproducir el video:', e));
-        };
+        this.efectoOscuridadActivo = true;
 
-        this.intervalOscuridad = setInterval(() => {
-            if (Math.random() < 0.10) {
-                overlay.style.opacity = '0.7';
-                videoElement.style.opacity = '1';
-                videoElement.currentTime = 0;
-                videoElement.play()
-                    .catch(e => console.log('Error al reproducir el video:', e));
-                
-                setTimeout(() => {
-                    overlay.style.opacity = '0';
-                    videoElement.style.opacity = '0';
-                    videoElement.pause();
-                }, 500);
-            }
-        }, 3000);
+        // Reproducir sonido de zombie
+        const audio = new Audio('../assets/sounds/zombie.mp3');
+        audio.play();
 
         setTimeout(() => {
-            this.detenerEfectoOscuridad();
-            videoElement.style.opacity = '0';
-            videoElement.pause();
-            const btnOscuridad = document.querySelector('button[onclick="bingoGame.toggleEfectoOscuridad()"]');
-            if (btnOscuridad) {
-                btnOscuridad.textContent = 'Efecto Oscuridad';
-            }
+            overlay.remove();
+            video.remove();
             this.efectoOscuridadActivo = false;
-        }, 11000);
+        }, this.duracionEfecto);
     }
 
     iniciarEfectoNumeros() {
-        this.intervalNumeros = setInterval(() => {
-            const celdas = document.querySelectorAll('.columna1');
-            const celdasArray = Array.from(celdas);
-            for (let i = 0; i < 5; i++) {
-                const celdaAleatoria = celdasArray[Math.floor(Math.random() * celdasArray.length)];
-                celdaAleatoria.classList.toggle('marcado');
-                setTimeout(() => {
-                    celdaAleatoria.classList.toggle('marcado');
-                }, 1000);
-            }
-        }, 1000);
+        if (this.efectoNumerosActivo) return;
+
+        const numeros = document.querySelectorAll('.columna1');
+        numeros.forEach(numero => {
+            numero.style.transform = 'rotate(180deg)';
+            numero.style.transition = 'transform 0.5s';
+        });
+
+        this.efectoNumerosActivo = true;
 
         setTimeout(() => {
-            this.detenerEfectoNumeros();
-            const btnNumeros = document.querySelector('button[onclick="bingoGame.toggleEfectoNumeros()"]');
-            if (btnNumeros) {
-                btnNumeros.textContent = 'Efecto Números';
-            }
+            numeros.forEach(numero => {
+                numero.style.transform = 'rotate(0deg)';
+            });
             this.efectoNumerosActivo = false;
-        }, 10000);
+        }, this.duracionEfecto);
     }
 
     iniciarEfectoEligeNumero() {
-        const numerosDisponibles = Array.from({ length: 60 }, (_, i) => i + 1).filter(
-            numero => !bingoGame.numerosSacados.includes(numero)
-        );
+        const modal = document.createElement('div');
+        modal.id = 'modalEligeNumero';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        `;
 
-        const contenedor = document.getElementById('numerosDisponibles');
-        contenedor.innerHTML = '';
+        const contenido = document.createElement('div');
+        contenido.className = 'modal-content';
+        contenido.innerHTML = `
+            <h2>Selecciona un número</h2>
+            <div id="numerosDisponibles" style="
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 10px;
+                margin-top: 20px;
+            "></div>
+        `;
 
-        numerosDisponibles.forEach(numero => {
-            const botonNumero = document.createElement('button');
-            botonNumero.textContent = numero;
-            botonNumero.onclick = () => this.seleccionarNumero(numero);
-            contenedor.appendChild(botonNumero);
+        modal.appendChild(contenido);
+        document.body.appendChild(modal);
+
+        // Obtener números disponibles
+        const numerosSacados = this.bingoGame.numerosSacados.map(b => b.numero);
+        const todosNumeros = Array.from({length: 75}, (_, i) => i + 1);
+        const disponibles = todosNumeros.filter(n => !numerosSacados.includes(n));
+
+        const numerosContainer = contenido.querySelector('#numerosDisponibles');
+        disponibles.forEach(numero => {
+            const boton = document.createElement('button');
+            boton.textContent = numero;
+            boton.onclick = () => this.seleccionarNumero(numero);
+            numerosContainer.appendChild(boton);
         });
-
-        document.getElementById('modalEligeNumero').style.display = 'block';
     }
 
-    seleccionarNumero(numero) {
-        if (!bingoGame.numerosSacados.includes(numero)) {
-            bingoGame.numerosSacados.push(numero);
-            bingoGame.mostrarNumerosSacados();
-            bingoGame.verificarNumeroEnCarton(numero);
-            bingoGame.actualizarNumerosEnPanel();
+    async seleccionarNumero(numero) {
+        try {
+            const response = await fetch('../php/juego/seleccionarNumero.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.bingoGame.idSala,
+                    id_jugador: this.bingoGame.idJugador,
+                    numero: numero
+                })
+            });
+
+            const data = await response.json();
+            if (data.success) {
+                // Cerrar el modal
+                const modal = document.getElementById('modalEligeNumero');
+                if (modal) modal.remove();
+
+                // Actualizar el juego
+                this.bingoGame.numerosSacados.push({
+                    numero: data.numero,
+                    letra: data.letra,
+                    orden: data.orden
+                });
+
+                // Actualizar la interfaz
+                this.bingoGame.actualizarPanelBalotas([{
+                    numero: data.numero,
+                    letra: data.letra
+                }]);
+
+                this.bingoGame.actualizarHistorialBalotas(this.bingoGame.numerosSacados);
+
+                // Desactivar el efecto
+                this.efectoEligeNumeroActivo = false;
+            } else {
+                alert(data.error || 'Error al seleccionar el número');
+            }
+        } catch (error) {
+            console.error('Error al seleccionar número:', error);
+            alert('Error al seleccionar el número');
         }
-        this.cerrarModal();
     }
 
     cerrarModal() {
-        document.getElementById('modalEligeNumero').style.display = 'none';
-    }
-
-    detenerEfectoOscuridad() {
-        // Limpiar el intervalo
-        if (this.intervalOscuridad) {
-            clearInterval(this.intervalOscuridad);
-            this.intervalOscuridad = null;
-        }
-        
-        // Limpiar el overlay de manera inmediata
-        const overlay = document.getElementById('zombie-overlay');
-        if (overlay) {
-            document.body.removeChild(overlay);
-        }
-
-        // Limpiar el video de manera inmediata
-        const videoElement = document.getElementById('zombie-video');
-        if (videoElement) {
-            videoElement.pause();
-            videoElement.srcObject = null;
-            document.body.removeChild(videoElement);
-        }
-
-        // Asegurarnos de que se pueda interactuar con la página
-        document.body.style.pointerEvents = 'auto';
-        this.efectoOscuridadActivo = false;
-    }
-
-    detenerEfectoNumeros() {
-        clearInterval(this.intervalNumeros);
-    }
-
-    detenerEfectoBloqueo() {
-        const btnBingo = document.querySelector('#btnBingo');
-        if (btnBingo) {
-            btnBingo.disabled = false;
-            btnBingo.style.opacity = '1';
+        const modal = document.getElementById('modalEligeNumero');
+        if (modal) {
+            modal.style.display = 'none';
         }
     }
 }
 
-export default Efectos;  // Exportación por defecto
+export default Efectos;

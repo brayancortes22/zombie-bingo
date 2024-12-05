@@ -58,8 +58,14 @@ class FormValidator {
             console.log('Respuesta del servidor:', data);
 
             if (data.success) {
-                alert('Registro exitoso');
-                window.location.href = '../html/login.php';
+                Swal.fire({
+                    title: 'Registro exitoso',
+                    text: 'Tu cuenta ha sido creada exitosamente.',
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                }).then(() => {
+                    window.location.href = '../html/login.php';
+                });
             } else {
                 // Mostrar errores específicos
                 if (data.errors) {
@@ -86,7 +92,12 @@ class FormValidator {
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error al procesar el registro');
+            Swal.fire({
+                title: 'Error',
+                text: 'Error al procesar el registro',
+                icon: 'error',
+                confirmButtonText: 'Aceptar'
+            });
         }
     }
 }

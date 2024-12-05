@@ -14,9 +14,21 @@
     <link rel="stylesheet" href="../css/fuentes.css">
 
     <title>Jugadores en la Sala</title>
-   
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+    <script>
+        // Verificar si el usuario ha iniciado sesión
+        fetch('../php/verificar_sesion.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.autenticado) {
+                    alert('Debes iniciar sesión');
+                    window.location.href = './login.php';
+                }
+            });
+    </script>
     <div class="container-fluid">
         <div class="imagen">
             <div id="userid">
@@ -27,11 +39,10 @@
                     <div class="col linia">ID Sala</div>
                     <div class="col contenedor" id="idSala"></div>
                     <div class="col linia">Jugadores conectados</div>
-                    <div class="col contenedor" id="jugadoresConectados"></div>
+                    <div class="col contenedor" id="jugadoresConectados"></div>/
+                    <div id="maxJugadores"></div>
                     <div class="col">
-                        <button id="btnIniciarJuego" class="boton" type="button" style="display: none;">
-                            Iniciar Juego
-                        </button>
+                        <button id="btnIniciarJuego" class="boton-iniciar">Iniciar Juego</button>
                     </div>
                 </div>
                 <div class="row">
@@ -40,11 +51,10 @@
                     <div class="col linia">Contraseña</div>
                     <div class="col contenedor" id="contraseñaSala"></div>
                     <div class="col">
-                        <button type="button" class="botonrojo texto" ><h5>Cancelar sala</h5></button>
+                        <button id="btnCancelarSala" class="boton-cancelar">Cancelar Sala</button>
+                        
                        <!-- Agregar el botón de salir -->
-<button id="btnSalirSala" class="btn btn-danger">
-    Salir de la Sala
-</button>
+                        <button id="btnSalirSala" class="btn btn-danger">Salir de la Sala</button>
                     </div>
                 </div>
                 <div class="titulo"><strong>Jugadores en la sala</strong></div>
@@ -54,12 +64,7 @@
             </div>
         </div>
     </div>
-    <script src="../sound/audio.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        audioManager.play('game');
-    });
-    </script>
+        <script src="../sound/audio.js"></script>
     <!-- <script src="../js/jugadoresSala_conectado.js"></script> -->
     <script src="../js/jugadoresSala.js"></script>
     <script src="../js/perfilJugador.js"></script>
