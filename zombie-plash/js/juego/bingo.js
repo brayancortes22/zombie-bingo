@@ -649,23 +649,21 @@ class BingoGame {
 
     verificarNumeroEnCarton(numero) {
         try {
-            // En lugar de marcar automáticamente, solo verificamos si el número existe en el cartón
+            console.log('Verificando número:', numero);
+            console.log('Números sacados:', this.numerosSacados);
+            
             const celdas = document.querySelectorAll('.columna1');
             celdas.forEach(celda => {
-                if (celda.dataset.numero === numero.toString()) {
-                    // Ya no marcamos automáticamente
-                    // celda.classList.add('marcado');
-                    
-                    // Opcionalmente podemos resaltar temporalmente el número
+                const numeroEnCelda = parseInt(celda.dataset.numero);
+                if (numeroEnCelda === numero) {
+                    console.log('Número encontrado en celda:', numeroEnCelda);
+                    // Resaltar temporalmente el número
                     celda.classList.add('numero-disponible');
                     setTimeout(() => {
                         celda.classList.remove('numero-disponible');
                     }, 2000);
                 }
             });
-
-            // Verificar si hay línea o bingo solo cuando el jugador marca manualmente
-            // this.verificarPatrones();
         } catch (error) {
             console.error('Error al verificar número en cartón:', error);
         }
@@ -738,6 +736,8 @@ class BingoGame {
         // Si no hay números sacados, no hacer nada
         if (!numerosSacados || numerosSacados.length === 0) return;
 
+        console.log('Actualizando interfaz con números:', numerosSacados);
+
         // Verificar si hay un nuevo número comparando longitudes
         if (numerosSacados.length > this.numerosSacados.length) {
             // Mantener solo las últimas 5 balotas
@@ -748,10 +748,12 @@ class BingoGame {
             
             // Agregar las balotas
             ultimasBalotas.forEach((balota, index) => {
+                // Asegurarse de que los números sean enteros
+                balota.numero = parseInt(balota.numero);
+                
                 const balotaElement = document.createElement('div');
                 balotaElement.className = 'balota';
                 
-                // Solo aplicar animación a la última balota
                 if (index === ultimasBalotas.length - 1) {
                     balotaElement.classList.add('nueva-balota');
                 }
@@ -766,11 +768,13 @@ class BingoGame {
             // Actualizar el historial
             this.actualizarPanelHistorial(numerosSacados);
             
-            // Permitir a los jugadores marcar manualmente
-            this.permitirMarcaManual();
-
-            // Actualizar array local
-            this.numerosSacados = [...numerosSacados];
+            // Actualizar array local asegurándose de que los números son enteros
+            this.numerosSacados = numerosSacados.map(balota => ({
+                ...balota,
+                numero: parseInt(balota.numero)
+            }));
+            
+            console.log('Números sacados actualizados:', this.numerosSacados);
         }
     }
 
@@ -840,46 +844,92 @@ class BingoGame {
     }
 
     async marcarCasilla(casilla) {
-        if (!casilla.dataset.numero || !casilla.dataset.letra) return;
-        
-        const numero = parseInt(casilla.dataset.numero);
-        const letra = casilla.dataset.letra;
-
-        // Verificar si el número ha salido
-        const numeroHaSalido = this.numerosSacados.some(balota => 
-            balota.numero === numero && balota.letra === letra
-        );
-
-        if (!numeroHaSalido) {
-            alert('Este número aún no ha salido');
-            return;
-        }
-        
         try {
-            const response = await fetch('../php/juego/marcarCasilla.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id_sala: this.idSala,
-                    id_jugador: this.idJugador,
-                    numero: numero,
-                    letra: letra
-                })
+            // Verificar que la casilla no está siendo procesada
+            if (casilla.classList.contains('procesando-click')) {
+                return;
+            }
+
+            if (!casilla.dataset.numero || !casilla.dataset.letra) {
+                console.warn('Casilla inválida:', casilla);
+                return;
+            }
+
+            const numero = parseInt(casilla.dataset.numero);
+            const letra = casilla.dataset.letra;
+
+            // Verificar que el número es válido
+            if (isNaN(numero)) {
+                console.warn('Número inválido:', casilla.dataset.numero);
+                return;
+            }
+
+            // Verificar si el número ha salido
+            const numeroHaSalido = this.numerosSacados.some(balota => {
+                // Convertir ambos números a enteros para la comparación
+                const balotaNumero = parseInt(balota.numero);
+                return balotaNumero === numero && balota.letra === letra;
             });
 
-            const data = await response.json();
+            if (!numeroHaSalido) {
+                Swal.fire({
+                    title: 'Número no disponible',
+                    text: 'Este número aún no ha salido',
+                    icon: 'warning',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return;
+            }
+
+            // Agregar clase de procesamiento
+            casilla.classList.add('procesando-click');
             
-            if (data.success) {
-                casilla.classList.toggle('marcado');
-                this.verificarPatronesGanadores();
-            } else {
-                console.error('Error al marcar casilla:', data.error);
-                alert(data.error);
+            try {
+                const response = await fetch('../php/juego/marcarCasilla.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_sala: this.idSala,
+                        id_jugador: this.idJugador,
+                        numero: numero,
+                        letra: letra
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    casilla.classList.toggle('marcado');
+                    this.verificarPatronesGanadores();
+                } else {
+                    console.error('Error al marcar casilla:', data.error);
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.error || 'No se pudo marcar la casilla',
+                        icon: 'error',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }
+            } catch (error) {
+                console.error('Error en la petición:', error);
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Error al procesar la casilla',
+                    icon: 'error',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } finally {
+                // Siempre remover la clase de procesamiento
+                casilla.classList.remove('procesando-click');
             }
         } catch (error) {
-            console.error('Error al marcar casilla:', error);
+            console.error('Error en marcarCasilla:', error);
+            casilla.classList.remove('procesando-click');
         }
     }
 
@@ -892,21 +942,54 @@ class BingoGame {
 
     // Método para marcar/desmarcar casillas
     toggleCasilla(celda) {
-        const numero = parseInt(celda.dataset.numero);
-        const letra = celda.dataset.letra;
+        try {
+            // Verificar que la celda es válida
+            if (!celda || !celda.dataset.numero || !celda.dataset.letra) {
+                console.warn('Celda inválida:', celda);
+                return;
+            }
 
-        // Verificar si el número ha salido
-        const numeroHaSalido = this.numerosSacados.some(balota => 
-            balota.numero === numero && balota.letra === letra
-        );
+            const numero = parseInt(celda.dataset.numero);
+            const letra = celda.dataset.letra;
 
-        if (!numeroHaSalido) {
-            alert('Este número aún no ha salido');
-            return;
+            // Verificar que el número es válido
+            if (isNaN(numero)) {
+                console.warn('Número inválido:', celda.dataset.numero);
+                return;
+            }
+
+            // Verificar si el número ha salido
+            const numeroHaSalido = this.numerosSacados.some(balota => {
+                // Convertir ambos números a enteros para la comparación
+                const balotaNumero = parseInt(balota.numero);
+                return balotaNumero === numero && balota.letra === letra;
+            });
+
+            if (!numeroHaSalido) {
+                Swal.fire({
+                    title: 'Número no disponible',
+                    text: 'Este número aún no ha salido',
+                    icon: 'warning',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return;
+            }
+
+            // Agregar una clase temporal durante el proceso de marcado
+            celda.classList.add('procesando-click');
+
+            // Usar setTimeout para evitar doble clicks accidentales
+            setTimeout(() => {
+                celda.classList.toggle('marcado');
+                celda.classList.remove('procesando-click');
+                this.verificarPatronesGanadores();
+            }, 100);
+
+        } catch (error) {
+            console.error('Error en toggleCasilla:', error);
+            celda.classList.remove('procesando-click');
         }
-
-        celda.classList.toggle('marcado');
-        this.verificarPatronesGanadores();
     }
 
     // Modificar el método verificarPatronesGanadores

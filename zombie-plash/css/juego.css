@@ -748,3 +748,19 @@ height: 40%;
     font-size: 16px;
     line-height: 1.5;
 }
+
+.procesando-click {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.numero-disponible {
+    animation: parpadeo 1s ease-in-out;
+    border: 2px solid #4CAF50;
+}
+
+@keyframes parpadeo {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); border-color: #45a049; }
+    100% { transform: scale(1); }
+}
