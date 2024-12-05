@@ -10,9 +10,10 @@ function obtenerEfectosActivos($id_sala, $id_jugador) {
         $stmt = $pdo->prepare("
             SELECT ea.*, 
                    UNIX_TIMESTAMP(ea.tiempo_inicio) as timestamp_inicio,
-                   j.nombre_jugador as origen_nombre
+                   ru.nombre as origen_nombre
             FROM efectos_activos ea
             JOIN jugador j ON ea.jugador_origen = j.id_jugador
+            JOIN registro_usuarios ru ON j.id_registro = ru.id_registro
             WHERE ea.id_sala = ? 
             AND ea.jugador_destino = ?
             AND ea.estado = 'pendiente'

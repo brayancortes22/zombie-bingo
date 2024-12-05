@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-12-2024 a las 04:09:58
+-- Tiempo de generación: 05-12-2024 a las 04:48:00
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -256,81 +256,81 @@ INSERT INTO `balotas` (`id_balota`, `id_sala`, `numero`, `letra`, `estado`, `ord
 (148, 239, 73, 'O', 0, NULL),
 (149, 239, 74, 'O', 0, NULL),
 (150, 239, 75, 'O', 0, NULL),
-(451, 240, 1, 'B', 0, NULL),
-(452, 240, 2, 'B', 1, 7),
-(453, 240, 3, 'B', 0, NULL),
-(454, 240, 4, 'B', 1, 10),
-(455, 240, 5, 'B', 0, NULL),
-(456, 240, 6, 'B', 1, 11),
-(457, 240, 7, 'B', 0, NULL),
-(458, 240, 8, 'B', 1, 2),
-(459, 240, 9, 'B', 0, NULL),
-(460, 240, 10, 'B', 1, 15),
-(461, 240, 11, 'B', 0, NULL),
-(462, 240, 12, 'B', 1, 29),
-(463, 240, 13, 'B', 1, 13),
-(464, 240, 14, 'B', 0, NULL),
-(465, 240, 15, 'B', 0, NULL),
-(466, 240, 16, 'I', 0, NULL),
-(467, 240, 17, 'I', 0, NULL),
-(468, 240, 18, 'I', 1, 25),
-(469, 240, 19, 'I', 1, 19),
-(470, 240, 20, 'I', 1, 21),
-(471, 240, 21, 'I', 1, 14),
-(472, 240, 22, 'I', 0, NULL),
-(473, 240, 23, 'I', 1, 6),
-(474, 240, 24, 'I', 1, 3),
-(475, 240, 25, 'I', 1, 4),
-(476, 240, 26, 'I', 1, 30),
-(477, 240, 27, 'I', 0, NULL),
-(478, 240, 28, 'I', 0, NULL),
-(479, 240, 29, 'I', 0, NULL),
-(480, 240, 30, 'I', 1, 23),
-(481, 240, 31, 'N', 0, NULL),
-(482, 240, 32, 'N', 0, NULL),
-(483, 240, 33, 'N', 1, 22),
-(484, 240, 34, 'N', 0, NULL),
-(485, 240, 35, 'N', 0, NULL),
-(486, 240, 36, 'N', 0, NULL),
-(487, 240, 37, 'N', 0, NULL),
-(488, 240, 38, 'N', 0, NULL),
-(489, 240, 39, 'N', 1, 28),
-(490, 240, 40, 'N', 0, NULL),
-(491, 240, 41, 'N', 0, NULL),
-(492, 240, 42, 'N', 1, 24),
-(493, 240, 43, 'N', 0, NULL),
-(494, 240, 44, 'N', 1, 8),
-(495, 240, 45, 'N', 0, NULL),
-(496, 240, 46, 'G', 1, 9),
-(497, 240, 47, 'G', 1, 18),
-(498, 240, 48, 'G', 0, NULL),
-(499, 240, 49, 'G', 0, NULL),
-(500, 240, 50, 'G', 1, 26),
-(501, 240, 51, 'G', 1, 16),
-(502, 240, 52, 'G', 1, 5),
-(503, 240, 53, 'G', 0, NULL),
-(504, 240, 54, 'G', 0, NULL),
-(505, 240, 55, 'G', 0, NULL),
-(506, 240, 56, 'G', 0, NULL),
-(507, 240, 57, 'G', 0, NULL),
-(508, 240, 58, 'G', 0, NULL),
-(509, 240, 59, 'G', 1, 12),
-(510, 240, 60, 'G', 0, NULL),
-(511, 240, 61, 'O', 0, NULL),
-(512, 240, 62, 'O', 0, NULL),
-(513, 240, 63, 'O', 0, NULL),
-(514, 240, 64, 'O', 0, NULL),
-(515, 240, 65, 'O', 0, NULL),
-(516, 240, 66, 'O', 1, 17),
-(517, 240, 67, 'O', 0, NULL),
-(518, 240, 68, 'O', 0, NULL),
-(519, 240, 69, 'O', 0, NULL),
-(520, 240, 70, 'O', 1, 20),
-(521, 240, 71, 'O', 0, NULL),
-(522, 240, 72, 'O', 1, 27),
-(523, 240, 73, 'O', 0, NULL),
-(524, 240, 74, 'O', 0, NULL),
-(525, 240, 75, 'O', 1, 1);
+(751, 240, 1, 'B', 1, 6),
+(752, 240, 2, 'B', 0, NULL),
+(753, 240, 3, 'B', 0, NULL),
+(754, 240, 4, 'B', 1, 29),
+(755, 240, 5, 'B', 0, NULL),
+(756, 240, 6, 'B', 0, NULL),
+(757, 240, 7, 'B', 1, 5),
+(758, 240, 8, 'B', 0, NULL),
+(759, 240, 9, 'B', 0, NULL),
+(760, 240, 10, 'B', 0, NULL),
+(761, 240, 11, 'B', 1, 9),
+(762, 240, 12, 'B', 1, 26),
+(763, 240, 13, 'B', 1, 33),
+(764, 240, 14, 'B', 1, 11),
+(765, 240, 15, 'B', 0, NULL),
+(766, 240, 16, 'I', 0, NULL),
+(767, 240, 17, 'I', 0, NULL),
+(768, 240, 18, 'I', 1, 27),
+(769, 240, 19, 'I', 1, 18),
+(770, 240, 20, 'I', 0, NULL),
+(771, 240, 21, 'I', 0, NULL),
+(772, 240, 22, 'I', 1, 16),
+(773, 240, 23, 'I', 1, 7),
+(774, 240, 24, 'I', 0, NULL),
+(775, 240, 25, 'I', 0, NULL),
+(776, 240, 26, 'I', 1, 30),
+(777, 240, 27, 'I', 1, 35),
+(778, 240, 28, 'I', 0, NULL),
+(779, 240, 29, 'I', 1, 24),
+(780, 240, 30, 'I', 0, NULL),
+(781, 240, 31, 'N', 0, NULL),
+(782, 240, 32, 'N', 1, 10),
+(783, 240, 33, 'N', 1, 1),
+(784, 240, 34, 'N', 0, NULL),
+(785, 240, 35, 'N', 0, NULL),
+(786, 240, 36, 'N', 1, 14),
+(787, 240, 37, 'N', 1, 31),
+(788, 240, 38, 'N', 0, NULL),
+(789, 240, 39, 'N', 0, NULL),
+(790, 240, 40, 'N', 0, NULL),
+(791, 240, 41, 'N', 0, NULL),
+(792, 240, 42, 'N', 1, 21),
+(793, 240, 43, 'N', 1, 13),
+(794, 240, 44, 'N', 1, 34),
+(795, 240, 45, 'N', 0, NULL),
+(796, 240, 46, 'G', 0, NULL),
+(797, 240, 47, 'G', 0, NULL),
+(798, 240, 48, 'G', 1, 4),
+(799, 240, 49, 'G', 0, NULL),
+(800, 240, 50, 'G', 0, NULL),
+(801, 240, 51, 'G', 0, NULL),
+(802, 240, 52, 'G', 1, 2),
+(803, 240, 53, 'G', 1, 32),
+(804, 240, 54, 'G', 1, 28),
+(805, 240, 55, 'G', 1, 23),
+(806, 240, 56, 'G', 1, 17),
+(807, 240, 57, 'G', 1, 22),
+(808, 240, 58, 'G', 1, 15),
+(809, 240, 59, 'G', 1, 20),
+(810, 240, 60, 'G', 0, NULL),
+(811, 240, 61, 'O', 1, 25),
+(812, 240, 62, 'O', 0, NULL),
+(813, 240, 63, 'O', 0, NULL),
+(814, 240, 64, 'O', 1, 12),
+(815, 240, 65, 'O', 0, NULL),
+(816, 240, 66, 'O', 1, 8),
+(817, 240, 67, 'O', 0, NULL),
+(818, 240, 68, 'O', 0, NULL),
+(819, 240, 69, 'O', 0, NULL),
+(820, 240, 70, 'O', 0, NULL),
+(821, 240, 71, 'O', 0, NULL),
+(822, 240, 72, 'O', 0, NULL),
+(823, 240, 73, 'O', 0, NULL),
+(824, 240, 74, 'O', 1, 19),
+(825, 240, 75, 'O', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -349,6 +349,46 @@ CREATE TABLE `cartones_jugadores` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `casillas_marcadas`
+--
+
+CREATE TABLE `casillas_marcadas` (
+  `id_marcada` int(11) NOT NULL,
+  `id_sala` int(11) NOT NULL,
+  `id_jugador` int(11) NOT NULL,
+  `numero` int(11) NOT NULL,
+  `letra` char(1) NOT NULL,
+  `fecha_marcado` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `efectos_activos`
+--
+
+CREATE TABLE `efectos_activos` (
+  `id_efecto` int(11) NOT NULL,
+  `id_sala` int(11) NOT NULL,
+  `tipo_efecto` varchar(50) NOT NULL,
+  `jugador_origen` int(11) NOT NULL,
+  `jugador_destino` int(11) NOT NULL,
+  `estado` enum('pendiente','activo','completado') DEFAULT 'pendiente',
+  `tiempo_inicio` timestamp NOT NULL DEFAULT current_timestamp(),
+  `duracion` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `efectos_activos`
+--
+
+INSERT INTO `efectos_activos` (`id_efecto`, `id_sala`, `tipo_efecto`, `jugador_origen`, `jugador_destino`, `estado`, `tiempo_inicio`, `duracion`) VALUES
+(1, 240, 'oscuridad', 13, 15, 'pendiente', '2024-12-05 03:37:03', 10000),
+(2, 240, 'oscuridad', 13, 15, 'pendiente', '2024-12-05 03:47:19', 10000);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `efectos_aplicados`
 --
 
@@ -362,6 +402,14 @@ CREATE TABLE `efectos_aplicados` (
   `fecha_aplicacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `efectos_aplicados`
+--
+
+INSERT INTO `efectos_aplicados` (`id_efecto`, `id_sala`, `tipo_efecto`, `jugador_origen`, `jugador_destino`, `duracion`, `fecha_aplicacion`) VALUES
+(1, 240, 'oscuridad', 13, 15, 10000, '2024-12-05 03:16:27'),
+(2, 240, 'oscuridad', 13, 15, 10000, '2024-12-05 03:34:07');
+
 -- --------------------------------------------------------
 
 --
@@ -373,6 +421,19 @@ CREATE TABLE `efectos_procesados` (
   `id_efecto` int(11) NOT NULL,
   `id_jugador` int(11) NOT NULL,
   `fecha_proceso` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `estado_juego`
+--
+
+CREATE TABLE `estado_juego` (
+  `id_sala` int(11) NOT NULL,
+  `estado` enum('esperando','jugando','finalizado') DEFAULT 'esperando',
+  `ultima_balota_id` int(11) DEFAULT NULL,
+  `ultima_actualizacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -526,6 +587,23 @@ ALTER TABLE `cartones_jugadores`
   ADD KEY `id_jugador` (`id_jugador`);
 
 --
+-- Indices de la tabla `casillas_marcadas`
+--
+ALTER TABLE `casillas_marcadas`
+  ADD PRIMARY KEY (`id_marcada`),
+  ADD KEY `id_sala` (`id_sala`),
+  ADD KEY `id_jugador` (`id_jugador`);
+
+--
+-- Indices de la tabla `efectos_activos`
+--
+ALTER TABLE `efectos_activos`
+  ADD PRIMARY KEY (`id_efecto`),
+  ADD KEY `id_sala` (`id_sala`),
+  ADD KEY `jugador_origen` (`jugador_origen`),
+  ADD KEY `jugador_destino` (`jugador_destino`);
+
+--
 -- Indices de la tabla `efectos_aplicados`
 --
 ALTER TABLE `efectos_aplicados`
@@ -541,6 +619,12 @@ ALTER TABLE `efectos_procesados`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_efecto` (`id_efecto`),
   ADD KEY `id_jugador` (`id_jugador`);
+
+--
+-- Indices de la tabla `estado_juego`
+--
+ALTER TABLE `estado_juego`
+  ADD KEY `id_sala` (`id_sala`);
 
 --
 -- Indices de la tabla `jugador`
@@ -593,7 +677,7 @@ ALTER TABLE `amistad`
 -- AUTO_INCREMENT de la tabla `balotas`
 --
 ALTER TABLE `balotas`
-  MODIFY `id_balota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=526;
+  MODIFY `id_balota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=826;
 
 --
 -- AUTO_INCREMENT de la tabla `cartones_jugadores`
@@ -602,10 +686,22 @@ ALTER TABLE `cartones_jugadores`
   MODIFY `id_carton` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `casillas_marcadas`
+--
+ALTER TABLE `casillas_marcadas`
+  MODIFY `id_marcada` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `efectos_activos`
+--
+ALTER TABLE `efectos_activos`
+  MODIFY `id_efecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `efectos_aplicados`
 --
 ALTER TABLE `efectos_aplicados`
-  MODIFY `id_efecto` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_efecto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `efectos_procesados`
@@ -668,6 +764,21 @@ ALTER TABLE `cartones_jugadores`
   ADD CONSTRAINT `cartones_jugadores_ibfk_2` FOREIGN KEY (`id_jugador`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
 
 --
+-- Filtros para la tabla `casillas_marcadas`
+--
+ALTER TABLE `casillas_marcadas`
+  ADD CONSTRAINT `casillas_marcadas_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE,
+  ADD CONSTRAINT `casillas_marcadas_ibfk_2` FOREIGN KEY (`id_jugador`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `efectos_activos`
+--
+ALTER TABLE `efectos_activos`
+  ADD CONSTRAINT `efectos_activos_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE,
+  ADD CONSTRAINT `efectos_activos_ibfk_2` FOREIGN KEY (`jugador_origen`) REFERENCES `jugador` (`id_jugador`),
+  ADD CONSTRAINT `efectos_activos_ibfk_3` FOREIGN KEY (`jugador_destino`) REFERENCES `jugador` (`id_jugador`);
+
+--
 -- Filtros para la tabla `efectos_aplicados`
 --
 ALTER TABLE `efectos_aplicados`
@@ -681,6 +792,12 @@ ALTER TABLE `efectos_aplicados`
 ALTER TABLE `efectos_procesados`
   ADD CONSTRAINT `efectos_procesados_ibfk_1` FOREIGN KEY (`id_efecto`) REFERENCES `efectos_aplicados` (`id_efecto`) ON DELETE CASCADE,
   ADD CONSTRAINT `efectos_procesados_ibfk_2` FOREIGN KEY (`id_jugador`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `estado_juego`
+--
+ALTER TABLE `estado_juego`
+  ADD CONSTRAINT `estado_juego_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `jugador`
