@@ -44,6 +44,21 @@ class Efectos {
         }
 
         try {
+            // Si es el poder de elegir número, no lo enviamos a otros jugadores
+            if (tipoEfecto === 'elige_numero') {
+                this.poderEnUso = true;
+                this.deshabilitarTodosPoderes();
+                this.iniciarEfectoEligeNumero();
+                
+                setTimeout(() => {
+                    this.poderEnUso = false;
+                    this.habilitarTodosPoderes();
+                }, this.cooldownPoder);
+                
+                return true;
+            }
+
+            // Para otros efectos, aplicar a los demás jugadores
             const response = await fetch('../php/juego/aplicarEfecto.php', {
                 method: 'POST',
                 headers: {
@@ -61,7 +76,6 @@ class Efectos {
                 this.poderEnUso = true;
                 this.deshabilitarTodosPoderes();
                 
-                // Restablecer después del cooldown
                 setTimeout(() => {
                     this.poderEnUso = false;
                     this.habilitarTodosPoderes();
@@ -217,11 +231,6 @@ class Efectos {
 
         modal.style.display = 'block';
         this.efectoEligeNumeroActivo = true;
-
-        setTimeout(() => {
-            modal.style.display = 'none';
-            this.efectoEligeNumeroActivo = false;
-        }, this.duracionEfecto);
     }
 
     async seleccionarNumero(numero) {
@@ -233,18 +242,42 @@ class Efectos {
                 },
                 body: JSON.stringify({
                     id_sala: this.bingoGame.idSala,
+                    id_jugador: this.bingoGame.idJugador,
                     numero: numero
                 })
             });
 
             const data = await response.json();
             if (data.success) {
+                // Cerrar el modal
                 document.getElementById('modalEligeNumero').style.display = 'none';
-                // Actualizar el juego con el nuevo número
-                this.bingoGame.actualizarNumeroSeleccionado(data);
+                this.efectoEligeNumeroActivo = false;
+
+                // Mostrar mensaje de éxito
+                alert(data.mensaje);
+
+                // Agregar el número al historial local
+                if (this.bingoGame.numerosSacados) {
+                    this.bingoGame.numerosSacados.push({
+                        numero: data.numero,
+                        letra: data.letra,
+                        orden: data.orden
+                    });
+                }
+
+                // Actualizar la interfaz
+                if (this.bingoGame.actualizarPanelNumeros) {
+                    this.bingoGame.actualizarPanelNumeros(data.numero, data.letra);
+                }
+                if (this.bingoGame.actualizarHistorialBalotas) {
+                    this.bingoGame.actualizarHistorialBalotas(this.bingoGame.numerosSacados);
+                }
+            } else {
+                alert(data.error || 'Error al seleccionar el número');
             }
         } catch (error) {
             console.error('Error al seleccionar número:', error);
+            alert('Error al seleccionar el número');
         }
     }
 
