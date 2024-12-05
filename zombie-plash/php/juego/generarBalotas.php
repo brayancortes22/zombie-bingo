@@ -1,120 +1,88 @@
 <?php
 require_once '../../setting/conexion-base-datos.php';
+session_start();
 
-function verificarRolCreador($id_sala, $id_jugador) {
-    global $conexion;
-    $pdo = $conexion->conectar();
-    
-    $sql = "SELECT rol FROM jugadores_en_sala 
-            WHERE id_sala = ? AND id_jugador = ? AND rol = 'creador'";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id_sala, $id_jugador]);
-    
-    return $stmt->fetch() !== false;
-}
+header('Content-Type: application/json');
 
-function generarBalotas($id_sala, $id_jugador) {
+function generarBalotas($id_sala) {
     global $conexion;
     $pdo = $conexion->conectar();
     
     try {
-        if (!$id_sala) {
-            throw new Exception('ID de sala no proporcionado');
-        }
-        
-        // Verificar si el jugador es el creador
-        if (!verificarRolCreador($id_sala, $id_jugador)) {
-            throw new Exception('Solo el creador puede generar balotas');
-        }
-        
-        error_log("Generando balotas para sala: " . $id_sala);
-        
-        // Verificar si la sala existe
-        $sql_verificar = "SELECT id_sala FROM salas WHERE id_sala = ?";
-        $stmt = $pdo->prepare($sql_verificar);
+        // Validar que la sala existe
+        $stmt = $pdo->prepare("SELECT id_sala FROM salas WHERE id_sala = ?");
         $stmt->execute([$id_sala]);
-        
         if (!$stmt->fetch()) {
-            throw new Exception('La sala no existe');
+            throw new PDOException("La sala no existe");
         }
-        
-        // Limpiar balotas existentes para esta sala
-        $sql_limpiar = "DELETE FROM balotas WHERE id_sala = ?";
-        $stmt = $pdo->prepare($sql_limpiar);
+
+        // Primero limpiamos las balotas existentes para esta sala
+        $stmt = $pdo->prepare("DELETE FROM balotas WHERE id_sala = ?");
         $stmt->execute([$id_sala]);
         
-        // Generar nuevas balotas
-        $balotas = [];
+        // Generamos nuevas balotas
+        $letras = ['B', 'I', 'N', 'G', 'O'];
+        $rangos = [
+            'B' => [1, 15],
+            'I' => [16, 30],
+            'N' => [31, 45],
+            'G' => [46, 60],
+            'O' => [61, 75]
+        ];
         
-        // B: 1-12
-        for ($i = 1; $i <= 12; $i++) {
-            $balotas[] = ['numero' => $i, 'letra' => 'B'];
-        }
+        // Preparar la consulta una sola vez
+        $stmt = $pdo->prepare("
+            INSERT INTO balotas (id_sala, numero, letra, estado) 
+            VALUES (?, ?, ?, 0)
+        ");
         
-        // I: 13-23
-        for ($i = 13; $i <= 23; $i++) {
-            $balotas[] = ['numero' => $i, 'letra' => 'I'];
-        }
-        
-        // N: 24-34
-        for ($i = 24; $i <= 34; $i++) {
-            $balotas[] = ['numero' => $i, 'letra' => 'N'];
-        }
-        
-        // G: 35-45
-        for ($i = 35; $i <= 45; $i++) {
-            $balotas[] = ['numero' => $i, 'letra' => 'G'];
-        }
-        
-        // O: 46-60
-        for ($i = 46; $i <= 60; $i++) {
-            $balotas[] = ['numero' => $i, 'letra' => 'O'];
-        }
-
-         // Log cantidad de balotas
-         error_log("Total balotas a insertar: " . count($balotas));
-        
-
-        // Insertar balotas en la base de datos
-        $sql_insertar = "INSERT INTO balotas (numero, letra, id_sala, estado) VALUES (?, ?, ?, 0)";
-        $stmt = $pdo->prepare($sql_insertar);
-        
-        foreach ($balotas as $balota) {
-            $stmt->execute([$balota['numero'], $balota['letra'], $id_sala]);
-              // Log cada inserción
-              error_log("Balota insertada: Número {$balota['numero']}, Letra {$balota['letra']}");
+        $balotasGeneradas = 0;
+        // Insertar todas las balotas
+        foreach ($letras as $letra) {
+            $min = $rangos[$letra][0];
+            $max = $rangos[$letra][1];
+            
+            for ($numero = $min; $numero <= $max; $numero++) {
+                $stmt->execute([$id_sala, $numero, $letra]);
+                $balotasGeneradas++;
             }
-        // Verificar balotas insertadas
-        $sql_verificar = "SELECT COUNT(*) as total FROM balotas WHERE id_sala = ?";
-        $stmt = $pdo->prepare($sql_verificar);
-        $stmt->execute([$id_sala]);
-        $total = $stmt->fetch()['total'];
-        error_log("Total balotas insertadas en BD: " . $total);
+        }
         
-        return ['success' => true, 'message' => 'Balotas generadas correctamente', 'total' => $total];
+        echo json_encode([
+            'success' => true,
+            'message' => "Se generaron $balotasGeneradas balotas exitosamente",
+            'sala_id' => $id_sala
+        ]);
         
-    } catch (Exception $e) {
+    } catch (PDOException $e) {
         error_log("Error en generarBalotas: " . $e->getMessage());
-        return ['success' => false, 'message' => $e->getMessage()];
+        echo json_encode([
+            'success' => false, 
+            'error' => 'Error al generar balotas: ' . $e->getMessage(),
+            'sala_id' => $id_sala
+        ]);
     }
 }
 
-// Asegurar que el contenido sea JSON
-header('Content-Type: application/json');
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = json_decode(file_get_contents('php://input'), true);
-    $id_sala = $data['id_sala'] ?? null;
-    $id_jugador = $data['id_jugador'] ?? null;
+    $sala_id = $_POST['sala_id'] ?? null;
     
-    error_log("POST recibido en generarBalotas.php");
-    error_log("ID sala recibido: " . ($id_sala ?? 'null'));
+    if (!$sala_id) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'ID de sala no proporcionado'
+        ]);
+        exit;
+    }
     
-    $resultado = generarBalotas($id_sala, $id_jugador);
-    echo json_encode($resultado);
-    exit;
-} else {
-    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
-    exit;
+    if (!is_numeric($sala_id)) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'ID de sala inválido'
+        ]);
+        exit;
+    }
+    
+    generarBalotas((int)$sala_id);
 }
 ?>

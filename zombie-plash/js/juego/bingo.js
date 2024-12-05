@@ -4,137 +4,187 @@ import CuentaRegresiva from './cuentaregresiva.js';
 class BingoGame {
     constructor() {
         // Obtener datos de la sala desde localStorage
-        const datosSala = JSON.parse(localStorage.getItem('datosSala'));
-        this.idSala = datosSala?.id_sala;
-        this.idJugador = localStorage.getItem('id_jugador');
-        this.rolJugador = null;
-        
-        if (!this.idSala) {
-            throw new Error('No se encontró el ID de la sala');
+        try {
+            this.datosSala = JSON.parse(localStorage.getItem('datosSala'));
+            if (!this.datosSala) {
+                throw new Error('No se encontraron datos de la sala');
+            }
+
+            // Asignar propiedades desde datosSala
+            this.idSala = this.datosSala.id_sala;
+            this.idJugador = this.datosSala.id_jugador;
+            this.rolJugador = this.datosSala.rol;
+            this.nombreJugador = this.datosSala.nombre_jugador;
+
+            console.log('Datos de la sala cargados:', {
+                idSala: this.idSala,
+                idJugador: this.idJugador,
+                rolJugador: this.rolJugador,
+                nombreJugador: this.nombreJugador
+            });
+            
+            this.numerosSacados = [];
+            this.cartonActual = [];
+            this.efectos = new Efectos();
+            this.cuentaRegresiva = new CuentaRegresiva();
+            this.intervaloBalotas = null;
+            this.inicializarEventos();
+            this.verificarEfectosActivos();
+
+        } catch (error) {
+            console.error('Error al inicializar BingoGame:', error);
+            alert('Error al cargar los datos del juego. Serás redirigido al inicio.');
+            window.location.href = 'inicio.php';
         }
-        
-        this.obtenerRolJugador();
-        this.numerosSacados = [];
-        this.cartonActual = [];
-        this.efectos = new Efectos();
-        this.cuentaRegresiva = new CuentaRegresiva();
-        this.intervaloBalotas = null;
-        this.inicializarEventos();
-        this.verificarEfectosActivos();
     }
 
     async inicializarJuego() {
         try {
-            if (!this.idSala) {
-                throw new Error('ID de sala no disponible');
+            if (!this.idSala || !this.idJugador) {
+                throw new Error('ID de sala o jugador no disponible');
             }
             
             console.log('Iniciando juego para sala:', this.idSala);
             
             // Iniciar cuenta regresiva
             this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
-                // Después de la cuenta regresiva, obtener el rol y comenzar según corresponda
-                this.obtenerRolJugador();
+                // Después de la cuenta regresiva, comenzar según el rol
+                this.inicializarSegunRol();
             });
         } catch (error) {
             console.error('Error al inicializar el juego:', error);
         }
     }
 
-    async obtenerRolJugador() {
-        try {
-            const response = await fetch('../../zombie-plash/php/juego/obtenerRolJugador.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id_sala: this.idSala,
-                    id_jugador: this.idJugador
-                })
-            });
-            
-            const data = await response.json();
-            if (data.success) {
-                this.rolJugador = data.rol;
-                this.inicializarSegunRol();
-            }
-        } catch (error) {
-            console.error('Error al obtener rol:', error);
-        }
-    }
-
     async inicializarSegunRol() {
+        console.log('Inicializando según rol:', this.rolJugador);
+        
         if (this.rolJugador === 'creador') {
-            // Solo el creador genera balotas
+            console.log('Iniciando como creador');
             await this.generarBalotas();
             this.iniciarJuego();
         } else {
-            // Los participantes solo escuchan actualizaciones
+            console.log('Iniciando como participante');
             this.escucharActualizaciones();
         }
     }
 
     async generarBalotas() {
         try {
+            console.log('Iniciando generación de balotas para sala:', this.idSala);
+            
+            const formData = new FormData();
+            formData.append('sala_id', this.idSala);
+            
             const response = await fetch('../php/juego/generarBalotas.php', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id_sala: this.idSala,
-                    id_jugador: this.idJugador
-                })
+                body: formData
             });
             
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`Error HTTP: ${response.status}`);
             }
             
             const data = await response.json();
-            console.log('Respuesta generarBalotas:', data);
+            console.log('Respuesta del servidor:', data);
             
             if (!data.success) {
-                throw new Error(data.message || 'Error al generar balotas');
+                throw new Error(data.error || 'Error al generar balotas');
             }
+            
+            console.log('Balotas generadas exitosamente');
+            return true;
+            
         } catch (error) {
             console.error('Error al generar balotas:', error);
+            alert('Error al generar balotas: ' + error.message);
             throw error;
         }
     }
 
     escucharActualizaciones() {
         // Reducir la frecuencia de las actualizaciones para evitar sobrecarga
-        setInterval(async () => {
-            await this.obtenerActualizaciones();
-        }, 2000); // Cambiar a 2 segundos
+        this.intervalActualizaciones = setInterval(async () => {
+            try {
+                const response = await fetch('../php/juego/obtenerBalotas.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_sala: this.idSala
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.actualizarPanelBalotas(data.balotas_recientes);
+                    this.actualizarHistorialBalotas(data.historial);
+                }
+            } catch (error) {
+                console.error('Error al obtener actualizaciones:', error);
+            }
+        }, 2000); // Actualizar cada 2 segundos
     }
 
-    async obtenerActualizaciones() {
-        if (this._actualizando) return; // Evitar actualizaciones simultáneas
-        
-        try {
-            this._actualizando = true;
-            const response = await fetch('../../zombie-plash/php/juego/obtenerActualizaciones.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id_sala: this.idSala
-                })
-            });
+    actualizarPanelBalotas(balotas) {
+        const panelNumeros = document.getElementById('numerosSacados');
+        if (!panelNumeros) return;
+
+        // Limpiar panel actual
+        panelNumeros.innerHTML = '';
+
+        // Agregar las balotas más recientes
+        balotas.forEach((balota, index) => {
+            const balotaElement = document.createElement('div');
+            balotaElement.className = 'balota';
+            if (index === 0) balotaElement.classList.add('nueva-balota');
             
-            const data = await response.json();
-            if (data.success && data.numerosSacados) {
-                this.actualizarInterfaz(data.numerosSacados);
+            balotaElement.innerHTML = `
+                <span class="letra">${balota.letra}</span>
+                <span class="numero">${balota.numero}</span>
+            `;
+            
+            panelNumeros.appendChild(balotaElement);
+        });
+    }
+
+    actualizarHistorialBalotas(historial) {
+        const panelIzquierdo = document.querySelector('.izquierda');
+        if (!panelIzquierdo) return;
+
+        // Agrupar números por letra
+        const numerosPorLetra = {
+            'B': [], 'I': [], 'N': [], 'G': [], 'O': []
+        };
+
+        historial.forEach(balota => {
+            numerosPorLetra[balota.letra].push(balota.numero);
+        });
+
+        // Crear el contenedor del historial
+        const historialContainer = document.createElement('div');
+        historialContainer.id = 'panel-historial';
+
+        // Crear columnas para cada letra
+        Object.entries(numerosPorLetra).forEach(([letra, numeros]) => {
+            if (numeros.length > 0) {
+                const columna = document.createElement('div');
+                columna.className = `columna-${letra}`;
+                columna.innerHTML = `
+                    <h3>${letra}</h3>
+                    <div class="numeros">
+                        ${numeros.sort((a, b) => a - b).join(', ')}
+                    </div>
+                `;
+                historialContainer.appendChild(columna);
             }
-        } catch (error) {
-            console.error('Error al obtener actualizaciones:', error);
-        } finally {
-            this._actualizando = false;
-        }
+        });
+
+        // Actualizar el panel izquierdo
+        panelIzquierdo.innerHTML = '';
+        panelIzquierdo.appendChild(historialContainer);
     }
 
     async iniciarJuego() {
@@ -297,6 +347,9 @@ class BingoGame {
     }
 
     async detenerJuego() {
+        if (this.intervalActualizaciones) {
+            clearInterval(this.intervalActualizaciones);
+        }
         try {
             const response = await fetch('../php/juego/salirSala.php', {
                 method: 'POST',

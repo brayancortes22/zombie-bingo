@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-12-2024 a las 03:38:19
+-- Tiempo de generación: 05-12-2024 a las 03:38:40
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -134,253 +134,64 @@ CREATE TABLE `amistad` (
 --
 
 INSERT INTO `amistad` (`id_amistad`, `id_jugador`, `id_amigo`, `fecha_amistad`) VALUES
-(1, 1, 6, '2024-11-15 19:38:43'),
-(2, 1, 2, '2024-11-15 20:07:15'),
-(3, 1, 4, '2024-11-15 20:07:59'),
-(4, 1, 16, '2024-11-15 21:15:26'),
-(5, 1, 9, '2024-11-17 03:27:07'),
-(6, 1, 10, '2024-11-17 03:27:23'),
-(7, 7, 1, '2024-11-22 20:14:53'),
-(8, 2, 7, '2024-11-22 22:00:01'),
-(9, 2, 10, '2024-11-22 22:00:05'),
-(10, 7, 10, '2024-11-26 19:50:02'),
-(11, 1, 19, '2024-11-30 06:12:45'),
-(12, 10, 4, '2024-12-03 21:51:58'),
-(13, 10, 1, '2024-12-03 21:51:58'),
-(14, 10, 15, '2024-12-03 21:54:41');
+(17, 27, 26, '2024-12-04 18:22:49'),
+(18, 27, 28, '2024-12-04 19:24:43');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `balotas`
+-- Estructura de tabla para la tabla `cartones_jugadores`
 --
 
-CREATE TABLE `balotas` (
-  `id_balota` int(11) NOT NULL,
-  `numero` int(11) NOT NULL,
-  `letra` char(1) NOT NULL,
-  `estado` tinyint(1) DEFAULT 0,
-  `orden_salida` int(11) DEFAULT NULL,
-  `id_sala` int(11) NOT NULL
+CREATE TABLE `cartones_jugadores` (
+  `id_carton` int(11) NOT NULL,
+  `id_sala` int(11) DEFAULT NULL,
+  `id_jugador` int(11) DEFAULT NULL,
+  `numeros` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`numeros`)),
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `balotas`
+-- Volcado de datos para la tabla `cartones_jugadores`
 --
 
-INSERT INTO `balotas` (`id_balota`, `numero`, `letra`, `estado`, `orden_salida`, `id_sala`) VALUES
-(6781, 1, 'B', 1, 54, 201),
-(6782, 2, 'B', 1, 14, 201),
-(6783, 3, 'B', 1, 37, 201),
-(6784, 4, 'B', 1, 38, 201),
-(6785, 5, 'B', 1, 48, 201),
-(6786, 6, 'B', 1, 43, 201),
-(6787, 7, 'B', 1, 57, 201),
-(6788, 8, 'B', 1, 55, 201),
-(6789, 9, 'B', 1, 45, 201),
-(6790, 10, 'B', 1, 25, 201),
-(6791, 11, 'B', 1, 20, 201),
-(6792, 12, 'B', 1, 56, 201),
-(6793, 13, 'I', 1, 4, 201),
-(6794, 14, 'I', 1, 36, 201),
-(6795, 15, 'I', 1, 21, 201),
-(6796, 16, 'I', 1, 39, 201),
-(6797, 17, 'I', 1, 24, 201),
-(6798, 18, 'I', 1, 15, 201),
-(6799, 19, 'I', 1, 51, 201),
-(6800, 20, 'I', 1, 29, 201),
-(6801, 21, 'I', 1, 59, 201),
-(6802, 22, 'I', 1, 50, 201),
-(6803, 23, 'I', 1, 8, 201),
-(6804, 24, 'N', 1, 28, 201),
-(6805, 25, 'N', 1, 7, 201),
-(6806, 26, 'N', 1, 31, 201),
-(6807, 27, 'N', 1, 5, 201),
-(6808, 28, 'N', 1, 47, 201),
-(6809, 29, 'N', 1, 32, 201),
-(6810, 30, 'N', 1, 41, 201),
-(6811, 31, 'N', 1, 16, 201),
-(6812, 32, 'N', 1, 6, 201),
-(6813, 33, 'N', 1, 53, 201),
-(6814, 34, 'N', 1, 34, 201),
-(6815, 35, 'G', 1, 52, 201),
-(6816, 36, 'G', 1, 3, 201),
-(6817, 37, 'G', 1, 10, 201),
-(6818, 38, 'G', 1, 13, 201),
-(6819, 39, 'G', 1, 23, 201),
-(6820, 40, 'G', 1, 60, 201),
-(6821, 41, 'G', 1, 40, 201),
-(6822, 42, 'G', 1, 49, 201),
-(6823, 43, 'G', 1, 42, 201),
-(6824, 44, 'G', 1, 18, 201),
-(6825, 45, 'G', 1, 11, 201),
-(6826, 46, 'O', 1, 46, 201),
-(6827, 47, 'O', 1, 35, 201),
-(6828, 48, 'O', 1, 30, 201),
-(6829, 49, 'O', 1, 44, 201),
-(6830, 50, 'O', 1, 2, 201),
-(6831, 51, 'O', 1, 58, 201),
-(6832, 52, 'O', 1, 12, 201),
-(6833, 53, 'O', 1, 9, 201),
-(6834, 54, 'O', 1, 33, 201),
-(6835, 55, 'O', 1, 26, 201),
-(6836, 56, 'O', 1, 1, 201),
-(6837, 57, 'O', 1, 27, 201),
-(6838, 58, 'O', 1, 17, 201),
-(6839, 59, 'O', 1, 19, 201),
-(6840, 60, 'O', 1, 22, 201),
-(6901, 1, 'B', 1, 28, 202),
-(6902, 2, 'B', 1, 14, 202),
-(6903, 3, 'B', 1, 33, 202),
-(6904, 4, 'B', 1, 29, 202),
-(6905, 5, 'B', 1, 37, 202),
-(6906, 6, 'B', 1, 46, 202),
-(6907, 7, 'B', 1, 25, 202),
-(6908, 8, 'B', 1, 39, 202),
-(6909, 9, 'B', 1, 27, 202),
-(6910, 10, 'B', 1, 20, 202),
-(6911, 11, 'B', 1, 36, 202),
-(6912, 12, 'B', 1, 53, 202),
-(6913, 13, 'I', 1, 56, 202),
-(6914, 14, 'I', 1, 60, 202),
-(6915, 15, 'I', 1, 34, 202),
-(6916, 16, 'I', 1, 38, 202),
-(6917, 17, 'I', 1, 42, 202),
-(6918, 18, 'I', 1, 54, 202),
-(6919, 19, 'I', 1, 59, 202),
-(6920, 20, 'I', 1, 45, 202),
-(6921, 21, 'I', 1, 3, 202),
-(6922, 22, 'I', 1, 5, 202),
-(6923, 23, 'I', 1, 21, 202),
-(6924, 24, 'N', 1, 52, 202),
-(6925, 25, 'N', 1, 49, 202),
-(6926, 26, 'N', 1, 18, 202),
-(6927, 27, 'N', 1, 58, 202),
-(6928, 28, 'N', 1, 41, 202),
-(6929, 29, 'N', 1, 57, 202),
-(6930, 30, 'N', 1, 7, 202),
-(6931, 31, 'N', 1, 6, 202),
-(6932, 32, 'N', 1, 1, 202),
-(6933, 33, 'N', 1, 48, 202),
-(6934, 34, 'N', 1, 31, 202),
-(6935, 35, 'G', 1, 50, 202),
-(6936, 36, 'G', 1, 51, 202),
-(6937, 37, 'G', 1, 19, 202),
-(6938, 38, 'G', 1, 35, 202),
-(6939, 39, 'G', 1, 43, 202),
-(6940, 40, 'G', 1, 44, 202),
-(6941, 41, 'G', 1, 55, 202),
-(6942, 42, 'G', 1, 17, 202),
-(6943, 43, 'G', 1, 16, 202),
-(6944, 44, 'G', 1, 40, 202),
-(6945, 45, 'G', 1, 22, 202),
-(6946, 46, 'O', 1, 32, 202),
-(6947, 47, 'O', 1, 24, 202),
-(6948, 48, 'O', 1, 10, 202),
-(6949, 49, 'O', 1, 23, 202),
-(6950, 50, 'O', 1, 11, 202),
-(6951, 51, 'O', 1, 15, 202),
-(6952, 52, 'O', 1, 4, 202),
-(6953, 53, 'O', 1, 47, 202),
-(6954, 54, 'O', 1, 13, 202),
-(6955, 55, 'O', 1, 30, 202),
-(6956, 56, 'O', 1, 8, 202),
-(6957, 57, 'O', 1, 2, 202),
-(6958, 58, 'O', 1, 9, 202),
-(6959, 59, 'O', 1, 12, 202),
-(6960, 60, 'O', 1, 26, 202),
-(7021, 1, 'B', 0, NULL, 203),
-(7022, 2, 'B', 1, 14, 203),
-(7023, 3, 'B', 1, 2, 203),
-(7024, 4, 'B', 1, 4, 203),
-(7025, 5, 'B', 0, NULL, 203),
-(7026, 6, 'B', 0, NULL, 203),
-(7027, 7, 'B', 0, NULL, 203),
-(7028, 8, 'B', 0, NULL, 203),
-(7029, 9, 'B', 0, NULL, 203),
-(7030, 10, 'B', 0, NULL, 203),
-(7031, 11, 'B', 0, NULL, 203),
-(7032, 12, 'B', 0, NULL, 203),
-(7033, 13, 'I', 0, NULL, 203),
-(7034, 14, 'I', 0, NULL, 203),
-(7035, 15, 'I', 1, 10, 203),
-(7036, 16, 'I', 1, 16, 203),
-(7037, 17, 'I', 0, NULL, 203),
-(7038, 18, 'I', 1, 18, 203),
-(7039, 19, 'I', 0, NULL, 203),
-(7040, 20, 'I', 0, NULL, 203),
-(7041, 21, 'I', 0, NULL, 203),
-(7042, 22, 'I', 1, 11, 203),
-(7043, 23, 'I', 0, NULL, 203),
-(7044, 24, 'N', 0, NULL, 203),
-(7045, 25, 'N', 0, NULL, 203),
-(7046, 26, 'N', 0, NULL, 203),
-(7047, 27, 'N', 1, 12, 203),
-(7048, 28, 'N', 0, NULL, 203),
-(7049, 29, 'N', 0, NULL, 203),
-(7050, 30, 'N', 0, NULL, 203),
-(7051, 31, 'N', 0, NULL, 203),
-(7052, 32, 'N', 0, NULL, 203),
-(7053, 33, 'N', 1, 1, 203),
-(7054, 34, 'N', 0, NULL, 203),
-(7055, 35, 'G', 0, NULL, 203),
-(7056, 36, 'G', 1, 8, 203),
-(7057, 37, 'G', 0, NULL, 203),
-(7058, 38, 'G', 1, 3, 203),
-(7059, 39, 'G', 0, NULL, 203),
-(7060, 40, 'G', 1, 7, 203),
-(7061, 41, 'G', 1, 9, 203),
-(7062, 42, 'G', 0, NULL, 203),
-(7063, 43, 'G', 0, NULL, 203),
-(7064, 44, 'G', 0, NULL, 203),
-(7065, 45, 'G', 1, 13, 203),
-(7066, 46, 'O', 0, NULL, 203),
-(7067, 47, 'O', 0, NULL, 203),
-(7068, 48, 'O', 0, NULL, 203),
-(7069, 49, 'O', 1, 22, 203),
-(7070, 50, 'O', 1, 17, 203),
-(7071, 51, 'O', 1, 19, 203),
-(7072, 52, 'O', 1, 21, 203),
-(7073, 53, 'O', 0, NULL, 203),
-(7074, 54, 'O', 1, 6, 203),
-(7075, 55, 'O', 1, 5, 203),
-(7076, 56, 'O', 1, 20, 203),
-(7077, 57, 'O', 1, 15, 203),
-(7078, 58, 'O', 0, NULL, 203),
-(7079, 59, 'O', 0, NULL, 203),
-(7080, 60, 'O', 0, NULL, 203);
-
---
--- Disparadores `balotas`
---
-DELIMITER $$
-CREATE TRIGGER `before_balota_update` BEFORE UPDATE ON `balotas` FOR EACH ROW BEGIN
-    IF NEW.estado = 1 AND OLD.estado = 0 THEN
-        SET NEW.orden_salida = (
-            SELECT COALESCE(MAX(orden_salida), 0) + 1
-            FROM balotas
-            WHERE id_sala = NEW.id_sala
-            AND estado = 1
-        );
-    END IF;
-END
-$$
-DELIMITER ;
+INSERT INTO `cartones_jugadores` (`id_carton`, `id_sala`, `id_jugador`, `numeros`, `fecha_creacion`) VALUES
+(1, 237, 13, '{\"B\":[3,15,11,13,9],\"I\":[17,25,28,27,30],\"N\":[42,31,36,38,37],\"G\":[51,56,58,53,54],\"O\":[74,64,72,67,75]}', '2024-12-05 02:01:53'),
+(2, 237, 15, '{\"B\":[4,11,13,14,15],\"I\":[28,30,17,24,20],\"N\":[36,32,33,38,41],\"G\":[56,52,47,46,50],\"O\":[71,68,70,62,74]}', '2024-12-05 02:01:55'),
+(3, 238, 13, '{\"B\":[5,3,12,6,9],\"I\":[28,23,19,26,18],\"N\":[40,37,44,42,45],\"G\":[50,51,53,59,55],\"O\":[73,61,70,74,71]}', '2024-12-05 02:17:37'),
+(4, 238, 15, '{\"B\":[11,12,2,5,8],\"I\":[19,24,28,17,30],\"N\":[39,43,41,31,40],\"G\":[50,56,46,53,60],\"O\":[67,64,65,70,61]}', '2024-12-05 02:17:39'),
+(5, 239, 13, '{\"B\":[5,8,6,4,14],\"I\":[16,24,23,29,25],\"N\":[42,41,38,35,32],\"G\":[56,48,47,58,50],\"O\":[68,65,71,62,61]}', '2024-12-05 02:20:30'),
+(6, 239, 15, '{\"B\":[5,14,3,6,10],\"I\":[30,26,23,16,22],\"N\":[45,40,35,37,39],\"G\":[51,57,50,49,52],\"O\":[69,70,67,72,71]}', '2024-12-05 02:20:33');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `efectos_aplicados`
+-- Estructura de tabla para la tabla `efectos_activos`
 --
 
-CREATE TABLE `efectos_aplicados` (
-  `id` int(11) NOT NULL,
+CREATE TABLE `efectos_activos` (
+  `id_efecto` int(11) NOT NULL,
   `id_sala` int(11) NOT NULL,
-  `tipo_efecto` varchar(50) NOT NULL,
-  `jugador_origen` int(11) NOT NULL,
-  `jugador_destino` int(11) NOT NULL,
-  `fecha_aplicacion` datetime NOT NULL DEFAULT current_timestamp(),
-  `duracion` int(11) NOT NULL DEFAULT 10000
+  `id_jugador_afectado` int(11) NOT NULL,
+  `tipo_efecto` varchar(20) NOT NULL,
+  `tiempo_inicio` timestamp NOT NULL DEFAULT current_timestamp(),
+  `tiempo_fin` timestamp NOT NULL DEFAULT current_timestamp(),
+  `datos_efecto` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`datos_efecto`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `historial_balotas`
+--
+
+CREATE TABLE `historial_balotas` (
+  `id_historial` int(11) NOT NULL,
+  `id_sala` int(11) DEFAULT NULL,
+  `numero` int(11) DEFAULT NULL,
+  `letra` char(1) DEFAULT NULL,
+  `orden_salida` int(11) DEFAULT NULL,
+  `fecha_salida` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -401,16 +212,9 @@ CREATE TABLE `jugador` (
 --
 
 INSERT INTO `jugador` (`id_jugador`, `nombre`, `id_credenciales`, `id_registro`) VALUES
-(1, 'bscl', NULL, 1),
-(2, 'bsl-1', NULL, 6),
-(3, 'bscl-2', NULL, 7),
-(4, 'bsl-3', NULL, 8),
-(5, 'bscl-4', NULL, 9),
-(6, 'bscl-5', NULL, 10),
-(7, 'bsl-31', NULL, 12),
-(9, 'pepen', NULL, 20),
-(10, 'jhon', NULL, 2),
-(11, 'brayan_cortes', NULL, 24);
+(13, 'brayan_cortes_2', NULL, 27),
+(14, 'brayan_cortes', NULL, 26),
+(15, 'bscl', NULL, 28);
 
 -- --------------------------------------------------------
 
@@ -431,13 +235,16 @@ CREATE TABLE `jugadores_en_sala` (
 --
 
 INSERT INTO `jugadores_en_sala` (`id`, `id_sala`, `id_jugador`, `nombre_jugador`, `rol`) VALUES
-(325, 201, 1, 'bscl', 'creador'),
-(326, 201, 6, 'bscl-5', 'participante'),
-(327, 202, 1, 'bscl', 'creador'),
-(328, 202, 6, 'bscl-5', 'participante'),
-(329, 203, 1, 'bscl', 'creador'),
-(330, 203, 6, 'bscl-5', 'participante'),
-(332, 205, 11, 'brayan_cortes', 'creador');
+(382, 235, 14, 'brayan_cortes', 'creador'),
+(383, 235, 13, 'brayan_22', 'participante'),
+(384, 236, 14, 'brayan_cortes', 'creador'),
+(385, 236, 13, 'brayan_22', 'participante'),
+(386, 237, 13, 'brayan_22', 'creador'),
+(387, 237, 15, 'bscl', 'participante'),
+(388, 238, 13, 'brayan_22', 'creador'),
+(389, 238, 15, 'bscl', 'participante'),
+(390, 239, 13, 'brayan_22', 'creador'),
+(391, 239, 15, 'bscl', 'participante');
 
 -- --------------------------------------------------------
 
@@ -455,16 +262,16 @@ CREATE TABLE `partida` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `recuperar_contraseña`
+-- Estructura de tabla para la tabla `poderes_usados`
 --
 
-CREATE TABLE `recuperar_contraseña` (
-  `id_codigo` int(11) NOT NULL,
-  `id_registro` int(11) DEFAULT NULL,
-  `fecha_inicio` date DEFAULT NULL,
-  `fecha_fin` date DEFAULT NULL,
-  `codigo` varchar(255) DEFAULT NULL,
-  `estado` varchar(255) DEFAULT NULL
+CREATE TABLE `poderes_usados` (
+  `id_poder` int(11) NOT NULL,
+  `id_sala` int(11) DEFAULT NULL,
+  `id_jugador_origen` int(11) DEFAULT NULL,
+  `id_jugador_destino` int(11) DEFAULT NULL,
+  `tipo_poder` varchar(50) DEFAULT NULL,
+  `fecha_uso` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -488,28 +295,9 @@ CREATE TABLE `registro_usuarios` (
 --
 
 INSERT INTO `registro_usuarios` (`id_registro`, `nombre`, `contraseña`, `correo`, `estado`, `avatar`, `ultima_conexion`) VALUES
-(1, 'bscl', '$2y$10$d4Mukc4CVyvuAzSnC6RMmO3fBTRyG.CO7D0WmtlNxJ3C1GYk7FMNu', 'bscl20062007@gmail.com', NULL, '674f73d101bd3_1733260241.png', NULL),
-(2, 'jhon-1', '$2y$10$Yi5b4dFqPazLcPMhFja0fuoz10TS2QxCN1n4nFBeLswFxYYOE7Pga', 'jhon@d.com', NULL, 'avatar1.jpg', NULL),
-(3, 'jhondd', '$2y$10$8gAjzhQMgOjmM0S.c5384Og5wDjmx2.wYH3RPTa0RgfYN5QysIyfG', 'wwww@gmail.co', NULL, 'perfil1.jpeg', NULL),
-(4, 'bs', '$2y$10$6ZeQlaB2GjNHcoOcumTxTeQSjCgevvpkbzKfnlPG4vEw/gVoXRB/y', 'bsc@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(6, 'bsl-1', '$2y$10$iQU7o1RbOyLG3ie53guOYO8LuPNpXFxc8IT.tAsST0GnmWaOXLfru', 'bscl-1@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(7, 'bscl-2', '$2y$10$CIr/WjQSTAR02H1Wqs6r/uQLlWrLqY//7fr8FJo/oC49ea7HjTdoO', 'bscl-2@gmail.com', NULL, 'avatar3.jpg', NULL),
-(8, 'bsl-3', '$2y$10$Zr6XuSqwJZwWJf3C4gZ.1.yrFU46aWtAkk8sebGEKJi8k92YQaywa', 'bscl-3@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(9, 'bscl-4', '$2y$10$RncrORRaf/wF8GavdHIMNO2S5BQghk2XmN6/b9j9vDMxBnY/KVG7.', 'bscl-4@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(10, 'bscl-5', '$2y$10$Pm.KgzjXIutMFVt.0h8d2OgYaez6TYFPiKE7km9CWwv4ZN89Fr1rO', 'bscl-5@gmail.com', NULL, '674f7cfe0d069_kaka.png', NULL),
-(11, 'catalina', '$2y$10$h6SZm1h9E3jO3wbbelCWr.SmtEUzbAX0chtjY3WFsG7gTXcGfvN2i', 'catalina2005cometta@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(12, 'bsl-31', '$2y$10$0y5Xft.a5SI8taVmJftfLOkE5MpqL.2PjoNlf1ddiYfZ1.nW4wbCW', 'wwwffw@gmail.co', NULL, 'perfil1.jpeg', NULL),
-(14, 'hola283', '$2y$10$7y5yCSDFY48XwYr19/AFleoFccoPdacLEOQtGR2ckacM6Q7.ITMka', 'hola@gamail.com', NULL, 'perfil1.jpeg', NULL),
-(15, 'GTRG', '$2y$10$Rf8IFRrLLUlbY8D2zkUGjeOmjpK6Nlw9yu0wmXQQJDXZ4OZRNktoa', 'RTG@GMAIL.COM', NULL, 'perfil1.jpeg', NULL),
-(16, 's', '$2y$10$tzPvpaaP5fixP2pQ/EIpL.abRFY7XZ2DR299KvmdRn84mEZGzO5R6', 'bscl2006s2007@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(17, 'sss', '$2y$10$2Y.lDE1SArVeGThmLlXjkO0G/htDy8SzOEoFv.EBP.cx/mYnLruiK', 'bscl2006s20aa07@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(18, 'pepe', '$2y$10$Fy3Sk2jd7Ao2BfNtaHJj6OWcmBTBNdDFEIf0v./aOu9EtYcu2TKw2', 'pepe@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(19, 'bscl-9', '$2y$10$0rSkwnkECYnBeuyIzsMR8.ZYRSfJY6jqVHXm4Se9UWxdjFSB5iPZW', 'bscl-9@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(20, 'pepen', '$2y$10$l2glVT3gwpw0CYCGDGliLuqiAgyfnCzL2cTIvdS2tMB/fA8omEsgm', 'bscl20062m007@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(21, 'hola2332', '$2y$10$GRyUZvIAADLTeHisTL1q4.L6S9mGnuypWsp2rEY4XhEh02Nuk.1MW', 'holas3de@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(22, 'BRAYAN', '$2y$10$WSMAghJZF2cnqxCVAHq/8.To.fBws3yD.8AyFEuHJCSN4/prKtUqO', 'BRAYAN@GMAIL.COM', NULL, 'perfil1.jpeg', NULL),
-(23, 'holaaas', '$2y$10$1HgMC1TYJWNN4tFm5vbm.eY8bAmJWwSIgwstZNkn33sxH.TQLVCVe', 'bscl2006200ww7@gmail.com', NULL, 'perfil1.jpeg', NULL),
-(24, 'brayan_cortes', '$2y$10$gv2pvMCicPPA9O6tC9Jz8.Q0qga9WZWJhQhXen9oK5WCYkb6Bja56', 'brayanstidcorteslombana@gmail.com', NULL, '674fbda95de36_Imagen de WhatsApp 2024-12-03 a las 21.25.16_87333a8c.jpg', NULL);
+(26, 'brayan_cortes', '$2y$10$4Q1Rq4uV/04nQhLmIZVLReaDRiIa.2rOi/DJsYqQAM8AC41N8nuTq', 'brayanstidcorteslombana@gmail.com', NULL, '6750ad950f0f1_Imagen de WhatsApp 2024-12-03 a las 21.25.16_87333a8c.jpg', NULL),
+(27, 'brayan_22', '$2y$10$qUFDBmK4uc2eJCU2/onWQurJtsBw4T7L/QSJvkcvA2I6myOB32aOy', 'elmundodelanime92@gmail.com', NULL, '6750a413917b1_images.jpg', NULL),
+(28, 'bscl', '$2y$10$YiyAg4oXeCsWzyA60SrZYe3VvITZykjZZ9wPHL3LS0g4lwxUNPVOO', 'bscl20062007@gmail.com', NULL, 'perfil1.jpeg', NULL);
 
 -- --------------------------------------------------------
 
@@ -535,10 +323,11 @@ CREATE TABLE `salas` (
 --
 
 INSERT INTO `salas` (`id_sala`, `id_creador`, `contraseña`, `max_jugadores`, `jugadores_unidos`, `estado`, `jugando`, `efectos`, `numeros_sacados`, `ultimo_numero_sacado`) VALUES
-(201, 1, '$2y$10$RdYfR2h1bb2hUZ5cqwXNTu4.//MlHMuvi1x2VEr4CDwtYStkihmTi', 2, 1, 'en_juego', 0, NULL, '[]', '2024-12-03 20:09:25'),
-(202, 1, '$2y$10$ndWrCo8KLPDWQ7Da8BsUtuJwnXnFwZe6Fm2xYddNbDOt7LgJNjENe', 2, 1, 'en_juego', 0, NULL, '[]', '2024-12-03 20:23:33'),
-(203, 1, '$2y$10$2YW1YUMoyP//dl9DQ6b.PeOPGNFEguGNkDvlRlPtoHh69sAm04Tfq', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-03 20:38:49'),
-(205, 11, '$2y$10$v4QRK9qTsRHKsi6cc3DIrew6Qj0TH3797cNkriIbP3d.TrluJamFG', 2, 1, 'esperando', 0, NULL, '[]', '2024-12-04 02:35:33');
+(235, 14, '$2y$10$4Y/5r9SX8aiAWag7OyoQMOyH7uDtopfNaLqN3JmxxXwzDq5Jdd1HC', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-04 23:53:01'),
+(236, 14, '$2y$10$y63PMi3/BJ66k6T3WVUuyeSVfZYKfqg1cT2/BOAFOSWQTV2o6bIIy', 2, 2, 'esperando', 0, NULL, '[]', '2024-12-05 00:04:20'),
+(237, 13, '$2y$10$p3oSuqEgki5vEpBDMcVfGuamVm1k465dl3fcyX2s/xHciJy2cz3fa', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-05 02:00:15'),
+(238, 13, '$2y$10$QxU0.SzWHBiCBo2TpnQKPeD0bRkUP1Z0kQTu/nH5NF8dl4iJNzDJe', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-05 02:16:31'),
+(239, 13, '$2y$10$LSz1Sbxi51RA.3EQCw7Hs.43Xoh72Gu0Tp40l1lnYlZ8.W15A5dDS', 2, 2, 'en_juego', 0, NULL, '[]', '2024-12-05 02:19:43');
 
 --
 -- Índices para tablas volcadas
@@ -553,21 +342,27 @@ ALTER TABLE `amistad`
   ADD KEY `id_amigo` (`id_amigo`);
 
 --
--- Indices de la tabla `balotas`
+-- Indices de la tabla `cartones_jugadores`
 --
-ALTER TABLE `balotas`
-  ADD PRIMARY KEY (`id_balota`),
+ALTER TABLE `cartones_jugadores`
+  ADD PRIMARY KEY (`id_carton`),
   ADD KEY `id_sala` (`id_sala`),
-  ADD KEY `idx_balotas_estado_orden` (`id_sala`,`estado`,`orden_salida`);
+  ADD KEY `id_jugador` (`id_jugador`);
 
 --
--- Indices de la tabla `efectos_aplicados`
+-- Indices de la tabla `efectos_activos`
 --
-ALTER TABLE `efectos_aplicados`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_sala` (`id_sala`),
-  ADD KEY `jugador_origen` (`jugador_origen`),
-  ADD KEY `jugador_destino` (`jugador_destino`);
+ALTER TABLE `efectos_activos`
+  ADD PRIMARY KEY (`id_efecto`),
+  ADD KEY `idx_efectos_sala` (`id_sala`),
+  ADD KEY `idx_efectos_jugador` (`id_jugador_afectado`);
+
+--
+-- Indices de la tabla `historial_balotas`
+--
+ALTER TABLE `historial_balotas`
+  ADD PRIMARY KEY (`id_historial`),
+  ADD KEY `id_sala` (`id_sala`);
 
 --
 -- Indices de la tabla `jugador`
@@ -594,11 +389,13 @@ ALTER TABLE `partida`
   ADD KEY `id_ganador` (`id_ganador`);
 
 --
--- Indices de la tabla `recuperar_contraseña`
+-- Indices de la tabla `poderes_usados`
 --
-ALTER TABLE `recuperar_contraseña`
-  ADD PRIMARY KEY (`id_codigo`),
-  ADD KEY `fk_id_registro` (`id_registro`);
+ALTER TABLE `poderes_usados`
+  ADD PRIMARY KEY (`id_poder`),
+  ADD KEY `id_jugador_destino` (`id_jugador_destino`),
+  ADD KEY `idx_poderes_sala` (`id_sala`),
+  ADD KEY `idx_poderes_jugador` (`id_jugador_origen`);
 
 --
 -- Indices de la tabla `registro_usuarios`
@@ -621,31 +418,37 @@ ALTER TABLE `salas`
 -- AUTO_INCREMENT de la tabla `amistad`
 --
 ALTER TABLE `amistad`
-  MODIFY `id_amistad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_amistad` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT de la tabla `balotas`
+-- AUTO_INCREMENT de la tabla `cartones_jugadores`
 --
-ALTER TABLE `balotas`
-  MODIFY `id_balota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7081;
+ALTER TABLE `cartones_jugadores`
+  MODIFY `id_carton` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT de la tabla `efectos_aplicados`
+-- AUTO_INCREMENT de la tabla `efectos_activos`
 --
-ALTER TABLE `efectos_aplicados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+ALTER TABLE `efectos_activos`
+  MODIFY `id_efecto` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `historial_balotas`
+--
+ALTER TABLE `historial_balotas`
+  MODIFY `id_historial` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `jugador`
 --
 ALTER TABLE `jugador`
-  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_jugador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `jugadores_en_sala`
 --
 ALTER TABLE `jugadores_en_sala`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=392;
 
 --
 -- AUTO_INCREMENT de la tabla `partida`
@@ -654,16 +457,22 @@ ALTER TABLE `partida`
   MODIFY `id_partida` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `poderes_usados`
+--
+ALTER TABLE `poderes_usados`
+  MODIFY `id_poder` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `registro_usuarios`
 --
 ALTER TABLE `registro_usuarios`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT de la tabla `salas`
 --
 ALTER TABLE `salas`
-  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=206;
+  MODIFY `id_sala` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=240;
 
 --
 -- Restricciones para tablas volcadas
@@ -677,18 +486,24 @@ ALTER TABLE `amistad`
   ADD CONSTRAINT `amistad_ibfk_2` FOREIGN KEY (`id_amigo`) REFERENCES `registro_usuarios` (`id_registro`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `balotas`
+-- Filtros para la tabla `cartones_jugadores`
 --
-ALTER TABLE `balotas`
-  ADD CONSTRAINT `fk_sala_balotas` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE;
+ALTER TABLE `cartones_jugadores`
+  ADD CONSTRAINT `cartones_jugadores_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE,
+  ADD CONSTRAINT `cartones_jugadores_ibfk_2` FOREIGN KEY (`id_jugador`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `efectos_aplicados`
+-- Filtros para la tabla `efectos_activos`
 --
-ALTER TABLE `efectos_aplicados`
-  ADD CONSTRAINT `efectos_aplicados_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE,
-  ADD CONSTRAINT `efectos_aplicados_ibfk_2` FOREIGN KEY (`jugador_origen`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE,
-  ADD CONSTRAINT `efectos_aplicados_ibfk_3` FOREIGN KEY (`jugador_destino`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
+ALTER TABLE `efectos_activos`
+  ADD CONSTRAINT `efectos_activos_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`),
+  ADD CONSTRAINT `efectos_activos_ibfk_2` FOREIGN KEY (`id_jugador_afectado`) REFERENCES `jugador` (`id_jugador`);
+
+--
+-- Filtros para la tabla `historial_balotas`
+--
+ALTER TABLE `historial_balotas`
+  ADD CONSTRAINT `historial_balotas_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `jugador`
@@ -713,10 +528,12 @@ ALTER TABLE `partida`
   ADD CONSTRAINT `partida_ibfk_2` FOREIGN KEY (`id_ganador`) REFERENCES `jugador` (`id_jugador`);
 
 --
--- Filtros para la tabla `recuperar_contraseña`
+-- Filtros para la tabla `poderes_usados`
 --
-ALTER TABLE `recuperar_contraseña`
-  ADD CONSTRAINT `fk_id_registro` FOREIGN KEY (`id_registro`) REFERENCES `registro_usuarios` (`id_registro`);
+ALTER TABLE `poderes_usados`
+  ADD CONSTRAINT `poderes_usados_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`) ON DELETE CASCADE,
+  ADD CONSTRAINT `poderes_usados_ibfk_2` FOREIGN KEY (`id_jugador_origen`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE,
+  ADD CONSTRAINT `poderes_usados_ibfk_3` FOREIGN KEY (`id_jugador_destino`) REFERENCES `jugador` (`id_jugador`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `salas`
@@ -728,3 +545,114 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+-- Tabla para las balotas del juego
+CREATE TABLE balotas (
+    id_balota INT AUTO_INCREMENT PRIMARY KEY,
+    id_sala INT NOT NULL,
+    numero INT NOT NULL,
+    letra CHAR(1) NOT NULL,
+    estado TINYINT DEFAULT 0, -- 0: no usado, 1: usado
+    orden_salida INT DEFAULT NULL,
+    FOREIGN KEY (id_sala) REFERENCES salas(id_sala) ON DELETE CASCADE
+);
+
+-- Tabla para los cartones de los jugadores
+CREATE TABLE cartones_jugadores (
+    id_carton INT AUTO_INCREMENT PRIMARY KEY,
+    id_sala INT NOT NULL,
+    id_jugador INT NOT NULL,
+    numeros JSON NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_sala) REFERENCES salas(id_sala) ON DELETE CASCADE,
+    FOREIGN KEY (id_jugador) REFERENCES jugador(id_jugador) ON DELETE CASCADE
+);
+
+-- Tabla para los efectos aplicados
+CREATE TABLE efectos_aplicados (
+    id_efecto INT AUTO_INCREMENT PRIMARY KEY,
+    id_sala INT NOT NULL,
+    tipo_efecto VARCHAR(50) NOT NULL,
+    jugador_origen INT NOT NULL,
+    jugador_destino INT NOT NULL,
+    duracion INT NOT NULL, -- en milisegundos
+    fecha_aplicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_sala) REFERENCES salas(id_sala) ON DELETE CASCADE,
+    FOREIGN KEY (jugador_origen) REFERENCES jugador(id_jugador) ON DELETE CASCADE,
+    FOREIGN KEY (jugador_destino) REFERENCES jugador(id_jugador) ON DELETE CASCADE
+);
+
+-- Tabla para los efectos procesados
+CREATE TABLE efectos_procesados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_efecto INT NOT NULL,
+    id_jugador INT NOT NULL,
+    fecha_proceso TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_efecto) REFERENCES efectos_aplicados(id_efecto) ON DELETE CASCADE,
+    FOREIGN KEY (id_jugador) REFERENCES jugador(id_jugador) ON DELETE CASCADE
+);
+
+-- Procedimientos almacenados para el juego
+DELIMITER //
+
+CREATE PROCEDURE generar_balotas_sala(IN p_id_sala INT)
+BEGIN
+    -- Limpiar balotas existentes
+    DELETE FROM balotas WHERE id_sala = p_id_sala;
+    
+    -- Generar nuevas balotas
+    -- B: 1-15
+    INSERT INTO balotas (id_sala, numero, letra)
+    SELECT p_id_sala, n, 'B' FROM 
+    (SELECT @row := @row + 1 as n FROM 
+     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) t1,
+     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2) t2,
+     (SELECT @row := 0) t3 LIMIT 15) numbers;
+    
+    -- I: 16-30
+    INSERT INTO balotas (id_sala, numero, letra)
+    SELECT p_id_sala, n + 15, 'I' FROM 
+    (SELECT @row := @row + 1 as n FROM 
+     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) t1,
+     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2) t2,
+     (SELECT @row := 0) t3 LIMIT 15) numbers;
+     
+    -- Continuar con N, G, O...
+END //
+
+CREATE PROCEDURE sacar_balota(IN p_id_sala INT)
+BEGIN
+    DECLARE v_balota_id INT;
+    DECLARE v_siguiente_orden INT;
+    
+    START TRANSACTION;
+    
+    -- Obtener una balota no usada aleatoria
+    SELECT id_balota INTO v_balota_id
+    FROM balotas 
+    WHERE id_sala = p_id_sala AND estado = 0
+    ORDER BY RAND() LIMIT 1;
+    
+    IF v_balota_id IS NOT NULL THEN
+        -- Obtener el siguiente orden
+        SELECT COALESCE(MAX(orden_salida), 0) + 1 
+        INTO v_siguiente_orden
+        FROM balotas 
+        WHERE id_sala = p_id_sala AND estado = 1;
+        
+        -- Actualizar la balota
+        UPDATE balotas 
+        SET estado = 1,
+            orden_salida = v_siguiente_orden
+        WHERE id_balota = v_balota_id;
+        
+        -- Devolver la información de la balota
+        SELECT numero, letra, orden_salida
+        FROM balotas
+        WHERE id_balota = v_balota_id;
+    END IF;
+    
+    COMMIT;
+END //
+
+DELIMITER ;
