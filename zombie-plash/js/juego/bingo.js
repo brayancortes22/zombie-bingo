@@ -104,7 +104,6 @@ class BingoGame {
     }
 
     escucharActualizaciones() {
-        // Reducir la frecuencia de las actualizaciones para evitar sobrecarga
         this.intervalActualizaciones = setInterval(async () => {
             try {
                 const response = await fetch('../php/juego/obtenerBalotas.php', {
@@ -120,8 +119,18 @@ class BingoGame {
                 const data = await response.json();
                 
                 if (data.success) {
+                    // Actualizar el array local de números sacados
+                    this.numerosSacados = data.historial;
+                    
+                    // Actualizar la interfaz
                     this.actualizarPanelBalotas(data.balotas_recientes);
                     this.actualizarHistorialBalotas(data.historial);
+                    
+                    // Si hay una nueva balota, verificar el cartón
+                    if (data.balotas_recientes.length > 0) {
+                        const ultimaBalota = data.balotas_recientes[data.balotas_recientes.length - 1];
+                        this.verificarNumeroEnCarton(ultimaBalota.numero, ultimaBalota.letra);
+                    }
                 }
             } catch (error) {
                 console.error('Error al obtener actualizaciones:', error);
@@ -140,12 +149,20 @@ class BingoGame {
         balotas.forEach((balota, index) => {
             const balotaElement = document.createElement('div');
             balotaElement.className = 'balota';
-            if (index === 0) balotaElement.classList.add('nueva-balota');
+            if (index === balotas.length - 1) {
+                balotaElement.classList.add('nueva-balota');
+                // Reproducir sonido para la nueva balota
+                const audio = new Audio('../assets/sounds/nueva_balota.mp3');
+                audio.play();
+            }
             
             balotaElement.innerHTML = `
                 <span class="letra">${balota.letra}</span>
                 <span class="numero">${balota.numero}</span>
             `;
+            
+            // Agregar animación de entrada
+            balotaElement.style.animation = 'balotaEntrada 0.5s ease-out';
             
             panelNumeros.appendChild(balotaElement);
         });

@@ -9,17 +9,6 @@ function seleccionarNumero($id_sala, $id_jugador, $numero) {
     try {
         // Verificar que el número no haya salido ya
         $stmt = $pdo->prepare("
-            SELECT id_balota 
-            FROM balotas 
-            WHERE id_sala = ? AND numero = ? AND estado = 1
-        ");
-        $stmt->execute([$id_sala, $numero]);
-        if ($stmt->fetch()) {
-            throw new Exception("Este número ya ha sido sacado");
-        }
-
-        // Obtener la balota correspondiente
-        $stmt = $pdo->prepare("
             SELECT id_balota, letra 
             FROM balotas 
             WHERE id_sala = ? AND numero = ? AND estado = 0
@@ -28,7 +17,7 @@ function seleccionarNumero($id_sala, $id_jugador, $numero) {
         $balota = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$balota) {
-            throw new Exception("Número no disponible");
+            throw new Exception("Este número no está disponible o ya ha sido sacado");
         }
 
         // Obtener el siguiente orden
@@ -49,7 +38,7 @@ function seleccionarNumero($id_sala, $id_jugador, $numero) {
         ");
         $stmt->execute([$orden['siguiente_orden'], $balota['id_balota']]);
 
-        // Registrar que este número fue seleccionado por el jugador
+        // Registrar el número seleccionado
         $stmt = $pdo->prepare("
             INSERT INTO numeros_seleccionados 
             (id_sala, id_jugador, numero, letra) 
@@ -57,7 +46,7 @@ function seleccionarNumero($id_sala, $id_jugador, $numero) {
         ");
         $stmt->execute([$id_sala, $id_jugador, $numero, $balota['letra']]);
 
-        // Actualizar el estado de la sala para que todos los jugadores vean el nuevo número
+        // Actualizar el estado de la sala
         $stmt = $pdo->prepare("
             UPDATE salas 
             SET ultimo_numero_sacado = CURRENT_TIMESTAMP,

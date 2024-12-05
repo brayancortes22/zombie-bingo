@@ -127,12 +127,15 @@ class Efectos {
     }
 
     async toggleEfectoEligeNumero() {
-        if (!this.efectoEligeNumeroActivo) {
-            const aplicado = await this.aplicarEfectoAJugadores('elige_numero');
-            if (aplicado) {
-                this.efectoEligeNumeroActivo = true;
-                this.iniciarEfectoEligeNumero();
-            }
+        if (this.efectoEligeNumeroActivo) {
+            alert('Ya estás usando este poder');
+            return;
+        }
+
+        const aplicado = await this.aplicarEfectoAJugadores('elige_numero');
+        if (aplicado) {
+            this.efectoEligeNumeroActivo = true;
+            this.iniciarEfectoEligeNumero();
         }
     }
 
@@ -208,29 +211,48 @@ class Efectos {
     }
 
     iniciarEfectoEligeNumero() {
-        if (this.efectoEligeNumeroActivo) return;
+        const modal = document.createElement('div');
+        modal.id = 'modalEligeNumero';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        `;
 
-        const modal = document.getElementById('modalEligeNumero');
-        const numerosDisponibles = document.getElementById('numerosDisponibles');
-        
-        // Limpiar números anteriores
-        numerosDisponibles.innerHTML = '';
+        const contenido = document.createElement('div');
+        contenido.className = 'modal-content';
+        contenido.innerHTML = `
+            <h2>Selecciona un número</h2>
+            <div id="numerosDisponibles" style="
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 10px;
+                margin-top: 20px;
+            "></div>
+        `;
 
-        // Obtener números disponibles (no sacados)
+        modal.appendChild(contenido);
+        document.body.appendChild(modal);
+
+        // Obtener números disponibles
         const numerosSacados = this.bingoGame.numerosSacados.map(b => b.numero);
         const todosNumeros = Array.from({length: 75}, (_, i) => i + 1);
         const disponibles = todosNumeros.filter(n => !numerosSacados.includes(n));
 
-        // Crear botones para cada número disponible
+        const numerosContainer = contenido.querySelector('#numerosDisponibles');
         disponibles.forEach(numero => {
             const boton = document.createElement('button');
             boton.textContent = numero;
             boton.onclick = () => this.seleccionarNumero(numero);
-            numerosDisponibles.appendChild(boton);
+            numerosContainer.appendChild(boton);
         });
-
-        modal.style.display = 'block';
-        this.efectoEligeNumeroActivo = true;
     }
 
     async seleccionarNumero(numero) {
@@ -250,28 +272,26 @@ class Efectos {
             const data = await response.json();
             if (data.success) {
                 // Cerrar el modal
-                document.getElementById('modalEligeNumero').style.display = 'none';
-                this.efectoEligeNumeroActivo = false;
+                const modal = document.getElementById('modalEligeNumero');
+                if (modal) modal.remove();
 
-                // Mostrar mensaje de éxito
-                alert(data.mensaje);
-
-                // Agregar el número al historial local
-                if (this.bingoGame.numerosSacados) {
-                    this.bingoGame.numerosSacados.push({
-                        numero: data.numero,
-                        letra: data.letra,
-                        orden: data.orden
-                    });
-                }
+                // Actualizar el juego
+                this.bingoGame.numerosSacados.push({
+                    numero: data.numero,
+                    letra: data.letra,
+                    orden: data.orden
+                });
 
                 // Actualizar la interfaz
-                if (this.bingoGame.actualizarPanelNumeros) {
-                    this.bingoGame.actualizarPanelNumeros(data.numero, data.letra);
-                }
-                if (this.bingoGame.actualizarHistorialBalotas) {
-                    this.bingoGame.actualizarHistorialBalotas(this.bingoGame.numerosSacados);
-                }
+                this.bingoGame.actualizarPanelBalotas([{
+                    numero: data.numero,
+                    letra: data.letra
+                }]);
+
+                this.bingoGame.actualizarHistorialBalotas(this.bingoGame.numerosSacados);
+
+                // Desactivar el efecto
+                this.efectoEligeNumeroActivo = false;
             } else {
                 alert(data.error || 'Error al seleccionar el número');
             }
