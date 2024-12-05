@@ -93,11 +93,7 @@ if (!isset($_SESSION['id_usuario'])) {
                             </i>
                             <strong>Unirse a una sala</strong></button>
                         </div>
-                        <div class="jugar" onclick="window.location.href='juego.html'">
-                            <button type="button" class="bjugar"> 
-                            <i class="fas fa-user">
-                            </i>
-                            <strong>Jugar en solitario</strong></button></div>
+                        
                 </div>
             </div>
             <div class="abajo">

@@ -25,12 +25,12 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `generar_balotas_sala` (IN `p_id_sala` INT)   
-BEGIN
+CREATE DEFINER=`root`@`localhost` PROCEDURE `generar_balotas_sala` (IN `p_id_sala` INT)   BEGIN
     -- Limpiar balotas existentes
     DELETE FROM balotas WHERE id_sala = p_id_sala;
     
-    -- Generar balotas para B (1-15)
+    -- Generar nuevas balotas
+    -- B: 1-15
     INSERT INTO balotas (id_sala, numero, letra)
     SELECT p_id_sala, n, 'B' FROM 
     (SELECT @row := @row + 1 as n FROM 
@@ -38,7 +38,7 @@ BEGIN
      (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2) t2,
      (SELECT @row := 0) t3 LIMIT 15) numbers;
     
-    -- Generar balotas para I (16-30)
+    -- I: 16-30
     INSERT INTO balotas (id_sala, numero, letra)
     SELECT p_id_sala, n + 15, 'I' FROM 
     (SELECT @row := @row + 1 as n FROM 
@@ -46,29 +46,7 @@ BEGIN
      (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2) t2,
      (SELECT @row := 0) t3 LIMIT 15) numbers;
      
-    -- Generar balotas para N (31-45)
-    INSERT INTO balotas (id_sala, numero, letra)
-    SELECT p_id_sala, n + 30, 'N' FROM 
-    (SELECT @row := @row + 1 as n FROM 
-     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) t1,
-     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2) t2,
-     (SELECT @row := 0) t3 LIMIT 15) numbers;
-     
-    -- Generar balotas para G (46-60)
-    INSERT INTO balotas (id_sala, numero, letra)
-    SELECT p_id_sala, n + 45, 'G' FROM 
-    (SELECT @row := @row + 1 as n FROM 
-     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) t1,
-     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2) t2,
-     (SELECT @row := 0) t3 LIMIT 15) numbers;
-     
-    -- Generar balotas para O (61-75)
-    INSERT INTO balotas (id_sala, numero, letra)
-    SELECT p_id_sala, n + 60, 'O' FROM 
-    (SELECT @row := @row + 1 as n FROM 
-     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4) t1,
-     (SELECT 0 UNION ALL SELECT 1 UNION ALL SELECT 2) t2,
-     (SELECT @row := 0) t3 LIMIT 15) numbers;
+    -- Continuar con N, G, O...
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `obtener_balotas_sacadas` (IN `sala_id` INT)   BEGIN

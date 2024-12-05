@@ -31,6 +31,8 @@ class BingoGame {
             this.inicializarEventos();
             this.verificarEfectosActivos();
             this.iniciarConsultaEfectos();
+            this.tiempoGenerarCarton = 15; // 15 segundos
+            this.timerGenerarCarton = null;
 
         } catch (error) {
             console.error('Error al inicializar BingoGame:', error);
@@ -47,11 +49,14 @@ class BingoGame {
             
             console.log('Iniciando juego para sala:', this.idSala);
             
-            // Iniciar cuenta regresiva
-            this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
-                // Después de la cuenta regresiva, comenzar según el rol
-                this.inicializarSegunRol();
-            });
+            // Generar cartón inicial automáticamente
+            await this.nuevoCarton();
+            
+            // Iniciar temporizador para el botón de generar cartón
+            // y comenzar el juego cuando termine
+            await this.iniciarTemporizadorGenerarCarton();
+            
+            // Ya no iniciamos la cuenta regresiva aquí
         } catch (error) {
             console.error('Error al inicializar el juego:', error);
         }
@@ -322,29 +327,16 @@ class BingoGame {
 
     async verificarBingo() {
         try {
-            // Recolectar números marcados del cartón
-            const numerosMarcados = [];
-            const celdas = document.querySelectorAll('.columna1.marcado');
-            celdas.forEach(celda => {
-                numerosMarcados.push({
-                    numero: parseInt(celda.dataset.numero),
-                    letra: celda.dataset.letra
-                });
-            });
-
-            if (numerosMarcados.length < 25) {
-                alert('Debes marcar todas las casillas para cantar BINGO');
-                return;
-            }
-
-            const response = await fetch('../php/juego/verificarBingo.php', {
+            const numerosMarcados = obtenerNumerosMarcados(); // Función que obtiene los números marcados
+            
+            const response = await fetch('php/juego/verificarBingo.php', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    id_sala: this.idSala,
-                    id_jugador: this.idJugador,
+                    id_sala: idSala,
+                    id_jugador: idJugador,
                     numeros_marcados: numerosMarcados
                 })
             });
@@ -352,13 +344,15 @@ class BingoGame {
             const data = await response.json();
             
             if (data.success) {
-                // Mostrar mensaje de victoria y terminar el juego
-                await this.finalizarJuego(data);
+                // Mostrar el modal con el ranking
+                mostrarModalRanking(data.ranking, data.ganador);
+                await finalizarJuego();
             } else {
-                alert(data.error || '¡Los números no coinciden! Verifica tus marcas.');
+                alert(data.error || 'Error al verificar el bingo');
             }
         } catch (error) {
             console.error('Error al verificar bingo:', error);
+            alert('Error al verificar el bingo. Por favor, inténtalo de nuevo.');
         }
     }
 
@@ -451,6 +445,19 @@ class BingoGame {
 
     async nuevoCarton() {
         try {
+            // Verificar si el botón está deshabilitado
+            const btnGenerarCarton = document.getElementById('btnGenerarCarton');
+            if (btnGenerarCarton && btnGenerarCarton.disabled) {
+                alert('El tiempo para generar un nuevo cartón ha expirado');
+                return false;
+            }
+
+            // Limpiar las marcas del cartón anterior si existe
+            const celdasMarcadas = document.querySelectorAll('.columna1.marcado');
+            celdasMarcadas.forEach(celda => {
+                celda.classList.remove('marcado');
+            });
+
             // Definir los rangos correctos para cada letra del BINGO
             const rangos = {
                 'B': { min: 1, max: 15 },     // B: 1-15
@@ -880,6 +887,49 @@ class BingoGame {
         const mensaje = `${efecto.origen_nombre} te ha aplicado el efecto: ${efecto.tipo_efecto}`;
         // Aquí puedes usar tu sistema de notificaciones preferido
         alert(mensaje);
+    }
+
+    iniciarTemporizadorGenerarCarton() {
+        return new Promise((resolve) => {
+        const btnGenerarCarton = document.getElementById('btnGenerarCarton');
+            if (!btnGenerarCarton) return resolve();
+
+        let tiempoRestante = this.tiempoGenerarCarton;
+        btnGenerarCarton.disabled = false;
+        
+        // Actualizar el texto del botón con el tiempo restante
+        const actualizarTextoBoton = () => {
+            btnGenerarCarton.textContent = `Generar Cartón (${tiempoRestante}s)`;
+        };
+        
+        actualizarTextoBoton();
+
+        this.timerGenerarCarton = setInterval(() => {
+            tiempoRestante--;
+            actualizarTextoBoton();
+            
+            if (tiempoRestante <= 0) {
+                clearInterval(this.timerGenerarCarton);
+                btnGenerarCarton.disabled = true;
+                btnGenerarCarton.textContent = 'Tiempo agotado';
+                    
+                    // Usar window.Swal en lugar de Swal directamente
+                    window.Swal.fire({
+                        title: '¡Comienza el juego!',
+                        text: 'Tu cartón ha sido fijado. ¡Buena suerte!',
+                        icon: 'success',
+                        timer: 2000,
+                        showConfirmButton: false
+                    }).then(() => {
+                        // Iniciar la cuenta regresiva y el juego
+                        this.cuentaRegresiva.iniciarCuentaRegresiva(() => {
+                            this.inicializarSegunRol();
+                        });
+                        resolve();
+                    });
+            }
+        }, 1000);
+        });
     }
 }
 
