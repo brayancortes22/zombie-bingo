@@ -342,12 +342,13 @@ class BingoGame {
     async verificarBingo() {
         try {
             const numerosMarcados = this.obtenerNumerosMarcados();
+            const totalCasillas = 25; // Un cartón de bingo tiene 25 casillas
             
-            // Verificar que hay números marcados
-            if (numerosMarcados.length === 0) {
+            // Verificar que hay suficientes números marcados
+            if (numerosMarcados.length < totalCasillas) {
                 await Swal.fire({
                     title: 'Error',
-                    text: 'Debes marcar al menos un número para verificar el bingo',
+                    text: 'Debes completar todo el cartón para cantar bingo',
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
@@ -380,6 +381,7 @@ class BingoGame {
             // Depuración
             const responseText = await response.text();
             console.log('Respuesta cruda del servidor:', responseText);
+            
             try {
                 const data = JSON.parse(responseText);
                 
