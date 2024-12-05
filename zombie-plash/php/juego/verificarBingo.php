@@ -1,81 +1,84 @@
 <?php
 require_once '../../setting/conexion-base-datos.php';
+header('Content-Type: application/json');
 
-function verificarBingo($id_sala, $carton, $numeros_jugador) {
+function verificarBingo($id_sala, $id_jugador) {
     global $conexion;
     $pdo = $conexion->conectar();
     
     try {
-        // Obtener números sacados de la sala
-        $sql = "SELECT numeros_sacados FROM salas WHERE id_sala = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$id_sala]);
+        // Obtener casillas marcadas del jugador
+        $stmt = $pdo->prepare("
+            SELECT numero, letra
+            FROM casillas_marcadas
+            WHERE id_sala = ? AND id_jugador = ?
+            ORDER BY letra, numero
+        ");
+        $stmt->execute([$id_sala, $id_jugador]);
+        $casillas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Verificar si hay suficientes casillas marcadas
+        if (count($casillas) < 25) {
+            return [
+                'success' => false,
+                'error' => 'No hay suficientes casillas marcadas'
+            ];
+        }
+
+        // Verificar que todas las casillas marcadas correspondan a balotas sacadas
+        $stmt = $pdo->prepare("
+            SELECT COUNT(*) as total
+            FROM casillas_marcadas cm
+            WHERE cm.id_sala = ? 
+            AND cm.id_jugador = ?
+            AND EXISTS (
+                SELECT 1 
+                FROM balotas b 
+                WHERE b.id_sala = cm.id_sala 
+                AND b.numero = cm.numero 
+                AND b.letra = cm.letra 
+                AND b.estado = 1
+            )
+        ");
+        $stmt->execute([$id_sala, $id_jugador]);
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-        
-        if (!$resultado) {
-            return ['success' => false, 'message' => 'Sala no encontrada'];
+
+        if ($resultado['total'] < 25) {
+            return [
+                'success' => false,
+                'error' => 'Algunas casillas marcadas no corresponden a balotas sacadas'
+            ];
         }
-        
-        $numeros_sala = json_decode($resultado['numeros_sacados'], true);
-        
-        // Verificar que todos los números del cartón estén en los números sacados
-        foreach ($carton as $numero) {
-            if (!in_array($numero, $numeros_sala)) {
-                return ['success' => false, 'message' => 'Números no coinciden'];
-            }
-        }
-        
-        // Obtener ranking de jugadores
-        $ranking = obtenerRanking($id_sala);
-        
-        // Registrar ganador
-        registrarGanador($id_sala, $_SESSION['id_jugador']);
-        
+
+        // Si llegamos aquí, el bingo es válido
         return [
             'success' => true,
-            'ranking' => $ranking
+            'message' => '¡BINGO válido!'
         ];
-        
+
     } catch (PDOException $e) {
-        return ['success' => false, 'message' => 'Error: ' . $e->getMessage()];
+        error_log("Error al verificar bingo: " . $e->getMessage());
+        return [
+            'success' => false,
+            'error' => 'Error al verificar bingo: ' . $e->getMessage()
+        ];
     }
-}
-
-function obtenerRanking($id_sala) {
-    global $conexion;
-    $pdo = $conexion->conectar();
-    
-    $sql = "SELECT j.nombre, COUNT(*) as aciertos 
-            FROM jugadores_en_sala jes 
-            JOIN jugador j ON jes.id_jugador = j.id_jugador 
-            WHERE jes.id_sala = ? 
-            GROUP BY j.id_jugador 
-            ORDER BY aciertos DESC";
-            
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id_sala]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function registrarGanador($id_sala, $id_jugador) {
-    global $conexion;
-    $pdo = $conexion->conectar();
-    
-    $sql = "INSERT INTO partida (id_sala, id_ganador, fecha_partida) 
-            VALUES (?, ?, NOW())";
-            
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id_sala, $id_jugador]);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
     
-    if (isset($data['id_sala']) && isset($data['carton']) && isset($data['numeros_sacados'])) {
-        $resultado = verificarBingo($data['id_sala'], $data['carton'], $data['numeros_sacados']);
-        echo json_encode($resultado);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
+    if (!isset($data['id_sala']) || !isset($data['id_jugador'])) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Datos incompletos'
+        ]);
+        exit;
     }
+    
+    echo json_encode(verificarBingo(
+        (int)$data['id_sala'],
+        (int)$data['id_jugador']
+    ));
 }
 ?> 

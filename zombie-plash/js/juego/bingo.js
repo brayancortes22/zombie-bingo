@@ -311,16 +311,17 @@ class BingoGame {
                 },
                 body: JSON.stringify({
                     id_sala: this.idSala,
-                    carton: this.cartonActual,
-                    numeros_sacados: this.numerosSacados
+                    id_jugador: this.idJugador
                 })
             });
+
             const data = await response.json();
             
             if (data.success) {
-                this.mostrarGanador(data);
+                // ¡BINGO válido!
+                this.mostrarGanador();
             } else {
-                alert('¡Los números no coinciden! Sigue jugando.');
+                alert(data.error || '¡Los números no coinciden! Sigue jugando.');
             }
         } catch (error) {
             console.error('Error al verificar bingo:', error);
@@ -719,6 +720,45 @@ class BingoGame {
         } catch (error) {
             console.error('Error al verificar efectos:', error);
         }
+    }
+
+    async marcarCasilla(casilla) {
+        if (!casilla.dataset.numero || !casilla.dataset.letra) return;
+        
+        try {
+            const response = await fetch('../php/juego/marcarCasilla.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.idSala,
+                    id_jugador: this.idJugador,
+                    numero: parseInt(casilla.dataset.numero),
+                    letra: casilla.dataset.letra
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                casilla.classList.toggle('marcado');
+                this.verificarPatronesGanadores();
+            } else {
+                console.error('Error al marcar casilla:', data.error);
+                // Opcional: mostrar mensaje al usuario
+                alert(data.error);
+            }
+        } catch (error) {
+            console.error('Error al marcar casilla:', error);
+        }
+    }
+
+    inicializarCarton() {
+        const celdas = document.querySelectorAll('.columna1');
+        celdas.forEach(celda => {
+            celda.addEventListener('click', () => this.marcarCasilla(celda));
+        });
     }
 }
 
