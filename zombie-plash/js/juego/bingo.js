@@ -30,6 +30,7 @@ class BingoGame {
             this.intervaloBalotas = null;
             this.inicializarEventos();
             this.verificarEfectosActivos();
+            this.iniciarConsultaEfectos();
 
         } catch (error) {
             console.error('Error al inicializar BingoGame:', error);
@@ -304,6 +305,21 @@ class BingoGame {
 
     async verificarBingo() {
         try {
+            // Recolectar números marcados del cartón
+            const numerosMarcados = [];
+            const celdas = document.querySelectorAll('.columna1.marcado');
+            celdas.forEach(celda => {
+                numerosMarcados.push({
+                    numero: parseInt(celda.dataset.numero),
+                    letra: celda.dataset.letra
+                });
+            });
+
+            if (numerosMarcados.length < 25) {
+                alert('Debes marcar todas las casillas para cantar BINGO');
+                return;
+            }
+
             const response = await fetch('../php/juego/verificarBingo.php', {
                 method: 'POST',
                 headers: {
@@ -311,43 +327,46 @@ class BingoGame {
                 },
                 body: JSON.stringify({
                     id_sala: this.idSala,
-                    id_jugador: this.idJugador
+                    id_jugador: this.idJugador,
+                    numeros_marcados: numerosMarcados
                 })
             });
 
             const data = await response.json();
             
             if (data.success) {
-                // ¡BINGO válido!
-                this.mostrarGanador();
+                // Mostrar mensaje de victoria y terminar el juego
+                await this.finalizarJuego(data);
             } else {
-                alert(data.error || '¡Los números no coinciden! Sigue jugando.');
+                alert(data.error || '¡Los números no coinciden! Verifica tus marcas.');
             }
         } catch (error) {
             console.error('Error al verificar bingo:', error);
         }
     }
 
-    async mostrarGanador(data) {
-        // Mostrar modal con ranking
+    async finalizarJuego(data) {
+        // Mostrar modal de victoria
         const modal = document.createElement('div');
-        modal.className = 'modal-ranking';
+        modal.className = 'modal-victoria';
         modal.innerHTML = `
             <div class="modal-content">
-                <h2>¡BINGO! Ganador: ${data.ganador}</h2>
-                <h3>Ranking de jugadores:</h3>
-                <ul>
-                    ${data.ranking.map(jugador => 
-                        `<li>${jugador.nombre} - ${jugador.aciertos} aciertos</li>`
-                    ).join('')}
-                </ul>
-                <button onclick="this.parentElement.parentElement.remove()">Cerrar</button>
+                <h2>¡BINGO!</h2>
+                <p>¡Felicitaciones ${data.ganador}!</p>
+                <p>La partida ha terminado.</p>
+                <button onclick="window.location.href='inicio.php'">Volver al inicio</button>
             </div>
         `;
         document.body.appendChild(modal);
+
+        // Detener todas las actualizaciones
+        this.detenerJuego();
     }
 
     async detenerJuego() {
+        if (this.intervalEfectos) {
+            clearInterval(this.intervalEfectos);
+        }
         if (this.intervalActualizaciones) {
             clearInterval(this.intervalActualizaciones);
         }
@@ -488,6 +507,8 @@ class BingoGame {
                     celda.textContent = carton[letra][fila];
                     celda.dataset.numero = carton[letra][fila];
                     celda.dataset.letra = letra;
+                    celda.classList.add('celda-clickeable');
+                    celda.addEventListener('click', () => this.toggleCasilla(celda));
                 }
             });
 
@@ -759,6 +780,106 @@ class BingoGame {
         celdas.forEach(celda => {
             celda.addEventListener('click', () => this.marcarCasilla(celda));
         });
+    }
+
+    // Método para marcar/desmarcar casillas
+    toggleCasilla(celda) {
+        celda.classList.toggle('marcado');
+        this.verificarPatronesGanadores();
+    }
+
+    // Modificar el método verificarPatronesGanadores
+    verificarPatronesGanadores() {
+        const filas = document.getElementById('cartonBingo').getElementsByClassName('fila5');
+        let numerosCompletados = 0;
+
+        // Verificar filas
+        for (let i = 0; i < filas.length; i++) {
+            const celdas = filas[i].getElementsByClassName('columna1');
+            let celdasMarcadas = 0;
+            
+            for (let j = 0; j < celdas.length; j++) {
+                if (celdas[j].classList.contains('marcado')) {
+                    celdasMarcadas++;
+                    numerosCompletados++;
+                }
+            }
+            
+            if (celdasMarcadas === 5) {
+                console.log('¡Línea completada!');
+            }
+        }
+
+        // Si todas las casillas están marcadas, habilitar el botón de BINGO
+        const btnBingo = document.querySelector('.bingo button[onclick="bingoGame.verificarBingo()"]');
+        if (btnBingo) {
+            btnBingo.disabled = numerosCompletados !== 25;
+        }
+    }
+
+    iniciarConsultaEfectos() {
+        console.log('Iniciando consulta de efectos...');
+        
+        this.intervalEfectos = setInterval(async () => {
+            try {
+                if (!this.idSala || !this.idJugador) {
+                    console.error('ID de sala o jugador no disponible');
+                    return;
+                }
+
+                console.log('Consultando efectos para sala:', this.idSala, 'jugador:', this.idJugador);
+                
+                const response = await fetch('../php/juego/consultarEfectos.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_sala: this.idSala,
+                        id_jugador: this.idJugador
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('Respuesta de efectos:', data);
+                
+                if (data.success && data.efectos && data.efectos.length > 0) {
+                    console.log('Efectos encontrados:', data.efectos);
+                    data.efectos.forEach(efecto => {
+                        this.aplicarEfectoRecibido(efecto);
+                    });
+                }
+            } catch (error) {
+                console.error('Error al consultar efectos:', error);
+            }
+        }, 2000); // Consultar cada 2 segundos
+    }
+
+    aplicarEfectoRecibido(efecto) {
+        switch (efecto.tipo_efecto) {
+            case 'oscuridad':
+                this.efectos.iniciarEfectoOscuridad();
+                break;
+            case 'numeros':
+                this.efectos.iniciarEfectoNumeros();
+                break;
+            case 'elige_numero':
+                this.efectos.iniciarEfectoEligeNumero();
+                break;
+        }
+
+        // Mostrar notificación
+        this.mostrarNotificacionEfecto(efecto);
+    }
+
+    mostrarNotificacionEfecto(efecto) {
+        const mensaje = `${efecto.origen_nombre} te ha aplicado el efecto: ${efecto.tipo_efecto}`;
+        // Aquí puedes usar tu sistema de notificaciones preferido
+        alert(mensaje);
     }
 }
 

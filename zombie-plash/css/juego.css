@@ -538,3 +538,22 @@ height: 40%;
     background-color: #f5f5f5;
     border-radius: 5px;
 }
+
+.celda-clickeable {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.celda-clickeable:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.marcado {
+    background-color: rgba(0, 255, 0, 0.3) !important;
+    font-weight: bold;
+}
+
+.bingo button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

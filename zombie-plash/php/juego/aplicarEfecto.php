@@ -7,7 +7,7 @@ function aplicarEfecto($id_sala, $jugador_origen, $tipo_efecto) {
     $pdo = $conexion->conectar();
     
     try {
-        // Obtener todos los jugadores en la sala excepto el origen
+        // Obtener jugadores destino
         $stmt = $pdo->prepare("
             SELECT id_jugador 
             FROM jugadores_en_sala 
@@ -16,12 +16,12 @@ function aplicarEfecto($id_sala, $jugador_origen, $tipo_efecto) {
         $stmt->execute([$id_sala, $jugador_origen]);
         $jugadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $duracion = 10000; // 10 segundos por defecto
-        $afectados = 0;
+        $duracion = 10000; // 10 segundos
+        $efectosAplicados = [];
 
         foreach ($jugadores as $jugador) {
             $stmt = $pdo->prepare("
-                INSERT INTO efectos_aplicados 
+                INSERT INTO efectos_activos 
                 (id_sala, tipo_efecto, jugador_origen, jugador_destino, duracion)
                 VALUES (?, ?, ?, ?, ?)
             ");
@@ -33,21 +33,19 @@ function aplicarEfecto($id_sala, $jugador_origen, $tipo_efecto) {
                 $jugador['id_jugador'],
                 $duracion
             ])) {
-                $afectados++;
+                $efectosAplicados[] = $pdo->lastInsertId();
             }
         }
 
         return [
             'success' => true,
-            'jugadores_afectados' => $afectados,
-            'mensaje' => "Efecto aplicado a $afectados jugadores"
+            'efectos_aplicados' => $efectosAplicados
         ];
 
     } catch (PDOException $e) {
-        error_log("Error al aplicar efecto: " . $e->getMessage());
         return [
             'success' => false,
-            'error' => 'Error al aplicar efecto: ' . $e->getMessage()
+            'error' => $e->getMessage()
         ];
     }
 }
