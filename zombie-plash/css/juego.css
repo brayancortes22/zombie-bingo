@@ -557,3 +557,62 @@ height: 40%;
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+/* Estilos para los efectos */
+#zombie-overlay {
+    animation: fadeIn 0.5s ease-in;
+}
+
+#zombie-video {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.columna1 {
+    transition: transform 0.5s ease;
+}
+
+#modalEligeNumero {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+}
+
+#modalEligeNumero .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+}
+
+#numerosDisponibles {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 10px;
+    padding: 10px;
+}
+
+#numerosDisponibles button {
+    padding: 10px;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#numerosDisponibles button:hover {
+    background-color: #45a049;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

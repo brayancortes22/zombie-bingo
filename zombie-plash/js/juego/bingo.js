@@ -25,7 +25,7 @@ class BingoGame {
             
             this.numerosSacados = [];
             this.cartonActual = [];
-            this.efectos = new Efectos();
+            this.efectos = new Efectos(this);
             this.cuentaRegresiva = new CuentaRegresiva();
             this.intervaloBalotas = null;
             this.inicializarEventos();
@@ -397,72 +397,11 @@ class BingoGame {
     }
 
     toggleEfectoNumeros() {
-        if (!this.efectos) {
-            console.error('Efectos no inicializados');
-            return;
-        }
-        
-        const btnNumeros = document.querySelector('.colu2 button:nth-child(2)');
-        if (btnNumeros.disabled) return;
-        
         this.efectos.toggleEfectoNumeros();
-        
-        // Deshabilitar el botón temporalmente
-        btnNumeros.disabled = true;
-        setTimeout(() => {
-            btnNumeros.disabled = false;
-        }, 10000); // 10 segundos
     }
 
     toggleEfectoEligeNumero() {
-        if (!this.efectos) {
-            console.error('Efectos no inicializados');
-            return;
-        }
-        
-        const numerosDisponibles = Array.from({ length: 60 }, (_, i) => i + 1)
-            .filter(num => !this.numerosSacados.some(balota => balota.numero === num));
-        
-        const modal = document.getElementById('modalEligeNumero');
-        const contenedor = document.getElementById('numerosDisponibles');
-        contenedor.innerHTML = '';
-        
-        numerosDisponibles.forEach(numero => {
-            const boton = document.createElement('button');
-            boton.textContent = numero;
-            boton.onclick = () => this.seleccionarNumeroManual(numero);
-            contenedor.appendChild(boton);
-        });
-        
-        modal.style.display = 'block';
-    }
-
-    async seleccionarNumeroManual(numero) {
-        try {
-            const response = await fetch('../php/juego/seleccionarNumero.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id_sala: this.idSala,
-                    numero: numero
-                })
-            });
-            
-            const data = await response.json();
-            if (data.success) {
-                document.getElementById('modalEligeNumero').style.display = 'none';
-                this.numerosSacados.push({
-                    numero: data.numero,
-                    letra: data.letra
-                });
-                this.actualizarPanelNumeros(data.numero, data.letra);
-                this.actualizarPanelHistorial();
-            }
-        } catch (error) {
-            console.error('Error al seleccionar número:', error);
-        }
+        this.efectos.toggleEfectoEligeNumero();
     }
 
     inicializarEventos() {

@@ -7,7 +7,17 @@ function aplicarEfecto($id_sala, $jugador_origen, $tipo_efecto) {
     $pdo = $conexion->conectar();
     
     try {
-        // Obtener jugadores destino
+        // Verificar que el jugador está en la sala
+        $stmt = $pdo->prepare("
+            SELECT id FROM jugadores_en_sala 
+            WHERE id_sala = ? AND id_jugador = ?
+        ");
+        $stmt->execute([$id_sala, $jugador_origen]);
+        if (!$stmt->fetch()) {
+            throw new Exception("El jugador no está en la sala");
+        }
+
+        // Obtener jugadores destino (todos excepto el origen)
         $stmt = $pdo->prepare("
             SELECT id_jugador 
             FROM jugadores_en_sala 
@@ -16,14 +26,18 @@ function aplicarEfecto($id_sala, $jugador_origen, $tipo_efecto) {
         $stmt->execute([$id_sala, $jugador_origen]);
         $jugadores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+        if (empty($jugadores)) {
+            throw new Exception("No hay otros jugadores en la sala");
+        }
+
         $duracion = 10000; // 10 segundos
         $efectosAplicados = [];
 
         foreach ($jugadores as $jugador) {
             $stmt = $pdo->prepare("
                 INSERT INTO efectos_activos 
-                (id_sala, tipo_efecto, jugador_origen, jugador_destino, duracion)
-                VALUES (?, ?, ?, ?, ?)
+                (id_sala, tipo_efecto, jugador_origen, jugador_destino, duracion, estado)
+                VALUES (?, ?, ?, ?, ?, 'pendiente')
             ");
             
             if ($stmt->execute([
@@ -39,10 +53,12 @@ function aplicarEfecto($id_sala, $jugador_origen, $tipo_efecto) {
 
         return [
             'success' => true,
-            'efectos_aplicados' => $efectosAplicados
+            'efectos_aplicados' => $efectosAplicados,
+            'mensaje' => 'Efecto aplicado correctamente'
         ];
 
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
+        error_log("Error al aplicar efecto: " . $e->getMessage());
         return [
             'success' => false,
             'error' => $e->getMessage()
