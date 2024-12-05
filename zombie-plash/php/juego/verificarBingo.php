@@ -98,12 +98,10 @@ try {
         }
     }
 
-    // Actualizar estado de la sala
-    $sql = "UPDATE salas SET estado = 'finalizado' WHERE id_sala = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->execute([$idSala]);
+    // Iniciar transacción
+    $conexion->beginTransaction();
 
-    // Obtener ranking
+    // Obtener el ranking
     $sql = "SELECT 
                 j.nombre_jugador,
                 COUNT(b.id_balota) as aciertos
@@ -116,9 +114,26 @@ try {
     $stmt->execute([$idSala]);
     $ranking = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    logError("Ranking obtenido", ['ranking' => $ranking]);
+    // Actualizar el estado de la sala con el ganador y el ranking
+    $sql = "UPDATE salas SET 
+            estado = 'finalizado', 
+            ganador_id = ?,
+            ranking = ?,
+            ganador_nombre = (SELECT nombre_jugador FROM jugadores_en_sala WHERE id_jugador = ? AND id_sala = ?)
+            WHERE id_sala = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->execute([
+        $idJugador,
+        json_encode($ranking),
+        $idJugador,
+        $idSala,
+        $idSala
+    ]);
 
-    // Enviar respuesta exitosa
+    // Confirmar transacción
+    $conexion->commit();
+
+    // Enviar respuesta
     sendJsonResponse([
         'success' => true,
         'mensaje' => '¡Bingo válido!',

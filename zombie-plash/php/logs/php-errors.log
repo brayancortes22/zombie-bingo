@@ -30,3 +30,37 @@
 2024-12-05 09:15:37 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\",\"id_jugador\":13,\"numeros_marcados\":[56]}"}
 2024-12-05 09:15:37 - Datos procesados - Context: {"idSala":"244","idJugador":13,"numerosMarcados":[56]}
 2024-12-05 09:15:37 - Error general - Context: {"error":"No hay n\u00fameros sacados en esta sala","trace":"#0 {main}"}
+2024-12-05 09:19:37 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\"}"}
+2024-12-05 09:21:21 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:21:21 - JSON recibido - Context: {"input":"{\"id_sala\":\"245\",\"id_jugador\":13,\"numeros_marcados\":[51]}"}
+2024-12-05 09:21:21 - Datos procesados - Context: {"idSala":"245","idJugador":13,"numerosMarcados":[51]}
+2024-12-05 09:21:21 - Números sacados obtenidos - Context: {"numerosSacados":[24,37,45,49,51]}
+2024-12-05 09:21:21 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":5},{"nombre_jugador":"bscl","aciertos":5}]}
+2024-12-05 09:21:57 - JSON recibido - Context: {"input":"{\"id_sala\":\"245\"}"}
+2024-12-05 09:25:20 - JSON recibido - Context: {"input":"{\"id_sala\":\"245\"}"}
+2024-12-05 09:26:44 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:26:44 - JSON recibido - Context: {"input":"{\"id_sala\":\"246\",\"id_jugador\":15,\"numeros_marcados\":[29]}"}
+2024-12-05 09:26:44 - Datos procesados - Context: {"idSala":"246","idJugador":15,"numerosMarcados":[29]}
+2024-12-05 09:26:44 - Números sacados obtenidos - Context: {"numerosSacados":[29,41,55]}
+2024-12-05 09:26:44 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":3},{"nombre_jugador":"bscl","aciertos":3}]}
+2024-12-05 09:27:11 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:27:11 - JSON recibido - Context: {"input":"{\"id_sala\":\"246\",\"id_jugador\":13,\"numeros_marcados\":[23]}"}
+2024-12-05 09:27:11 - Datos procesados - Context: {"idSala":"246","idJugador":13,"numerosMarcados":[23]}
+2024-12-05 09:27:11 - Números sacados obtenidos - Context: {"numerosSacados":[3,6,7,17,23,29,36,41,55]}
+2024-12-05 09:27:11 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":9},{"nombre_jugador":"bscl","aciertos":9}]}
+2024-12-05 09:27:25 - JSON recibido - Context: {"input":"{\"id_sala\":\"246\"}"}
+2024-12-05 09:27:36 - JSON recibido - Context: {"input":"{\"id_sala\":\"246\"}"}
+2024-12-05 09:29:28 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:29:28 - JSON recibido - Context: {"input":"{\"id_sala\":\"247\",\"id_jugador\":13,\"numeros_marcados\":[5]}"}
+2024-12-05 09:29:28 - Datos procesados - Context: {"idSala":"247","idJugador":13,"numerosMarcados":[5]}
+2024-12-05 09:29:28 - Números sacados obtenidos - Context: {"numerosSacados":[5,16,70]}
+2024-12-05 09:29:28 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":3},{"nombre_jugador":"bscl","aciertos":3}]}
+2024-12-05 09:34:37 - JSON recibido - Context: {"input":"{\"id_sala\":\"247\"}"}
+2024-12-05 09:34:40 - JSON recibido - Context: {"input":"{\"id_sala\":\"247\"}"}
+2024-12-05 09:36:08 - JSON recibido - Context: {"input":"{\"id_sala\":\"248\"}"}
+2024-12-05 09:40:11 - JSON recibido - Context: {"input":"{\"id_sala\":\"249\"}"}
+2024-12-05 09:40:13 - JSON recibido - Context: {"input":"{\"id_sala\":\"249\"}"}
+2024-12-05 09:43:46 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:43:46 - JSON recibido - Context: {"input":"{\"id_sala\":\"250\",\"id_jugador\":14,\"numeros_marcados\":[21]}"}
+2024-12-05 09:43:46 - Datos procesados - Context: {"idSala":"250","idJugador":14,"numerosMarcados":[21]}
+2024-12-05 09:43:46 - Números sacados obtenidos - Context: {"numerosSacados":[21,30,45]}

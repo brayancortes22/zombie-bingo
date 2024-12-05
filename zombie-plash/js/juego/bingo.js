@@ -33,6 +33,8 @@ class BingoGame {
             this.iniciarConsultaEfectos();
             this.tiempoGenerarCarton = 15; // 15 segundos
             this.timerGenerarCarton = null;
+            this.intervalEstadoSala = null;
+            this.iniciarConsultaEstado();
 
         } catch (error) {
             console.error('Error al inicializar BingoGame:', error);
@@ -418,46 +420,46 @@ class BingoGame {
 
     async finalizarJuego(data) {
         try {
-            // Mostrar modal de victoria con ranking
-            const modal = document.createElement('div');
-            modal.className = 'modal-victoria';
-            
-            // Crear tabla de ranking
-            const rankingHTML = data.ranking.map((jugador, index) => `
-                <tr class="${index === 0 ? 'ganador' : ''}">
-                    <td>${index + 1}</td>
-                    <td>${jugador.nombre_jugador}</td>
-                    <td>${jugador.aciertos}</td>
-                </tr>
-            `).join('');
+            // Preparar el mensaje del ranking
+            let mensajeRanking = '';
+            data.ranking.forEach((jugador, index) => {
+                let posicion = '';
+                switch(index) {
+                    case 0:
+                        posicion = '🥇 Primer lugar';
+                        break;
+                    case 1:
+                        posicion = '🥈 Segundo lugar';
+                        break;
+                    case 2:
+                        posicion = '🥉 Tercer lugar';
+                        break;
+                    default:
+                        posicion = `${index + 1}º lugar`;
+                }
+                mensajeRanking += `${posicion}: ${jugador.nombre_jugador} (${jugador.aciertos} aciertos)\n`;
+            });
 
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <h2>¡BINGO!</h2>
-                    <p>¡Felicitaciones!</p>
-                    <div class="ranking">
-                        <h3>Ranking Final</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Posición</th>
-                                    <th>Jugador</th>
-                                    <th>Números Acertados</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${rankingHTML}
-                            </tbody>
-                        </table>
-                    </div>
-                    <button onclick="window.location.href='inicio.php'">Volver al inicio</button>
-                </div>
-            `;
-            document.body.appendChild(modal);
+            // Mostrar el mensaje con el ranking
+            await Swal.fire({
+                title: '¡Fin del juego!',
+                html: `<div class="ranking-mensaje">
+                        <h3>🏆 Ranking Final 🏆</h3>
+                        <pre style="text-align: left; margin: 20px auto; font-family: Arial;">${mensajeRanking}</pre>
+                      </div>`,
+                icon: 'success',
+                confirmButtonText: 'Volver al inicio',
+                allowOutsideClick: false,
+                customClass: {
+                    popup: 'ranking-popup',
+                    content: 'ranking-content'
+                }
+            });
 
-            // Detener todas las actualizaciones
+            // Detener todas las actualizaciones y redirigir
             await this.detenerJuego();
-            
+            window.location.href = 'inicio.php';
+                
         } catch (error) {
             console.error('Error al finalizar el juego:', error);
             await Swal.fire({
@@ -480,6 +482,9 @@ class BingoGame {
             }
             if (this.intervaloBalotas) {
                 clearInterval(this.intervaloBalotas);
+            }
+            if (this.intervalEstadoSala) {
+                clearInterval(this.intervalEstadoSala);
             }
 
             const response = await fetch('../php/juego/salirSala.php', {
@@ -1024,6 +1029,91 @@ class BingoGame {
             }
         }, 1000);
         });
+    }
+
+    iniciarConsultaEstado() {
+        this.intervalEstadoSala = setInterval(async () => {
+            try {
+                const response = await fetch('../php/juego/consultarEstadoSala.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_sala: this.idSala
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success && data.estado === 'finalizado' && data.ranking) {
+                    // Detener todas las consultas
+                    this.detenerIntervalos();
+                    
+                    // Mostrar el ranking final
+                    await this.mostrarRankingFinal(data);
+                }
+            } catch (error) {
+                console.error('Error al consultar estado de la sala:', error);
+            }
+        }, 2000); // Consultar cada 2 segundos
+    }
+
+    detenerIntervalos() {
+        if (this.intervalEfectos) clearInterval(this.intervalEfectos);
+        if (this.intervalActualizaciones) clearInterval(this.intervalActualizaciones);
+        if (this.intervaloBalotas) clearInterval(this.intervaloBalotas);
+        if (this.intervalEstadoSala) clearInterval(this.intervalEstadoSala);
+    }
+
+    async mostrarRankingFinal(data) {
+        try {
+            // Preparar el mensaje del ranking
+            let mensajeRanking = '';
+            data.ranking.forEach((jugador, index) => {
+                let posicion = '';
+                let esGanador = jugador.nombre_jugador === data.ganador_nombre;
+                
+                switch(index) {
+                    case 0:
+                        posicion = '🥇 Primer lugar';
+                        break;
+                    case 1:
+                        posicion = '🥈 Segundo lugar';
+                        break;
+                    case 2:
+                        posicion = '🥉 Tercer lugar';
+                        break;
+                    default:
+                        posicion = `${index + 1}º lugar`;
+                }
+                
+                mensajeRanking += `${posicion}: ${jugador.nombre_jugador} ${esGanador ? '👑' : ''} (${jugador.aciertos} aciertos)\n`;
+            });
+
+            // Mostrar el mensaje con el ranking
+            await Swal.fire({
+                title: '¡Fin del juego!',
+                html: `<div class="ranking-mensaje">
+                        <h3>🏆 Ranking Final 🏆</h3>
+                        <h4>${data.ganador_nombre} ha ganado la partida!</h4>
+                        <pre style="text-align: left; margin: 20px auto; font-family: Arial;">${mensajeRanking}</pre>
+                      </div>`,
+                icon: 'success',
+                confirmButtonText: 'Volver al inicio',
+                allowOutsideClick: false,
+                customClass: {
+                    popup: 'ranking-popup',
+                    content: 'ranking-content'
+                }
+            });
+
+            // Redirigir al inicio
+            window.location.href = 'inicio.php';
+        } catch (error) {
+            console.error('Error al mostrar ranking final:', error);
+            window.location.href = 'inicio.php';
+        }
     }
 }
 
