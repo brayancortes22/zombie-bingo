@@ -150,10 +150,20 @@ class SalaManager {
 
     async salirDeSala() {
         try {
-            console.log('Intentando salir de la sala con datos:', {
-                id_sala: this.datosSala.id_sala,
-                id_jugador: this.datosSala.id_jugador
+            const confirmacion = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: "¿Deseas salir de la sala?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, salir',
+                cancelButtonText: 'Cancelar'
             });
+
+            if (!confirmacion.isConfirmed) {
+                return;
+            }
 
             if (!this.datosSala.id_sala || !this.datosSala.id_jugador) {
                 throw new Error('Datos incompletos: id_sala o id_jugador faltantes');
@@ -171,9 +181,15 @@ class SalaManager {
             });
 
             const data = await response.json();
-            console.log('Respuesta del servidor:', data);
 
             if (data.success) {
+                await Swal.fire({
+                    title: 'Éxito',
+                    text: 'Has salido de la sala correctamente',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
                 localStorage.removeItem('datosSala');
                 window.location.href = 'inicio.php';
             } else {
@@ -181,7 +197,7 @@ class SalaManager {
             }
         } catch (error) {
             console.error('Error al salir de la sala:', error);
-            Swal.fire({
+            await Swal.fire({
                 title: 'Error',
                 text: error.message || 'No se pudo salir de la sala',
                 icon: 'error',
