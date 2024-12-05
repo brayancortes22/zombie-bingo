@@ -13,3 +13,20 @@
 2024-12-05 09:06:13 - Datos procesados - Context: {"idSala":"244","idJugador":13,"numerosMarcados":[54]}
 2024-12-05 09:06:13 - Números sacados obtenidos - Context: {"numerosSacados":[2,12,40,42,54,74]}
 2024-12-05 09:06:13 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":6},{"nombre_jugador":"bscl","aciertos":6}]}
+2024-12-05 09:11:33 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:11:33 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\",\"id_jugador\":13,\"numeros_marcados\":[23]}"}
+2024-12-05 09:11:33 - Datos procesados - Context: {"idSala":"244","idJugador":13,"numerosMarcados":[23]}
+2024-12-05 09:11:33 - Números sacados obtenidos - Context: {"numerosSacados":[5,16,20,23,26,29,32,38,40,41,45,50,59,60,61,65,69,71,72]}
+2024-12-05 09:11:33 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":19},{"nombre_jugador":"bscl","aciertos":19}]}
+2024-12-05 09:11:37 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\"}"}
+2024-12-05 09:11:37 - Error de base de datos - Context: {"error":"SQLSTATE[23000]: Integrity constraint violation: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`zombie_plash_bd`.`jugadores_en_sala`, CONSTRAINT `jugadores_en_sala_ibfk_1` FOREIGN KEY (`id_sala`) REFERENCES `salas` (`id_sala`))","trace":"#0 C:\\xampp\\htdocs\\zombie-bingo\\zombie-plash\\php\\juego\\salirSala.php(81): PDOStatement->execute(Array)\n#1 {main}"}
+2024-12-05 09:15:09 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:15:09 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\",\"id_jugador\":15,\"numeros_marcados\":[56]}"}
+2024-12-05 09:15:09 - Datos procesados - Context: {"idSala":"244","idJugador":15,"numerosMarcados":[56]}
+2024-12-05 09:15:09 - Números sacados obtenidos - Context: {"numerosSacados":[17,56]}
+2024-12-05 09:15:09 - Ranking obtenido - Context: {"ranking":[{"nombre_jugador":"brayan_22","aciertos":2},{"nombre_jugador":"bscl","aciertos":2}]}
+2024-12-05 09:15:13 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\"}"}
+2024-12-05 09:15:37 - Iniciando verificación de bingo - Context: []
+2024-12-05 09:15:37 - JSON recibido - Context: {"input":"{\"id_sala\":\"244\",\"id_jugador\":13,\"numeros_marcados\":[56]}"}
+2024-12-05 09:15:37 - Datos procesados - Context: {"idSala":"244","idJugador":13,"numerosMarcados":[56]}
+2024-12-05 09:15:37 - Error general - Context: {"error":"No hay n\u00fameros sacados en esta sala","trace":"#0 {main}"}

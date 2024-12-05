@@ -417,55 +417,71 @@ class BingoGame {
     }
 
     async finalizarJuego(data) {
-        // Mostrar modal de victoria con ranking
-        const modal = document.createElement('div');
-        modal.className = 'modal-victoria';
-        
-        // Crear tabla de ranking
-        const rankingHTML = data.ranking.map((jugador, index) => `
-            <tr class="${index === 0 ? 'ganador' : ''}">
-                <td>${jugador.posicion}</td>
-                <td>${jugador.ganador}</td>
-                <td>${jugador.numeros_acertados}</td>
-            </tr>
-        `).join('');
+        try {
+            // Mostrar modal de victoria con ranking
+            const modal = document.createElement('div');
+            modal.className = 'modal-victoria';
+            
+            // Crear tabla de ranking
+            const rankingHTML = data.ranking.map((jugador, index) => `
+                <tr class="${index === 0 ? 'ganador' : ''}">
+                    <td>${index + 1}</td>
+                    <td>${jugador.nombre_jugador}</td>
+                    <td>${jugador.aciertos}</td>
+                </tr>
+            `).join('');
 
-        modal.innerHTML = `
-            <div class="modal-content">
-                <h2>¡BINGO!</h2>
-                <p>¡Felicitaciones ${data.ganador}!</p>
-                <div class="ranking">
-                    <h3>Ranking Final</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Posición</th>
-                                <th>Jugador</th>
-                                <th>Números Acertados</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rankingHTML}
-                        </tbody>
-                    </table>
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <h2>¡BINGO!</h2>
+                    <p>¡Felicitaciones!</p>
+                    <div class="ranking">
+                        <h3>Ranking Final</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Posición</th>
+                                    <th>Jugador</th>
+                                    <th>Números Acertados</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${rankingHTML}
+                            </tbody>
+                        </table>
+                    </div>
+                    <button onclick="window.location.href='inicio.php'">Volver al inicio</button>
                 </div>
-                <button onclick="window.location.href='inicio.php'">Volver al inicio</button>
-            </div>
-        `;
-        document.body.appendChild(modal);
+            `;
+            document.body.appendChild(modal);
 
-        // Detener todas las actualizaciones
-        this.detenerJuego();
+            // Detener todas las actualizaciones
+            await this.detenerJuego();
+            
+        } catch (error) {
+            console.error('Error al finalizar el juego:', error);
+            await Swal.fire({
+                title: 'Error',
+                text: 'Hubo un error al finalizar el juego. Serás redirigido al inicio.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            window.location.href = 'inicio.php';
+        }
     }
 
     async detenerJuego() {
-        if (this.intervalEfectos) {
-            clearInterval(this.intervalEfectos);
-        }
-        if (this.intervalActualizaciones) {
-            clearInterval(this.intervalActualizaciones);
-        }
         try {
+            if (this.intervalEfectos) {
+                clearInterval(this.intervalEfectos);
+            }
+            if (this.intervalActualizaciones) {
+                clearInterval(this.intervalActualizaciones);
+            }
+            if (this.intervaloBalotas) {
+                clearInterval(this.intervaloBalotas);
+            }
+
             const response = await fetch('../php/juego/salirSala.php', {
                 method: 'POST',
                 headers: {
@@ -475,14 +491,32 @@ class BingoGame {
                     id_sala: this.idSala
                 })
             });
-            const data = await response.json();
-            
-            if (data.success) {
-                clearInterval(this.intervaloBalotas);
-                window.location.href = 'inicio.php';
+
+            // Depuración
+            const responseText = await response.text();
+            console.log('Respuesta del servidor:', responseText);
+
+            try {
+                const data = JSON.parse(responseText);
+                if (data.success) {
+                    window.location.href = 'inicio.php';
+                } else {
+                    throw new Error(data.error || 'Error al salir de la sala');
+                }
+            } catch (parseError) {
+                console.error('Error al parsear respuesta:', parseError);
+                console.log('Texto recibido:', responseText);
+                throw parseError;
             }
         } catch (error) {
             console.error('Error al salir de la sala:', error);
+            await Swal.fire({
+                title: 'Error',
+                text: 'Hubo un error al salir de la sala. Serás redirigido al inicio.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            window.location.href = 'inicio.php';
         }
     }
 
