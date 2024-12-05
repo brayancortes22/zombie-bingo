@@ -649,15 +649,10 @@ class BingoGame {
 
     verificarNumeroEnCarton(numero) {
         try {
-            console.log('Verificando número:', numero);
-            console.log('Números sacados:', this.numerosSacados);
-            
             const celdas = document.querySelectorAll('.columna1');
             celdas.forEach(celda => {
                 const numeroEnCelda = parseInt(celda.dataset.numero);
                 if (numeroEnCelda === numero) {
-                    console.log('Número encontrado en celda:', numeroEnCelda);
-                    // Resaltar temporalmente el número
                     celda.classList.add('numero-disponible');
                     setTimeout(() => {
                         celda.classList.remove('numero-disponible');
@@ -733,22 +728,13 @@ class BingoGame {
         const panelNumeros = document.getElementById('numerosSacados');
         if (!panelNumeros) return;
 
-        // Si no hay números sacados, no hacer nada
         if (!numerosSacados || numerosSacados.length === 0) return;
 
-        console.log('Actualizando interfaz con números:', numerosSacados);
-
-        // Verificar si hay un nuevo número comparando longitudes
         if (numerosSacados.length > this.numerosSacados.length) {
-            // Mantener solo las últimas 5 balotas
             const ultimasBalotas = numerosSacados.slice(-5);
-            
-            // Limpiar el panel
             panelNumeros.innerHTML = '';
             
-            // Agregar las balotas
             ultimasBalotas.forEach((balota, index) => {
-                // Asegurarse de que los números sean enteros
                 balota.numero = parseInt(balota.numero);
                 
                 const balotaElement = document.createElement('div');
@@ -765,16 +751,12 @@ class BingoGame {
                 panelNumeros.appendChild(balotaElement);
             });
 
-            // Actualizar el historial
             this.actualizarPanelHistorial(numerosSacados);
             
-            // Actualizar array local asegurándose de que los números son enteros
             this.numerosSacados = numerosSacados.map(balota => ({
                 ...balota,
                 numero: parseInt(balota.numero)
             }));
-            
-            console.log('Números sacados actualizados:', this.numerosSacados);
         }
     }
 
@@ -845,28 +827,18 @@ class BingoGame {
 
     async marcarCasilla(casilla) {
         try {
-            // Verificar que la casilla no está siendo procesada
             if (casilla.classList.contains('procesando-click')) {
                 return;
             }
 
-            if (!casilla.dataset.numero || !casilla.dataset.letra) {
-                console.warn('Casilla inválida:', casilla);
-                return;
-            }
+            if (!casilla.dataset.numero || !casilla.dataset.letra) return;
 
             const numero = parseInt(casilla.dataset.numero);
             const letra = casilla.dataset.letra;
 
-            // Verificar que el número es válido
-            if (isNaN(numero)) {
-                console.warn('Número inválido:', casilla.dataset.numero);
-                return;
-            }
+            if (isNaN(numero)) return;
 
-            // Verificar si el número ha salido
             const numeroHaSalido = this.numerosSacados.some(balota => {
-                // Convertir ambos números a enteros para la comparación
                 const balotaNumero = parseInt(balota.numero);
                 return balotaNumero === numero && balota.letra === letra;
             });
@@ -882,7 +854,6 @@ class BingoGame {
                 return;
             }
 
-            // Agregar clase de procesamiento
             casilla.classList.add('procesando-click');
             
             try {
@@ -905,7 +876,6 @@ class BingoGame {
                     casilla.classList.toggle('marcado');
                     this.verificarPatronesGanadores();
                 } else {
-                    console.error('Error al marcar casilla:', data.error);
                     Swal.fire({
                         title: 'Error',
                         text: data.error || 'No se pudo marcar la casilla',
@@ -924,7 +894,6 @@ class BingoGame {
                     showConfirmButton: false
                 });
             } finally {
-                // Siempre remover la clase de procesamiento
                 casilla.classList.remove('procesando-click');
             }
         } catch (error) {
@@ -943,24 +912,14 @@ class BingoGame {
     // Método para marcar/desmarcar casillas
     toggleCasilla(celda) {
         try {
-            // Verificar que la celda es válida
-            if (!celda || !celda.dataset.numero || !celda.dataset.letra) {
-                console.warn('Celda inválida:', celda);
-                return;
-            }
+            if (!celda || !celda.dataset.numero || !celda.dataset.letra) return;
 
             const numero = parseInt(celda.dataset.numero);
             const letra = celda.dataset.letra;
 
-            // Verificar que el número es válido
-            if (isNaN(numero)) {
-                console.warn('Número inválido:', celda.dataset.numero);
-                return;
-            }
+            if (isNaN(numero)) return;
 
-            // Verificar si el número ha salido
             const numeroHaSalido = this.numerosSacados.some(balota => {
-                // Convertir ambos números a enteros para la comparación
                 const balotaNumero = parseInt(balota.numero);
                 return balotaNumero === numero && balota.letra === letra;
             });
@@ -976,10 +935,8 @@ class BingoGame {
                 return;
             }
 
-            // Agregar una clase temporal durante el proceso de marcado
             celda.classList.add('procesando-click');
 
-            // Usar setTimeout para evitar doble clicks accidentales
             setTimeout(() => {
                 celda.classList.toggle('marcado');
                 celda.classList.remove('procesando-click');
