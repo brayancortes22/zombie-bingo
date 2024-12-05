@@ -267,7 +267,9 @@ height: 40%;
 
 }
 .marcado{
-    background-color: rgb(71, 209, 7);
+    background-color: rgba(76, 175, 80, 0.5) !important;
+    font-weight: bold;
+    color: white;
 }
 
 #zombie-overlay {
@@ -542,15 +544,42 @@ height: 40%;
 .celda-clickeable {
     cursor: pointer;
     transition: background-color 0.3s;
+    position: relative;
 }
 
 .celda-clickeable:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
+.celda-clickeable::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+}
+
+.celda-clickeable:hover::before {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
 .marcado {
-    background-color: rgba(0, 255, 0, 0.3) !important;
+    background-color: rgba(76, 175, 80, 0.5) !important;
     font-weight: bold;
+    color: white;
+}
+
+.marcado::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2em;
+    color: white;
 }
 
 .bingo button:disabled {
@@ -661,4 +690,31 @@ height: 40%;
     font-size: 1.5em;
     font-weight: bold;
     color: #000;
+}
+
+.modal-victoria .ranking {
+    margin: 20px 0;
+}
+
+.modal-victoria table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.modal-victoria th,
+.modal-victoria td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.modal-victoria .ganador {
+    background-color: rgba(76, 175, 80, 0.2);
+    font-weight: bold;
+}
+
+.modal-victoria th {
+    background-color: #4CAF50;
+    color: white;
 }

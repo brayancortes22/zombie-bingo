@@ -126,16 +126,16 @@ class BingoGame {
                     this.actualizarPanelBalotas(data.balotas_recientes);
                     this.actualizarHistorialBalotas(data.historial);
                     
-                    // Si hay una nueva balota, verificar el cartón
+                    // Resaltar el último número si es nuevo
                     if (data.balotas_recientes.length > 0) {
                         const ultimaBalota = data.balotas_recientes[data.balotas_recientes.length - 1];
-                        this.verificarNumeroEnCarton(ultimaBalota.numero, ultimaBalota.letra);
+                        this.verificarNumeroEnCarton(ultimaBalota.numero);
                     }
                 }
             } catch (error) {
                 console.error('Error al obtener actualizaciones:', error);
             }
-        }, 2000); // Actualizar cada 2 segundos
+        }, 2000);
     }
 
     actualizarPanelBalotas(balotas) {
@@ -363,14 +363,38 @@ class BingoGame {
     }
 
     async finalizarJuego(data) {
-        // Mostrar modal de victoria
+        // Mostrar modal de victoria con ranking
         const modal = document.createElement('div');
         modal.className = 'modal-victoria';
+        
+        // Crear tabla de ranking
+        const rankingHTML = data.ranking.map((jugador, index) => `
+            <tr class="${index === 0 ? 'ganador' : ''}">
+                <td>${jugador.posicion}</td>
+                <td>${jugador.ganador}</td>
+                <td>${jugador.numeros_acertados}</td>
+            </tr>
+        `).join('');
+
         modal.innerHTML = `
             <div class="modal-content">
                 <h2>¡BINGO!</h2>
                 <p>¡Felicitaciones ${data.ganador}!</p>
-                <p>La partida ha terminado.</p>
+                <div class="ranking">
+                    <h3>Ranking Final</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Posición</th>
+                                <th>Jugador</th>
+                                <th>Números Acertados</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rankingHTML}
+                        </tbody>
+                    </table>
+                </div>
                 <button onclick="window.location.href='inicio.php'">Volver al inicio</button>
             </div>
         `;
@@ -427,12 +451,13 @@ class BingoGame {
 
     async nuevoCarton() {
         try {
+            // Definir los rangos correctos para cada letra del BINGO
             const rangos = {
-                'B': { min: 1, max: 12 },
-                'I': { min: 13, max: 23 },
-                'N': { min: 24, max: 34 },
-                'G': { min: 35, max: 45 },
-                'O': { min: 46, max: 60 }
+                'B': { min: 1, max: 15 },     // B: 1-15
+                'I': { min: 16, max: 30 },    // I: 16-30
+                'N': { min: 31, max: 45 },    // N: 31-45
+                'G': { min: 46, max: 60 },    // G: 46-60
+                'O': { min: 61, max: 75 }     // O: 61-75
             };
 
             const carton = {};
@@ -447,7 +472,7 @@ class BingoGame {
                     (_, i) => min + i
                 );
                 
-                // Mezclar números
+                // Mezclar números usando el algoritmo Fisher-Yates
                 for (let i = numerosDisponibles.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
                     [numerosDisponibles[i], numerosDisponibles[j]] = 
@@ -516,16 +541,23 @@ class BingoGame {
 
     verificarNumeroEnCarton(numero) {
         try {
-            // Buscar la celda que contiene el número
+            // En lugar de marcar automáticamente, solo verificamos si el número existe en el cartón
             const celdas = document.querySelectorAll('.columna1');
             celdas.forEach(celda => {
                 if (celda.dataset.numero === numero.toString()) {
-                    celda.classList.add('marcado');
+                    // Ya no marcamos automáticamente
+                    // celda.classList.add('marcado');
+                    
+                    // Opcionalmente podemos resaltar temporalmente el número
+                    celda.classList.add('numero-disponible');
+                    setTimeout(() => {
+                        celda.classList.remove('numero-disponible');
+                    }, 2000);
                 }
             });
 
-            // Verificar si hay línea o bingo
-            this.verificarPatrones();
+            // Verificar si hay línea o bingo solo cuando el jugador marca manualmente
+            // this.verificarPatrones();
         } catch (error) {
             console.error('Error al verificar número en cartón:', error);
         }
@@ -702,6 +734,19 @@ class BingoGame {
     async marcarCasilla(casilla) {
         if (!casilla.dataset.numero || !casilla.dataset.letra) return;
         
+        const numero = parseInt(casilla.dataset.numero);
+        const letra = casilla.dataset.letra;
+
+        // Verificar si el número ha salido
+        const numeroHaSalido = this.numerosSacados.some(balota => 
+            balota.numero === numero && balota.letra === letra
+        );
+
+        if (!numeroHaSalido) {
+            alert('Este número aún no ha salido');
+            return;
+        }
+        
         try {
             const response = await fetch('../php/juego/marcarCasilla.php', {
                 method: 'POST',
@@ -711,8 +756,8 @@ class BingoGame {
                 body: JSON.stringify({
                     id_sala: this.idSala,
                     id_jugador: this.idJugador,
-                    numero: parseInt(casilla.dataset.numero),
-                    letra: casilla.dataset.letra
+                    numero: numero,
+                    letra: letra
                 })
             });
 
@@ -723,7 +768,6 @@ class BingoGame {
                 this.verificarPatronesGanadores();
             } else {
                 console.error('Error al marcar casilla:', data.error);
-                // Opcional: mostrar mensaje al usuario
                 alert(data.error);
             }
         } catch (error) {
@@ -740,6 +784,19 @@ class BingoGame {
 
     // Método para marcar/desmarcar casillas
     toggleCasilla(celda) {
+        const numero = parseInt(celda.dataset.numero);
+        const letra = celda.dataset.letra;
+
+        // Verificar si el número ha salido
+        const numeroHaSalido = this.numerosSacados.some(balota => 
+            balota.numero === numero && balota.letra === letra
+        );
+
+        if (!numeroHaSalido) {
+            alert('Este número aún no ha salido');
+            return;
+        }
+
         celda.classList.toggle('marcado');
         this.verificarPatronesGanadores();
     }
@@ -760,10 +817,6 @@ class BingoGame {
                     numerosCompletados++;
                 }
             }
-            
-            if (celdasMarcadas === 5) {
-                console.log('¡Línea completada!');
-            }
         }
 
         // Si todas las casillas están marcadas, habilitar el botón de BINGO
@@ -774,16 +827,9 @@ class BingoGame {
     }
 
     iniciarConsultaEfectos() {
-        console.log('Iniciando consulta de efectos...');
-        
         this.intervalEfectos = setInterval(async () => {
             try {
-                if (!this.idSala || !this.idJugador) {
-                    console.error('ID de sala o jugador no disponible');
-                    return;
-                }
-
-                console.log('Consultando efectos para sala:', this.idSala, 'jugador:', this.idJugador);
+                if (!this.idSala || !this.idJugador) return;
                 
                 const response = await fetch('../php/juego/consultarEfectos.php', {
                     method: 'POST',
@@ -801,10 +847,8 @@ class BingoGame {
                 }
 
                 const data = await response.json();
-                console.log('Respuesta de efectos:', data);
                 
                 if (data.success && data.efectos && data.efectos.length > 0) {
-                    console.log('Efectos encontrados:', data.efectos);
                     data.efectos.forEach(efecto => {
                         this.aplicarEfectoRecibido(efecto);
                     });
@@ -812,7 +856,7 @@ class BingoGame {
             } catch (error) {
                 console.error('Error al consultar efectos:', error);
             }
-        }, 2000); // Consultar cada 2 segundos
+        }, 2000);
     }
 
     aplicarEfectoRecibido(efecto) {
