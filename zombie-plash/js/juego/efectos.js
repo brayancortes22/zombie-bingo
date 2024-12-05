@@ -3,15 +3,47 @@ class Efectos {
         this.bingoGame = bingoGame;
         this.efectoOscuridadActivo = false;
         this.efectoNumerosActivo = false;
-        this.efectoBloqueoActivo = false;
         this.efectoEligeNumeroActivo = false;
         this.duracionEfecto = 10000; // 10 segundos
+        this.cooldownPoder = 120000; // 2 minutos
+        this.cooldownEfectoRecibido = 5000; // 5 segundos
+        this.poderEnUso = false;
+    }
+
+    async verificarPuedeUsarPoder() {
+        try {
+            const response = await fetch('../php/juego/verificarPoder.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id_sala: this.bingoGame.idSala,
+                    id_jugador: this.bingoGame.idJugador
+                })
+            });
+
+            const data = await response.json();
+            return data.puede_usar;
+        } catch (error) {
+            console.error('Error al verificar poder:', error);
+            return false;
+        }
     }
 
     async aplicarEfectoAJugadores(tipoEfecto) {
+        if (this.poderEnUso) {
+            alert('Ya hay un poder en uso');
+            return false;
+        }
+
+        const puedeUsar = await this.verificarPuedeUsarPoder();
+        if (!puedeUsar) {
+            alert('Debes esperar para usar otro poder');
+            return false;
+        }
+
         try {
-            console.log('Aplicando efecto:', tipoEfecto, 'desde jugador:', this.bingoGame.idJugador);
-            
             const response = await fetch('../php/juego/aplicarEfecto.php', {
                 method: 'POST',
                 headers: {
@@ -24,48 +56,40 @@ class Efectos {
                 })
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const data = await response.json();
-            console.log('Respuesta del servidor:', data);
-
             if (data.success) {
-                this.deshabilitarBotonPoder(tipoEfecto);
+                this.poderEnUso = true;
+                this.deshabilitarTodosPoderes();
+                
+                // Restablecer después del cooldown
+                setTimeout(() => {
+                    this.poderEnUso = false;
+                    this.habilitarTodosPoderes();
+                }, this.cooldownPoder);
+                
                 return true;
             } else {
-                console.error('Error al aplicar efecto:', data.error);
                 alert(data.error || 'Error al aplicar el efecto');
                 return false;
             }
         } catch (error) {
             console.error('Error al aplicar efecto:', error);
-            alert('Error al aplicar el efecto');
             return false;
         }
     }
 
-    deshabilitarBotonPoder(tipoEfecto) {
-        let boton;
-        switch (tipoEfecto) {
-            case 'oscuridad':
-                boton = document.querySelector('.bu[onclick*="toggleEfectoOscuridad"]');
-                break;
-            case 'numeros':
-                boton = document.querySelector('.bu[onclick*="toggleEfectoNumeros"]');
-                break;
-            case 'elige_numero':
-                boton = document.querySelector('.bu[onclick*="toggleEfectoEligeNumero"]');
-                break;
-        }
-
-        if (boton) {
+    deshabilitarTodosPoderes() {
+        const botones = document.querySelectorAll('.bu[onclick*="toggleEfecto"]');
+        botones.forEach(boton => {
             boton.disabled = true;
-            setTimeout(() => {
-                boton.disabled = false;
-            }, 30000);
-        }
+        });
+    }
+
+    habilitarTodosPoderes() {
+        const botones = document.querySelectorAll('.bu[onclick*="toggleEfecto"]');
+        botones.forEach(boton => {
+            boton.disabled = false;
+        });
     }
 
     async toggleEfectoOscuridad() {

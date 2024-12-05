@@ -51,6 +51,24 @@ function aplicarEfecto($id_sala, $jugador_origen, $tipo_efecto) {
             }
         }
 
+        // Actualizar timestamp del último poder usado
+        $stmt = $pdo->prepare("
+            UPDATE jugadores_en_sala 
+            SET ultimo_poder_usado = CURRENT_TIMESTAMP
+            WHERE id_sala = ? AND id_jugador = ?
+        ");
+        $stmt->execute([$id_sala, $jugador_origen]);
+
+        // Bloquear a los jugadores afectados por 5 segundos
+        $stmt = $pdo->prepare("
+            UPDATE jugadores_en_sala 
+            SET poder_bloqueado_hasta = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 5 SECOND)
+            WHERE id_sala = ? AND id_jugador = ?
+        ");
+        foreach ($jugadores as $jugador) {
+            $stmt->execute([$id_sala, $jugador['id_jugador']]);
+        }
+
         return [
             'success' => true,
             'efectos_aplicados' => $efectosAplicados,
