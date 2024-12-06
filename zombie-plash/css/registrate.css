@@ -1,4 +1,17 @@
- .container-fluid{
+
+body::after {
+  content: '';
+  position: fixed;
+  width: 32px; /* Tamaño del cursor */
+  height: 32px;
+  background: url('../img/cursor.png') no-repeat center; /* Ruta de la imagen */
+  background-size: contain; /* Ajusta el tamaño de la imagen */
+  pointer-events: none; /* Permite clics a través del cursor */
+  z-index: 9999; /* Asegura que esté al frente */
+}
+
+
+.container-fluid{
     background-image: url(../img/fondo_login.jpg);
     background-size: contain;
     height: 100vh;
@@ -8,15 +21,18 @@
 
     
 }
+
 .cuadro{
     border: solid 6px #6a5303; 
     height: 80%;
     width: 50%;
     border-radius: 30px;
-    background-color: #384639;
+    background-color: #38463964;
     box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
     display: flex;
     flex-direction: column;
+    filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+
     
   }
   .cuadrote{
@@ -31,7 +47,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 30px;
+    font-size: 40px;
+    filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+
     color: white;
   }
     
@@ -41,6 +59,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+
    }
    .datos{
     height: 100%;
@@ -49,8 +69,7 @@
     flex-direction: row;
     justify-content: center;
     text-align: center;
-    
-    
+    margin-right: 5%;    
     
    }
    .largos{
@@ -59,7 +78,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-left: 48%;
+    margin-left: 40%;
    }
    .filas{
     
@@ -73,12 +92,14 @@
     height: 53%;
     margin-top: 3%;
     text-align: center;
+    filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
+
    }
    .formularios{
     height: 20%;
    }
    .espa{
-    margin-top: 2%;
+    margin-top: 3%;
    }
    .boton{
     width: 100%;
@@ -88,6 +109,9 @@
     height: 100%;
     width: 100%;
     background-color: red;
+    filter: drop-shadow(0px 0px 12px rgb(255, 0, 0));
+    color: white;
+
     border-radius: 50px;
   }
   a{
@@ -104,6 +128,9 @@
     background-color: #26c218;
     border-radius: 50px;
     margin-top: 5%;
+    filter: drop-shadow(0px 0px 12px rgb(0, 255, 30));
+    color: white;
+
   }
   .z{
     height: 80%;
@@ -120,8 +147,8 @@
       background-size: contain;
       height: 100vh;
       display: flex;
-      justify-content: center;
       align-items: center;
+
   
       
   }
@@ -130,7 +157,7 @@
       height: 70%;
       width: 100%;
       border-radius: 30px;
-      background-color: #384639;
+      background-color: #38463964;
       box-shadow: 13px 8px 10px #26c218; /* sombra en la derecha y parte inferior */
       display: flex;
       flex-direction: column;
@@ -171,12 +198,11 @@
       
      }
      .largos{
-      height: 382vh !important;
       width: 60%;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-left: 40%;
+      margin-left: 15%;
      
      }
      .filas{
@@ -206,20 +232,25 @@
       width: 100%;
       background-color: red;
       border-radius: 50px;
+      height: 60%;
+      margin-top: 5%;
     }
     a{
       height: 100%;
       height: 100%;
-      width: 50%;
-    }.botona{
+      width: 90%;
+    }
+    .botona{
     height: 100%;
     width: 100%;
     }
     .boton2{
-      height: 100%;
-      width: 50%;
+      height: 60%;
+      width: 100%;
       background-color: #26c218;
       border-radius: 50px;
+      filter: drop-shadow(0px 0px 12px rgb(0, 255, 30));
+
     }
     .z{
       height: 50%;
