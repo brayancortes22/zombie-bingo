@@ -31,8 +31,8 @@ if (isset($_SESSION['user_id'])) {
             <div class="cuadro">
                 <div class="largo">
                     <div class="verjuego">
-                        <a href="">
-                           <button type="button" class="btn success ver"><strong>Ver juego</strong></button>
+                        <a href="./ver_juego.html">
+                           <button type="button" class="btn success ver" ><strong>Ver juego</strong></button>
                         </a>
                     </div>
                     <div class="cuenta">
