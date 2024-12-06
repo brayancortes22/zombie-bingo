@@ -40,33 +40,19 @@ class ListaJugadoresManager {
 
     mostrarJugadores(jugadores) {
         const container = document.getElementById('listaJugadores');
-        container.innerHTML = '';
-
-        const jugadoresHTML = jugadores.map(jugador => {
-            let imgSrc;
-            if (jugador.avatar) {
-                imgSrc = `data:image/jpeg;base64,${jugador.avatar}`;
-            } else {
-                imgSrc = '../img/perfil1.jpeg';
-            }
-
-            return `
-                <div class="fila">
-                    <div class="cuadrito">
-                        <div class="circulo">
-                            <img src="${imgSrc}" alt="Avatar de ${jugador.nombre}">
-                        </div>
-                        <div class="icono" data-jugador-id="${jugador.id_registro}">
-                            <i class="bi ${this.amigos.has(jugador.id_registro) ? 'bi-person-fill-check' : 'bi-person-add'}"
-                               onclick="listaJugadoresManager.toggleAmigo(${jugador.id_registro}, this)"></i>
-                        </div>
-                    </div>
-                    <div class="cuadritos">${jugador.nombre}</div>
+        container.innerHTML = jugadores.map(jugador => `
+            <div class="fila">
+                <div class="circulo">
+                    <img src="${jugador.avatar ? `data:image/jpeg;base64,${jugador.avatar}` : '../img/perfil1.jpeg'}" 
+                         alt="Avatar de ${jugador.nombre}">
                 </div>
-            `;
-        }).join('');
-
-        container.innerHTML = jugadoresHTML;
+                <div class="icono" data-jugador-id="${jugador.id_registro}">
+                    <i class="bi ${this.amigos.has(jugador.id_registro) ? 'bi-person-fill-check' : 'bi-person-add'}"
+                       onclick="listaJugadoresManager.toggleAmigo(${jugador.id_registro}, this)"></i>
+                </div>
+                <div class="cuadritos">${jugador.nombre}</div>
+            </div>
+        `).join('');
     }
 
     setupEventListeners() {

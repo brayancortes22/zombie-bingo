@@ -118,84 +118,115 @@ img {
   font-size: 50px;
   position: absolute;
 }
-.informacion {
+.informacion, .informacion2, .informacion3 {
+    position: absolute;
+    top: 3px;
+    left: -40px;
+    width: 400px;
+    height: 350px;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.2);
+    transition: all 0.5s ease;
+    border-radius: 20px;
+    z-index: 10;
+}
 
-  position: absolute;
-  top: 3;
-  left: -40px;
-  width: 400px;
-  height: 350px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(87, 81, 81, 0.5)), url('../img/3posion.jpeg');
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  opacity: 0;
-  transform: scale(0.2); /* Comienza un poco más pequeño */
-  transition: opacity 0.5s ease, transform 0.5s ease, border-radius 0.5s ease; /* Transición rápida y fluida */
-  will-change: opacity, transform, border-radius; /* Mejora de rendimiento */
-  border-radius: 20px; /* initial curved shape */
-  object-fit: cover; /* Ajusta la imagen para que cubra todo el contenedor sin distorsión */
-  background-size: 100%;
-  margin-top: 2px;
-  
+.informacion {
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('../img/3posion.jpeg');
+    border: 3px solid #4a00ff;
+    box-shadow: 0 0 20px rgba(74, 0, 255, 0.5);
 }
+
 .informacion2 {
-  position: absolute;
-  top: 3;
-  left: -40px;
-  width: 400px;
-  height: 350px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(87, 81, 81, 0.5)), url('../img/2posion.jpeg');
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  opacity: 0;
-  transform: scale(0.2); /* Comienza un poco más pequeño */
-  transition: opacity 0.5s ease, transform 0.5s ease, border-radius 0.5s ease; /* Transición rápida y fluida */
-  will-change: opacity, transform, border-radius; /* Mejora de rendimiento */
-  border-radius: 20px; /* initial curved shape */
-  object-fit: cover; /* Ajusta la imagen para que cubra todo el contenedor sin distorsión */
-  background-size: 100%;
-  margin-top: 2px;
-  
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('../img/2posion.jpeg');
+    border: 3px solid #ff0000;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
 }
+
 .informacion3 {
-  position: absolute;
-  top: 3;
-  left: -40px;
-  width: 400px;
-  height: 350px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(87, 81, 81, 0.5)), url('../img/1posion.jpeg');
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  opacity: 0;
-  transform: scale(0.2); /* Comienza un poco más pequeño */
-  transition: opacity 0.5s ease, transform 0.5s ease, border-radius 0.5s ease; /* Transición rápida y fluida */
-  will-change: opacity, transform, border-radius; /* Mejora de rendimiento */
-  border-radius: 20px; /* initial curved shape */
-  object-fit: cover; /* Ajusta la imagen para que cubra todo el contenedor sin distorsión */
-  background-size: 100%;
-  margin-top: 2px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('../img/1posion.jpeg');
+    border: 3px solid #1eff00;
+    box-shadow: 0 0 20px rgba(30, 255, 0, 0.5);
 }
+
+.informacion h1, .informacion2 h1, .informacion3 h1 {
+    font-size: 28px !important;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.informacion h1 { color: #4a00ff !important; text-shadow: 0 0 10px rgba(74, 0, 255, 0.7); }
+.informacion2 h1 { color: #ff0000 !important; text-shadow: 0 0 10px rgba(255, 0, 0, 0.7); }
+.informacion3 h1 { color: #1eff00 !important; text-shadow: 0 0 10px rgba(30, 255, 0, 0.7); }
+
+.informacion p, .informacion2 p, .informacion3 p {
+    font-size: 18px !important;
+    line-height: 1.6;
+    margin: 15px 0;
+    padding: 0 20px;
+}
+
+.informacion p { color: #b088ff; text-shadow: 0 0 5px rgba(74, 0, 255, 0.5); }
+.informacion2 p { color: #ff8888; text-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+.informacion3 p { color: #88ff88; text-shadow: 0 0 5px rgba(30, 255, 0, 0.5); }
+
+.rojo {
+    margin-top: 20px;
+    font-size: 20px !important;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 10px;
+    animation: pulsar 2s infinite;
+}
+
+.informacion .rojo { background: rgba(74, 0, 255, 0.2); color: #4a00ff; }
+.informacion2 .rojo { background: rgba(255, 0, 0, 0.2); color: #ff0000; }
+.informacion3 .rojo { background: rgba(30, 255, 0, 0.2); color: #1eff00; }
+
+@keyframes pulsar {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.col:hover .informacion,
+.col:hover .informacion2,
+.col:hover .informacion3 {
+    opacity: 1;
+    transform: scale(1);
+    backdrop-filter: blur(5px);
+}
+
+.informacion::before,
+.informacion2::before,
+.informacion3::before {
+    font-family: "bootstrap-icons";
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.informacion::before { content: "\f4f7"; color: #4a00ff; }
+.informacion2::before { content: "\f4e2"; color: #ff0000; }
+.informacion3::before { content: "\f4df"; color: #1eff00; }
+
 .col {
-  
-  margin-left: 55px;
-  margin-right: 55px;
-  
+  margin: 0 55px;
   position: relative;
-  /* Oculta cualquier parte de la imagen que se salga del contenedor */
-  /* overflow: hidden;  */
   display: flex;
   justify-content: center;
   align-items: center;
-  
-
   width: 300px;
   height: 300px;
-  /* background-color: #f00; */
-  border-radius: 50%; /* forma circular */
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* ajusta la transición */
+  border-radius: 50%;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 }
 
 /* Mostrar la información al pasar el mouse sobre la columna */
@@ -220,20 +251,23 @@ img {
 
 
 h1{
-  font-size: 23px !important;
-  position: absolute;
-  top: 50px;
-  color: red !important;
+  font-size: 24px !important;
+  color: #ff0000 !important;
+  text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+  margin-bottom: 20px;
+  text-transform: uppercase;
 }
 .rojo{
-  color: red;
-  position: absolute;
-  bottom: 20px;
+  color: #ff0000;
+  font-weight: bold;
+  font-size: 18px !important;
+  text-shadow: 0 0 8px rgba(255, 0, 0, 0.5);
 }
 p{
-  font-size: 14px !important;
-  position: absolute;
-  bottom: 29%;
-  color: greenyellow;
+  font-size: 16px !important;
+  color: #1eff00;
+  text-shadow: 0 0 5px rgba(30, 255, 0, 0.5);
+  margin: 15px 0;
+  line-height: 1.4;
 }
 

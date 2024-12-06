@@ -31,45 +31,43 @@
             });
     </script>
     <div class="container-fluid">
+        <img src="../img/perfilJugador.jpeg" class="fondo_perfil" alt="Imagen de fondo"> 
         <div class="imagen">
             <a href="./inicio.php">
                 <i class="bi bi-backspace-reverse-fill"></i>
             </a>
             <div class="cua">
-                <div class="cua">
-                    <div class="zombi1">
-                        <div class="avatar-container">
-                            <img id="avatarActual" src="../uploads/avatars/perfil1.jpeg" alt="Avatar">
-                            <div class="hover-overlay">
-                                <input type="file" id="fileInput" name="avatar" accept="image/*">
-                                <label for="fileInput" class="change-avatar-btn">
-                                    <i class="bi bi-camera-fill"></i>
-                                    Cambiar foto
-                                </label>
+                <div class="zombi1">
+                    <div class="avatar-container">
+                        <img id="avatarActual" src="../uploads/avatars/perfil1.jpeg" alt="Avatar">
+                        <div class="hover-overlay">
+                            <input type="file" id="fileInput" name="avatar" accept="image/*">
+                            <label for="fileInput" class="change-avatar-btn">
+                                <i class="bi bi-camera-fill"></i>
+                                <span>Cambiar foto</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="cuadro">
+                    <div class="largo">
+                        <div class="nombre">
+                            <h2><strong>Nombre: </strong></h2>
+                        </div>
+                        <div class="zo">
+                            <h2><strong id="nombreCompleto">Cargando...</strong></h2>
+                            <div class="editar">    
+                                <i class="bi bi-pencil-square"></i>
                             </div>
                         </div>
                     </div>
-
-                </div>
-            </div>
-            <div class="cuadro">
-                <div class="largo">
-                    <div class="nombre">
-                        <h2><strong>Nombre: </strong></h2>
-                    </div>
-                    <div class="zo">
-                        <h2><strong id="nombreCompleto"><span>Cargando...</span></strong></h2>
-                        <div class="editar">    
-                            <i class="bi bi-pencil-square"></i>
+                    <div class="largo">
+                        <div class="nombre">
+                            <h2><strong>ID: </strong></h2>
                         </div>
-                    </div>
-                </div><br><br>
-                <div class="largo">
-                    <div class="nombre">
-                        <h2><strong>ID: </strong></h2>
-                    </div>
-                    <div class="zo">
-                        <h2><strong id="userId">Cargando...</strong></h2>
+                        <div class="zo">
+                            <h2><strong id="userId">Cargando...</strong></h2>
+                        </div>
                     </div>
                 </div>
             </div>
