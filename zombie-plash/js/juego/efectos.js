@@ -126,18 +126,18 @@ class Efectos {
         }
     }
 
-    async toggleEfectoEligeNumero() {
-        if (this.efectoEligeNumeroActivo) {
-            alert('Ya estás usando este poder');
-            return;
-        }
+    // async toggleEfectoEligeNumero() {
+    //     if (this.efectoEligeNumeroActivo) {
+    //         alert('Ya estás usando este poder');
+    //         return;
+    //     }
 
-        const aplicado = await this.aplicarEfectoAJugadores('elige_numero');
-        if (aplicado) {
-            this.efectoEligeNumeroActivo = true;
-            this.iniciarEfectoEligeNumero();
-        }
-    }
+    //     const aplicado = await this.aplicarEfectoAJugadores('elige_numero');
+    //     if (aplicado) {
+    //         this.efectoEligeNumeroActivo = true;
+    //         this.iniciarEfectoEligeNumero();
+    //     }
+    // }
 
     iniciarEfectoOscuridad() {
         if (this.efectoOscuridadActivo) return;

@@ -40,8 +40,21 @@
                     <input type="password" id="contraseñaSala" name="contraseñaSala" class="redondeo" required>
                     
                     <label for="maxJugadores" class="contra">Número de jugadores</label>
-                    <input type="number" id="maxJugadores" name="maxJugadores" class="redondeo" onkeydown="cancelarLetras(event)" required>
-                    
+                    <input type="number" id="maxJugadores" name="maxJugadores" class="redondeo" min="2" 
+                    max="50" oninput="validarMaxJugadores(this.value)"  onkeydown="cancelarLetras(event)" required>
+                    <script>
+                        function validarMaxJugadores(value) {
+                            if (value > 50) {
+                                Swal.fire({
+                                    title: '¡Atención!',
+                                    text: 'El máximo de jugadores permitido es 50',
+                                    icon: 'warning',
+                                    confirmButtonText: 'Entendido'
+                                });
+                                document.getElementById('maxJugadores').value = 50;
+                            }
+                        }
+                        </script>
                     <div class="botones">
                         <div class="Aceptar">
                             <button class="btn success" type="submit"><strong>Aceptar</strong></button>

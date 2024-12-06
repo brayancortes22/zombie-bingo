@@ -1,3 +1,6 @@
+body{
+    background-image: url(../img/fondo_juego_v2.jpg);
+}
 #copyButton {
     margin-top: 10px;
     padding: 10px 15px;
