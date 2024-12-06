@@ -1,14 +1,18 @@
 .container-fluid{
-    margin: 0% !important;
-    padding: 0% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     user-select: none;
     height: 100vh;
     display: flex;
 }
 .btn{
-    width: 100%;
-    height: 100%;
-    background-color: red;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 .imagen{
     background-image: url('../img/jugadoresSala.jpeg');
@@ -17,12 +21,11 @@
     background-repeat: no-repeat; /* Evita que la imagen se repita */
     background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
     height: 100vh; /* Hace que ocupe la altura completa de la ventana */
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white; /* Cambia el color del texto para que sea visible */
-    width: 100%;
-    z-index: 1;
 }
 .cuadro{
     border: #ce7c00 solid 5px;
@@ -30,7 +33,7 @@
     width: 90%;
     background-color: rgba(14, 85, 87, 0.5); /* Azul con 50% de transparencia */
     border-radius: 30px;
-    position: absolute;
+    position: relative;
     filter: drop-shadow(0px 0px 12px rgb(7, 7, 6));
     display: flex;
     flex-direction: column;
@@ -63,143 +66,191 @@
     display: flex;
 }
 .izquierda{
-    
     width: 25%;
-    height: 100%;
+    height: 70%;
+    padding: 20px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    
+    flex-direction: column;
+    gap: 20px;
 }
 /* contenedor de la casilla de lista de jugadores */
 .derecha{
-    width: 100%;
-    height: 90%; /* Altura fija para el contenedor */
-    overflow-y: auto; /* Barra de desplazamiento vertical */
+    width: 75%;
+    height: 90%;
+    overflow-y: auto;
     padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: flex-start;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 180px));
+    gap: 15px;
+    justify-content: start;
 }
 
 /* Estilizar la barra de desplazamiento */
 .derecha::-webkit-scrollbar {
-    width: 10px;
+    width: 8px;
 }
 
 .derecha::-webkit-scrollbar-track {
-    background: rgba(38, 194, 24, 0.1);
-    border-radius: 5px;
+    background: rgba(0, 255, 0, 0.1);
+    border-radius: 10px;
 }
 
 .derecha::-webkit-scrollbar-thumb {
-    background: #26c218;
-    border-radius: 5px;
-}
-
-.derecha::-webkit-scrollbar-thumb:hover {
-    background: #1e9612;
-}
-
-/* Contenedor de cada jugador */
-.fila {
-    width: calc(20% - 20px); /* 5 jugadores por fila con espacio entre ellos */
-    min-width: 150px; /* Ancho mínimo para evitar que se hagan muy pequeños */
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid #26c218;
+    background: #1eff00;
     border-radius: 10px;
+    box-shadow: 0 0 5px #1eff00;
+}
+
+/* Tarjeta de jugador */
+.fila {
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #1eff00;
+    border-radius: 15px;
     padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
     transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(30, 255, 0, 0.3);
+    height: 180px;
+    width: 100%;
 }
 
 .fila:hover {
     transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(38, 194, 24, 0.3);
+    box-shadow: 0 0 20px rgba(30, 255, 0, 0.5);
+    border-color: #00ff00;
 }
 
-.cuadrito {
-    width: 100%;
-    height: 20%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-}
-
+/* Imagen del jugador */
 .circulo {
-    width: 100%;
-    height: 80%;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     overflow: hidden;
-    border: 3px solid #26c218;
-    box-shadow: 0 0 10px rgba(38, 194, 24, 0.5);
+    border: 2px solid #1eff00;
+    box-shadow: 0 0 15px rgba(30, 255, 0, 0.5);
+    transition: all 0.3s ease;
 }
 
 .circulo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.icono {
-    margin-top: 10%;
-    right: 10px;
-    bottom: 0;
-    background: #26c218;
+.fila:hover .circulo {
+    box-shadow: 0 0 20px rgba(30, 255, 0, 0.8);
+}
+
+.fila:hover .circulo img {
+    transform: scale(1.1);
+}
+
+/* Nombre del jugador */
+.cuadritos {
+    color: #1eff00;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 0 5px rgba(30, 255, 0, 0.5);
+    margin: 5px 0;
     width: 100%;
-    height: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Botón de agregar amigo */
+.icono {
+    background: linear-gradient(145deg, #1eff00, #19e600);
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(30, 255, 0, 0.3);
 }
 
 .icono:hover {
-    transform: scale(1.1);
-    background: #1e9612;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 0 15px rgba(30, 255, 0, 0.6);
 }
 
 .icono i {
-    
-    color: white;
-    font-size: 22px;
+    color: #000;
+    font-size: 18px;
+    transition: all 0.3s ease;
 }
 
-.cuadritos {
+.icono:hover i {
+    color: #fff;
+}
+
+/* Estilos para el área de búsqueda */
+.izquierda {
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    border: 2px solid #1eff00;
+    margin: 20px;
+    box-shadow: 0 0 15px rgba(30, 255, 0, 0.3);
+}
+
+input {
     width: 100%;
-    text-align: center;
-    color: #26c218;
-    font-size: 16px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #1eff00;
+    border-radius: 10px;
+    color: #1eff00;
+    font-size: 1.1em;
+    margin-bottom: 15px;
+    box-shadow: 0 0 10px rgba(30, 255, 0, 0.2);
+}
+
+input:focus {
+    outline: none;
+    border-color: #00ff00;
+    box-shadow: 0 0 15px rgba(30, 255, 0, 0.4);
+}
+
+.btn, .btn2 {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
-input{
-    width: 120%;
-    height: 8vh;
-    border-radius: 50px;
+
+.btn {
+    background: #1eff00;
+    color: #000;
+    box-shadow: 0 0 10px rgba(30, 255, 0, 0.3);
 }
-.boton{
-    background-color: #1e9612;
-    
-    border-radius: 50px;
-    width: 100%;
-    height: 10%;
+
+.btn2 {
+    background: #ff3333;
+    color: #fff;
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.3);
 }
-.btn2{
-    background-color: #d30909;
-    border-radius: 50px;
-    width: 100%;
-    height: 10%;
+
+.btn:hover {
+    background: #00ff00;
+    box-shadow: 0 0 15px rgba(30, 255, 0, 0.6);
+}
+
+.btn2:hover {
+    background: #ff0000;
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
 }

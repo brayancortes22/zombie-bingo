@@ -1,0 +1,89 @@
+body {
+    background: linear-gradient(135deg, #1a1a1a, #4a4a4a);
+    color: white;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 2px;
+    color: #ff4444;
+}
+
+#gameLink {
+    text-decoration: none;
+    color: #fff;
+    background: #ff4444;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 1.2em;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 68, 68, 0.3);
+}
+
+#gameLink:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 68, 68, 0.4);
+}
+
+#copyButton {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 25px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+#copyButton:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+#qrCode {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    animation: flotar 3s ease-in-out infinite;
+}
+
+@keyframes flotar {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Efecto de respuesta al hacer clic en el botón */
+#copyButton:active {
+    transform: scale(0.95);
+}
+
+/* Contenedor para el QR y los botones */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+} 

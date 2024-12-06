@@ -62,15 +62,19 @@ height: 40%;
 
 }
 .fila{
+    margin-top: 0.9%;
     height: 10%;
     width: 100%;
     display: flex;
+    align-items: center;
+    /* espaciado-entre-botones usando el beteween */
+    justify-content: space-between;
 }
 .colu1{
     height: 100%;
-    width: 15%;
+    width: 5%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
 
@@ -98,21 +102,37 @@ height: 40%;
     
 }
 .bu{
+    
     height: 100%;
     width: 100%;
-    background-color: rgb(147, 208, 216);
+    /* background-color: rgb(147, 208, 216); */
     border-radius: 40px;
     text-align: center;
     font-size: 20px;
     color:  rgb(255, 255, 255);
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
     padding: 8px 16px;
-    background-color: #6a1b9a;
-    color: white;
+    background-color: #8e61f8b4;
+    color: rgb(252, 2, 2);
     border: none;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.3s ease;
+}
+.bu img {
+    width: 50%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
+    animation: agitar 3.5s ease-in-out infinite;
+}
+
+@keyframes agitar {
+    0%, 92%, 100% { transform: rotate(0deg); }
+    94% { transform: rotate(-5deg); }
+    96% { transform: rotate(5deg); }
+    98% { transform: rotate(-5deg); }
 }
 .bu:hover {
     background-color: #4a148c;
@@ -122,7 +142,7 @@ height: 40%;
     cursor: not-allowed;
 }
 .bu.activo {
-    background-color: #4a148c;
+    background-color: #57ec2a;
     animation: pulsar 2s infinite;
 }
 @keyframes pulsar {
@@ -132,7 +152,7 @@ height: 40%;
 }
 .bi{
     height: 100%;
-    color: rgb(36, 219, 30);
+    color: rgb(201, 41, 41);
     width: 100%;
     font-size: 79px !important;
     text-align: center;
@@ -154,7 +174,7 @@ height: 40%;
     width: 30%;
     border-radius: 40px;
     
-    margin-left: -2%;
+    margin-left: 6%;
     background-color:rgba(58, 204, 180, 0.733);
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
     border: solid 1px black;
@@ -186,16 +206,32 @@ height: 40%;
     display: flex;
     justify-content: center;
     filter: drop-shadow(0px 0px 12px rgb(29, 31, 29));
-
-  
+    gap: 10px;
 }
 
 
 .bingo{
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+   
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 10px;
+    margin-top: 10%;
+}
+.bingo button{
+    width: 100%;
+    height: 20%;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    margin-top: 20%;
+    background-color: #45a049;
 }
 .fila1{
     height: 15%;
@@ -223,6 +259,70 @@ height: 40%;
     margin-left: 2%;
     margin-right: 2%;
 
+}
+.btn {
+    position: relative;
+    padding: 15px 30px;
+    font-size: 1.2em;
+    color: white;
+    background: #ff4444;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #fff);
+    animation: bordeAnimado1 1.5s linear infinite;
+}
+
+.btn::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(270deg, transparent, #fff);
+    animation: bordeAnimado2 1.5s linear infinite;
+}
+
+@keyframes bordeAnimado1 {
+    0% {
+        left: -100%;
+    }
+    50%, 100% {
+        left: 100%;
+    }
+}
+
+@keyframes bordeAnimado2 {
+    0% {
+        right: -100%;
+    }
+    50%, 100% {
+        right: 100%;
+    }
+}
+
+/* Efecto hover manteniendo la animación */
+.btn:hover {
+    box-shadow: 0 0 15px #ff4444;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+/* Aseguramos que las animaciones continúen en hover */
+.btn:hover::before,
+.btn:hover::after {
+    animation-play-state: running;
 }
 .bh{
     padding: 8px 16px;
