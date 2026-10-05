@@ -25,7 +25,12 @@ Videojuego de Bingo temático post-apocalíptico zombie remasterizado a tecnolog
    - Mascota Zombie animada en canvas central.
    - HUD superior con estado del jugador (indicador Google o nivel de superviviente).
    - Acciones principales: *Jugar Solo*, *Crear Sala*, *Unirse a Sala*, *Guía de Pociones*, *Control de Audio*.
-3. **Guía de Pociones (`PotionsGuideView`):**
+   - **Franja Inferior de Amigos Agregados (`.abajo`):** 5 ranuras dinámicas para avatares y nombres de compañeros supervivientes, más acceso directo al directorio.
+3. **Lista de Jugadores & Amigos (`FriendsListView` - Recreación de `listaDeJugadores.html`):**
+   - Buscador de supervivientes por ID o nombre.
+   - Directorio de supervivientes con avatar, nivel y estado en línea/desconectado.
+   - Acción rápida para agregar o eliminar amigos (`UserPlus` / `UserCheck`) con persistencia en `localStorage`.
+4. **Guía de Pociones (`PotionsGuideView`):**
    - Catálogo interactivo de pociones (`cura.png`, `escudo.png`, `velocidad.png`, etc.) con efectos de balanceo (`@keyframes agitar`) y descripción táctica.
 4. **Crear Sala (`CreateRoomView`):**
    - Configuración de código de sala, límite de jugadores (2 a 8) y contraseña de acceso opcional.

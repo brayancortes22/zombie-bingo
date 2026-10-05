@@ -1,6 +1,7 @@
-import React from 'react'
-import type { UserSession } from '../../types/navigation'
+import React, { useState, useEffect } from 'react'
+import type { UserSession, Friend } from '../../types/navigation'
 import { Volume2, VolumeX, Share2, FlaskConical, Users, UserPlus, Play, LogOut } from 'lucide-react'
+import { friendsService } from '../../services/friendsService'
 
 interface HomeViewProps {
   user: UserSession
@@ -8,6 +9,7 @@ interface HomeViewProps {
   onCreateRoom: () => void
   onJoinRoom: () => void
   onOpenPotionsGuide: () => void
+  onOpenFriendsList: () => void
   onLogout: () => void
   soundEnabled: boolean
   onToggleSound: () => void
@@ -19,10 +21,16 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onCreateRoom,
   onJoinRoom,
   onOpenPotionsGuide,
+  onOpenFriendsList,
   onLogout,
   soundEnabled,
   onToggleSound,
 }) => {
+  const [friends, setFriends] = useState<Friend[]>([])
+
+  useEffect(() => {
+    setFriends(friendsService.getFriends())
+  }, [])
   return (
     <div className="zombie-bg min-h-screen flex flex-col p-4 sm:p-6 relative selection:bg-red-500 selection:text-white">
       {/* Top Header Strip (From Original inicio.php) */}
@@ -138,18 +146,80 @@ export const HomeView: React.FC<HomeViewProps> = ({
         </div>
       </div>
 
-      {/* Bottom Friends Strip (From Original inicio.php) */}
-      <div className="max-w-6xl w-full mx-auto mt-6 bg-black/75 backdrop-blur-md p-3.5 rounded-2xl border-2 border-red-950 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <span className="text-xs font-horror text-slate-400 uppercase tracking-wider">
-          💀 Amigos Agregados & Horda:
-        </span>
-        <div className="flex items-center gap-3">
-          {['/img/avatar1.jpg', '/img/avatar2.jpg', '/img/avatar3.jpg'].map((av, i) => (
-            <div key={i} className="flex items-center gap-1.5 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-800">
-              <img src={av} alt="Friend" className="w-6 h-6 rounded-full object-cover border border-red-500" />
-              <span className="text-[11px] font-mono text-slate-300">Zombie_{i + 1}</span>
+      {/* Bottom Friends Section (Authentic from original inicio.php .abajo) */}
+      <div className="max-w-6xl w-full mx-auto mt-6 bg-black/85 backdrop-blur-md p-4 rounded-2xl border-2 border-red-950 shadow-2xl">
+        <div className="flex items-center justify-between mb-3 border-b border-red-950 pb-2">
+          <div className="text-lg font-horror text-red-500 tracking-wider flex items-center gap-2">
+            <span>💀 Amigos Agregados</span>
+            <span className="text-xs font-mono text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-800/40">
+              {friends.length}
+            </span>
+          </div>
+          <button
+            type="button"
+            onClick={onOpenFriendsList}
+            className="text-xs font-horror text-yellow-400 hover:text-yellow-300 flex items-center gap-1 cursor-pointer transition-colors"
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>Ver Todos / Buscar</span>
+          </button>
+        </div>
+
+        {/* 5 Slots + Agregar Amigos Button (Like original inicio.php) */}
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+          {Array.from({ length: 5 }).map((_, index) => {
+            const friend = friends[index]
+            if (friend) {
+              return (
+                <div
+                  key={friend.id}
+                  className="flex flex-col items-center bg-slate-950/80 p-2.5 rounded-xl border border-red-950 hover:border-red-700/60 transition-all group"
+                >
+                  <div className="relative mb-1.5">
+                    <img
+                      src={friend.avatar}
+                      alt={friend.name}
+                      className="w-11 h-11 rounded-full object-cover border-2 border-red-600 group-hover:scale-105 transition-transform"
+                    />
+                    <span
+                      className={`w-3 h-3 rounded-full absolute bottom-0 right-0 border-2 border-slate-950 ${
+                        friend.isOnline ? 'bg-emerald-500' : 'bg-slate-600'
+                      }`}
+                    />
+                  </div>
+                  <span className="text-xs font-horror text-white truncate max-w-full text-center">
+                    {friend.name}
+                  </span>
+                  <span className="text-[10px] font-mono text-amber-400">Nv. {friend.level}</span>
+                </div>
+              )
+            }
+            return (
+              <div
+                key={`empty-${index}`}
+                className="flex flex-col items-center justify-center bg-slate-950/40 p-2.5 rounded-xl border border-dashed border-red-950/60 opacity-50"
+              >
+                <div className="w-11 h-11 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center mb-1.5 text-slate-700 text-xs">
+                  Vacío
+                </div>
+                <span className="text-xs font-horror text-slate-600">Vacío</span>
+              </div>
+            )
+          })}
+
+          {/* Agregar Amigos Slot */}
+          <button
+            type="button"
+            onClick={onOpenFriendsList}
+            className="flex flex-col items-center justify-center bg-red-950/40 hover:bg-red-900/50 p-2.5 rounded-xl border-2 border-dashed border-red-700 hover:border-red-500 cursor-pointer transition-all group"
+          >
+            <div className="w-11 h-11 rounded-full bg-red-950 border border-red-700 group-hover:bg-red-800 group-hover:scale-105 transition-all flex items-center justify-center mb-1.5 text-yellow-400">
+              <UserPlus className="w-5 h-5" />
             </div>
-          ))}
+            <span className="text-xs font-horror text-yellow-400 text-center leading-tight">
+              Agregar Amigos
+            </span>
+          </button>
         </div>
       </div>
     </div>

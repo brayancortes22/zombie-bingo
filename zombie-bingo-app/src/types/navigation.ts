@@ -6,6 +6,15 @@ export type ViewMode =
   | 'join-room'
   | 'lobby'
   | 'game'
+  | 'friends-list'
+
+export interface Friend {
+  id: string
+  name: string
+  avatar: string
+  isOnline: boolean
+  level: number
+}
 
 export interface UserSession {
   id: string

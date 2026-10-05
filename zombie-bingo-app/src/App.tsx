@@ -8,6 +8,7 @@ import { CreateRoomView } from './components/views/CreateRoomView'
 import { JoinRoomView } from './components/views/JoinRoomView'
 import { LobbyView } from './components/views/LobbyView'
 import { GameView } from './components/views/GameView'
+import { FriendsListView } from './components/views/FriendsListView'
 import type { ViewMode, UserSession, RoomData } from './types/navigation'
 
 export function App() {
@@ -121,10 +122,15 @@ export function App() {
           onCreateRoom={() => setCurrentView('create-room')}
           onJoinRoom={() => setCurrentView('join-room')}
           onOpenPotionsGuide={() => setCurrentView('potions-guide')}
+          onOpenFriendsList={() => setCurrentView('friends-list')}
           onLogout={handleLogout}
           soundEnabled={soundEnabled}
           onToggleSound={handleToggleSound}
         />
+      )}
+
+      {currentView === 'friends-list' && (
+        <FriendsListView onBack={() => setCurrentView('home')} />
       )}
 
       {currentView === 'potions-guide' && (
