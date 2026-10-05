@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import type { UserSession } from '../../types/navigation'
+import { GoogleAuthButton } from '../auth/GoogleAuthButton'
 
 interface LoginViewProps {
   onLoginSuccess: (user: UserSession) => void
@@ -125,6 +126,18 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onPlayGues
                 ¿Olvidaste tu contraseña?
               </span>
             )}
+
+            {/* Divisor estético */}
+            <div className="flex items-center gap-3 my-1">
+              <div className="flex-1 h-px bg-red-950" />
+              <span className="text-[11px] font-horror text-slate-400 uppercase tracking-wider">
+                o continúa con
+              </span>
+              <div className="flex-1 h-px bg-red-950" />
+            </div>
+
+            {/* Botón de Google OAuth */}
+            <GoogleAuthButton onSuccess={onLoginSuccess} isRegister={isRegister} />
           </form>
         </div>
       </div>

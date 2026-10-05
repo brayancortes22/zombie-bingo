@@ -35,7 +35,9 @@ export const HomeView: React.FC<HomeViewProps> = ({
             <h2 className="text-xl sm:text-2xl font-horror text-yellow-400 leading-tight">
               Bienvenido, {user.username}
             </h2>
-            <span className="text-xs font-mono text-emerald-400">Nivel 10 · Superviviente</span>
+            <span className="text-xs font-mono text-emerald-400">
+              {user.provider === 'google' ? `⚡ Conectado con Google (${user.email || 'Superviviente'})` : 'Nivel 10 · Superviviente'}
+            </span>
           </div>
         </div>
 

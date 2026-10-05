@@ -13,6 +13,7 @@ export interface UserSession {
   email?: string
   avatar: string
   isAuthenticated: boolean
+  provider?: 'local' | 'google' | 'guest'
 }
 
 export interface RoomPlayer {
