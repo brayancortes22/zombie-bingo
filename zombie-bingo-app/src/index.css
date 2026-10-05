@@ -1,80 +1,166 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Z-2';
+  src: url('/fonts/halloweek-webfont.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-horror: 'Z-2', 'Creepster', cursive, sans-serif;
     --font-display: 'Orbitron', monospace;
-    --font-zombie: 'Creepster', cursive, sans-serif;
+    --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
   }
 
   body {
-    font-family: var(--font-sans);
-    background-color: #07090E;
-    color: #F1F5F9;
+    font-family: var(--font-body);
+    background-color: #050608;
+    color: #F8FAFC;
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
   }
 }
 
-/* Tabular numbers for bingo counters, balotas, and clocks */
+.font-horror {
+  font-family: 'Z-2', 'Creepster', cursive, fantasy !important;
+}
+
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Glassmorphism Panels */
-.glass-panel {
-  background: rgba(15, 23, 42, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45);
+/* Background Scene */
+.zombie-bg {
+  background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.65)), url('/img/fondo_juego_v2.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-.glass-panel-glow {
-  background: rgba(13, 20, 36, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  box-shadow: 0 0 25px rgba(16, 185, 129, 0.15), inset 0 0 15px rgba(16, 185, 129, 0.05);
+/* Authentic Stone Frame for Bingo Card */
+.marco-zombie {
+  background-image: url('/img/marco.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 40px;
+  filter: drop-shadow(0px 0px 24px rgba(0, 0, 0, 0.95));
+  border: 2px solid rgba(138, 92, 246, 0.3);
+  box-shadow: inset 0 0 35px rgba(0,0,0,0.9), 0 0 25px rgba(0,0,0,0.8);
 }
 
-/* Zombie Stamp Splatter FX */
-@keyframes stamp-pop {
+/* Blood Rain Falling Effect (From Original goteo.css) */
+.rain-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+  overflow: hidden;
+}
+
+.raindrop {
+  position: absolute;
+  width: 2px;
+  height: 65px;
+  background: linear-gradient(transparent, #ef4444);
+  box-shadow: 0 0 8px #dc2626;
+  opacity: 0.65;
+  animation: fall-rain linear infinite;
+}
+
+@keyframes fall-rain {
   0% {
-    transform: scale(2.2) rotate(-15deg);
+    transform: translateY(-80px);
     opacity: 0;
   }
-  60% {
-    transform: scale(0.92) rotate(4deg);
-    opacity: 1;
+  15% {
+    opacity: 0.75;
+  }
+  85% {
+    opacity: 0.75;
   }
   100% {
-    transform: scale(1) rotate(0deg);
-    opacity: 1;
+    transform: translateY(105vh);
+    opacity: 0;
   }
 }
 
-.animate-stamp {
-  animation: stamp-pop 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+/* Original Potion Shake Animation (agitar) */
+@keyframes agitar {
+  0%, 88%, 100% { transform: rotate(0deg); }
+  90% { transform: rotate(-8deg); }
+  92% { transform: rotate(8deg); }
+  94% { transform: rotate(-8deg); }
+  96% { transform: rotate(8deg); }
 }
 
-/* Jumpscare / Zombie Fog Effect */
-@keyframes fog-drift {
-  0% {
-    filter: blur(0px) contrast(1);
-    transform: scale(1);
-  }
-  50% {
-    filter: blur(6px) contrast(1.4) hue-rotate(90deg);
-    transform: scale(1.02);
-  }
-  100% {
-    filter: blur(0px) contrast(1);
-    transform: scale(1);
-  }
+.animate-agitar {
+  animation: agitar 3.5s ease-in-out infinite;
 }
 
-.animate-zombie-fog {
-  animation: fog-drift 4s infinite ease-in-out;
+/* Original Pulsing Toxic Green Animation (pulsar) */
+@keyframes pulsar {
+  0% { transform: scale(1); filter: drop-shadow(0 0 5px #10b981); }
+  50% { transform: scale(1.06); filter: drop-shadow(0 0 18px #34d399); }
+  100% { transform: scale(1); filter: drop-shadow(0 0 5px #10b981); }
+}
+
+.animate-pulsar {
+  animation: pulsar 2s infinite;
+}
+
+/* Original Animated Laser Border on ¡BINGO! Button */
+@keyframes bordeAnimado1 {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
+@keyframes bordeAnimado2 {
+  0% { right: -100%; }
+  50%, 100% { right: 100%; }
+}
+
+.btn-zombie-bingo {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ef4444, #991b1b);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.7);
+  transition: all 0.25s ease;
+}
+
+.btn-zombie-bingo:hover {
+  box-shadow: 0 0 35px rgba(239, 68, 68, 1);
+  transform: scale(1.05);
+}
+
+.btn-zombie-bingo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffffff);
+  animation: bordeAnimado1 1.5s linear infinite;
+}
+
+.btn-zombie-bingo::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: -100%;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(270deg, transparent, #ffffff);
+  animation: bordeAnimado2 1.5s linear infinite;
 }
 
 /* Custom Scrollbars */
@@ -86,9 +172,6 @@
   background: #0B0F17;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1E293B;
+  background: #7F1D1D;
   border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #10B981;
 }

@@ -7,45 +7,40 @@ interface BingoBoardProps {
   drawnNumbers: Set<number>
   onMarkCell: (row: number, col: number) => void
   isVertigoActive?: boolean
+  onCallBingo?: () => void
+  onNewCard?: () => void
 }
 
-const COLUMNS = [
-  { letter: 'B', range: '1-15', bg: 'bg-blue-600/20 text-blue-400 border-blue-500/30' },
-  { letter: 'I', range: '16-30', bg: 'bg-purple-600/20 text-purple-400 border-purple-500/30' },
-  { letter: 'N', range: '31-45', bg: 'bg-emerald-600/20 text-emerald-400 border-emerald-500/30' },
-  { letter: 'G', range: '46-60', bg: 'bg-amber-600/20 text-amber-400 border-amber-500/30' },
-  { letter: 'O', range: '61-75', bg: 'bg-rose-600/20 text-rose-400 border-rose-500/30' },
-]
+const COLUMNS = ['B', 'I', 'N', 'G', 'O']
 
 export const BingoBoard: React.FC<BingoBoardProps> = ({
   grid,
   drawnNumbers,
   onMarkCell,
   isVertigoActive = false,
+  onCallBingo,
+  onNewCard,
 }) => {
   return (
     <div
-      className={`glass-panel p-3.5 sm:p-5 rounded-2xl w-full max-w-xl mx-auto shadow-2xl border border-slate-700/60 transition-transform duration-500 ${
+      className={`marco-zombie p-4 sm:p-7 w-full max-w-xl mx-auto shadow-2xl transition-transform duration-500 relative ${
         isVertigoActive ? 'rotate-180 scale-95' : ''
       }`}
     >
-      {/* Column Letter Headers */}
-      <div className="grid grid-cols-5 gap-2 sm:gap-3 mb-2.5 sm:mb-3">
-        {COLUMNS.map((col) => (
+      {/* Column Letter Headers (B I N G O) */}
+      <div className="grid grid-cols-5 gap-2 sm:gap-4 mb-3 sm:mb-4">
+        {COLUMNS.map((letra) => (
           <div
-            key={col.letter}
-            className={`flex flex-col items-center justify-center py-1.5 sm:py-2 rounded-xl border ${col.bg} shadow-inner font-display font-black text-xl sm:text-2xl tracking-wider select-none`}
+            key={letra}
+            className="flex items-center justify-center font-horror text-4xl sm:text-5xl text-[#ffd620] drop-shadow-[0_4px_8px_rgba(0,0,0,0.9)] select-none tracking-widest"
           >
-            <span>{col.letter}</span>
-            <span className="text-[10px] font-mono opacity-70 tracking-tighter">
-              {col.range}
-            </span>
+            {letra}
           </div>
         ))}
       </div>
 
-      {/* 5x5 Cells Grid */}
-      <div className="grid grid-cols-5 gap-2 sm:gap-3">
+      {/* 5x5 Circular Cells Grid */}
+      <div className="grid grid-cols-5 gap-2 sm:gap-4 justify-items-center mb-5">
         {grid.map((rowCells, rIdx) =>
           rowCells.map((cell, cIdx) => (
             <BingoCell
@@ -56,6 +51,25 @@ export const BingoBoard: React.FC<BingoBoardProps> = ({
             />
           ))
         )}
+      </div>
+
+      {/* Original Action Buttons Strip */}
+      <div className="flex items-center justify-center gap-4 pt-3 border-t border-red-950/60">
+        <button
+          type="button"
+          onClick={onCallBingo}
+          className="btn-zombie-bingo px-8 py-3.5 rounded-xl font-horror text-2xl text-white font-bold cursor-pointer select-none tracking-widest"
+        >
+          ¡BINGO!
+        </button>
+
+        <button
+          type="button"
+          onClick={onNewCard}
+          className="px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-green-700 hover:from-emerald-500 hover:to-green-600 text-white font-horror text-lg tracking-wider border border-green-400/50 shadow-lg cursor-pointer transition-all active:scale-95"
+        >
+          Generar Cartón
+        </button>
       </div>
     </div>
   )
