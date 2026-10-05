@@ -38,6 +38,12 @@ El esquema y datos iniciales se encuentran en:
 
 ---
 
+## 🎮 Modos y Funcionalidades Recientes
+- **⚡ Modo Auto-Piloto Zombie:** Extracción automática periódica de balotas cada 3.2s combinada con auto-marcado (*auto-dauber*) instantáneo en el cartón del jugador con sonido de sello de sangre (`stamp`) y detección automática de victorias (líneas, diagonales, cuatro esquinas y blackout).
+- **👤 Autenticación Dinámica y Personalización:** El juego inicia obligatoriamente en la pantalla de Login permitiendo seleccionar libremente el alias de supervivencia, avatar personalizado, inicio rápido con Google OAuth o modo invitado dinámico, evitando perfiles fijos o credenciales quemadas.
+
+---
+
 ## 🛡️ Estructura de Ramas (Regla 4)
 El proyecto se rige por un flujo estricto de 3 ramas:
 - `development`: Rama de desarrollo activo donde se integran las nuevas características.

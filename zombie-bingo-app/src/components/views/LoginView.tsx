@@ -9,15 +9,15 @@ interface LoginViewProps {
 
 export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onPlayGuest }) => {
   const [isRegister, setIsRegister] = useState(false)
-  const [username, setUsername] = useState('brayan_cortes')
-  const [password, setPassword] = useState('123456')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [avatar, setAvatar] = useState('/img/avatar1.jpg')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     onLoginSuccess({
       id: 'usr-' + Date.now(),
-      username: username || 'Superviviente',
+      username: username.trim() || 'Superviviente',
       avatar,
       isAuthenticated: true,
     })
@@ -65,26 +65,24 @@ export const LoginView: React.FC<LoginViewProps> = ({ onLoginSuccess, onPlayGues
 
           {/* Right Form */}
           <form onSubmit={handleSubmit} className="md:col-span-7 flex flex-col gap-3.5">
-            {isRegister && (
-              <div>
-                <label className="block text-xs font-horror text-slate-300 mb-1">
-                  Elige tu Avatar:
-                </label>
-                <div className="flex items-center gap-3">
-                  {['/img/avatar1.jpg', '/img/avatar2.jpg', '/img/avatar3.jpg'].map((av) => (
-                    <img
-                      key={av}
-                      src={av}
-                      alt="Avatar"
-                      onClick={() => setAvatar(av)}
-                      className={`w-12 h-12 rounded-full object-cover cursor-pointer border-2 transition-all ${
-                        avatar === av ? 'border-yellow-400 scale-110 shadow-lg shadow-yellow-500/50' : 'border-slate-700 opacity-60'
-                      }`}
-                    />
-                  ))}
-                </div>
+            <div>
+              <label className="block text-xs font-horror text-slate-300 mb-1">
+                Elige tu Avatar de Superviviente:
+              </label>
+              <div className="flex items-center gap-3">
+                {['/img/avatar1.jpg', '/img/avatar2.jpg', '/img/avatar3.jpg'].map((av, idx) => (
+                  <img
+                    key={av}
+                    src={av}
+                    alt={`Avatar ${idx + 1}`}
+                    onClick={() => setAvatar(av)}
+                    className={`w-12 h-12 rounded-full object-cover cursor-pointer border-2 transition-all hover:scale-105 ${
+                      avatar === av ? 'border-yellow-400 scale-110 shadow-lg shadow-yellow-500/50' : 'border-slate-700 opacity-60'
+                    }`}
+                  />
+                ))}
               </div>
-            )}
+            </div>
 
             <div>
               <label className="block text-xs font-horror text-slate-300 mb-1">

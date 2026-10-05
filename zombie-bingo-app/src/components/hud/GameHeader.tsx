@@ -111,14 +111,20 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
           <button
             type="button"
             onClick={onToggleAutoDraw}
-            className={`flex items-center gap-1.5 px-4 py-3 rounded-2xl font-horror text-lg border transition-all ${
+            title={isAutoDraw ? 'Pausar Auto-Piloto' : 'Activar Auto-Piloto (Saca balotas y marca casillas solo)'}
+            className={`flex items-center gap-1.5 px-4 py-3 rounded-2xl font-horror text-lg border transition-all cursor-pointer ${
               isAutoDraw
-                ? 'bg-amber-500/30 text-amber-300 border-amber-400 animate-pulse'
-                : 'bg-slate-900 text-slate-300 border-red-900 hover:text-white'
+                ? 'bg-amber-500/30 text-amber-300 border-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.5)] animate-pulse'
+                : 'bg-slate-900 text-slate-300 border-red-900 hover:text-white hover:border-red-600'
             }`}
           >
-            {isAutoDraw ? <Pause className="w-5 h-5 text-amber-400" /> : <Play className="w-5 h-5" />}
-            <span className="hidden sm:inline">{isAutoDraw ? 'Pausar' : 'Auto'}</span>
+            {isAutoDraw ? <Pause className="w-5 h-5 text-amber-400" /> : <Play className="w-5 h-5 text-emerald-400" />}
+            <span className="hidden sm:inline">
+              {isAutoDraw ? '⚡ Auto-Piloto (Marcando...)' : '⚡ Auto-Piloto'}
+            </span>
+            <span className="sm:hidden">
+              {isAutoDraw ? 'Auto' : '⚡'}
+            </span>
           </button>
 
           <div className="hidden md:flex items-center gap-2 ml-1">

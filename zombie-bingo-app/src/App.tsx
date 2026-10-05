@@ -11,14 +11,28 @@ import { GameView } from './components/views/GameView'
 import { FriendsListView } from './components/views/FriendsListView'
 import type { ViewMode, UserSession, RoomData } from './types/navigation'
 
+const SESSION_STORAGE_KEY = 'zombie_bingo_user_session'
+
+const DEFAULT_GUEST: UserSession = {
+  id: 'guest',
+  username: 'Superviviente',
+  avatar: '/img/avatar1.jpg',
+  isAuthenticated: false,
+}
+
 export function App() {
-  const [currentView, setCurrentView] = useState<ViewMode>('home')
-  const [user, setUser] = useState<UserSession>({
-    id: 'user-1',
-    username: 'brayan_cortes',
-    avatar: '/img/avatar1.jpg',
-    isAuthenticated: true,
+  const [user, setUser] = useState<UserSession | null>(() => {
+    try {
+      const saved = localStorage.getItem(SESSION_STORAGE_KEY)
+      if (saved) {
+        return JSON.parse(saved)
+      }
+    } catch {
+      // ignore
+    }
+    return null
   })
+  const [currentView, setCurrentView] = useState<ViewMode>('login')
   const [activeRoom, setActiveRoom] = useState<RoomData | null>(null)
   const [soundEnabled, setSoundEnabled] = useState(true)
   const bgMusicRef = useRef<HTMLAudioElement | null>(null)
@@ -61,6 +75,11 @@ export function App() {
   }
 
   const handleLoginSuccess = (loggedInUser: UserSession) => {
+    try {
+      localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(loggedInUser))
+    } catch {
+      // ignore
+    }
     setUser(loggedInUser)
     setCurrentView('home')
   }
@@ -90,9 +109,16 @@ export function App() {
   }
 
   const handleLogout = () => {
-    setUser((prev) => ({ ...prev, isAuthenticated: false }))
+    try {
+      localStorage.removeItem(SESSION_STORAGE_KEY)
+    } catch {
+      // ignore
+    }
+    setUser(null)
     setCurrentView('login')
   }
+
+  const activeUser = user || DEFAULT_GUEST
 
   return (
     <div className="zombie-bg min-h-screen text-slate-100 flex flex-col relative selection:bg-red-500 selection:text-white">
@@ -104,12 +130,13 @@ export function App() {
         <LoginView
           onLoginSuccess={handleLoginSuccess}
           onPlayGuest={() => {
-            setUser({
-              id: 'guest',
-              username: 'Invitado',
+            const guestUser: UserSession = {
+              id: 'guest-' + Date.now(),
+              username: 'Invitado_' + Math.floor(100 + Math.random() * 900),
               avatar: '/img/avatar3.jpg',
               isAuthenticated: false,
-            })
+            }
+            setUser(guestUser)
             setCurrentView('home')
           }}
         />
@@ -117,7 +144,7 @@ export function App() {
 
       {currentView === 'home' && (
         <HomeView
-          user={user}
+          user={activeUser}
           onPlaySolo={handlePlaySolo}
           onCreateRoom={() => setCurrentView('create-room')}
           onJoinRoom={() => setCurrentView('join-room')}
@@ -139,7 +166,7 @@ export function App() {
 
       {currentView === 'create-room' && (
         <CreateRoomView
-          user={user}
+          user={activeUser}
           onCreateRoom={handleCreateRoom}
           onCancel={() => setCurrentView('home')}
         />
@@ -147,7 +174,7 @@ export function App() {
 
       {currentView === 'join-room' && (
         <JoinRoomView
-          user={user}
+          user={activeUser}
           onJoinSuccess={handleJoinRoom}
           onCancel={() => setCurrentView('home')}
         />
@@ -155,7 +182,7 @@ export function App() {
 
       {currentView === 'lobby' && activeRoom && (
         <LobbyView
-          user={user}
+          user={activeUser}
           room={activeRoom}
           onStartGame={handleStartRoomGame}
           onLeaveRoom={handleLeaveRoom}

@@ -175,44 +175,6 @@ export function useBingoGame(options: { onBallDrawn?: (ball: BingoBall) => void 
     return null
   }, [])
 
-  // Draw Ball
-  const drawBall = useCallback(() => {
-    if (tumbler.length === 0 || isSpinning) return
-
-    setIsSpinning(true)
-    soundEngine.playRoll()
-
-    setTimeout(() => {
-      const nextBall = tumbler[0]
-      setTumbler((prev) => prev.slice(1))
-      setDrawnBalls((prev) => [...prev, nextBall])
-      setIsSpinning(false)
-      soundEngine.playBallPop()
-      onBallDrawn?.(nextBall)
-    }, 900)
-  }, [tumbler, isSpinning, onBallDrawn])
-
-  // Auto-draw loop
-  useEffect(() => {
-    if (!isAutoDraw || winPattern) return
-    const interval = setInterval(() => {
-      drawBall()
-    }, 3800)
-    return () => clearInterval(interval)
-  }, [isAutoDraw, winPattern, drawBall])
-
-  // Inject Ball from Remote Host
-  const injectBall = useCallback((ball: BingoBall) => {
-    setIsSpinning(true)
-    soundEngine.playRoll()
-
-    setTimeout(() => {
-      setDrawnBalls((prev) => [...prev, ball])
-      setIsSpinning(false)
-      soundEngine.playBallPop()
-    }, 900)
-  }, [])
-
   // Mark Cell
   const markCell = useCallback(
     (row: number, col: number) => {
@@ -245,6 +207,70 @@ export function useBingoGame(options: { onBallDrawn?: (ball: BingoBall) => void 
     },
     [freezeDuration, maxEnergy, checkWinPatterns, winPattern]
   )
+
+  // Draw Ball
+  const drawBall = useCallback(() => {
+    if (tumbler.length === 0 || isSpinning) return
+
+    setIsSpinning(true)
+    soundEngine.playRoll()
+
+    setTimeout(() => {
+      const nextBall = tumbler[0]
+      setTumbler((prev) => prev.slice(1))
+      setDrawnBalls((prev) => [...prev, nextBall])
+      setIsSpinning(false)
+      soundEngine.playBallPop()
+      onBallDrawn?.(nextBall)
+    }, 900)
+  }, [tumbler, isSpinning, onBallDrawn])
+
+  // Auto-draw loop (saca balotas cada 3.2 segundos en modo automático)
+  useEffect(() => {
+    if (!isAutoDraw || winPattern) return
+    const interval = setInterval(() => {
+      drawBall()
+    }, 3200)
+    return () => clearInterval(interval)
+  }, [isAutoDraw, winPattern, drawBall])
+
+  // Auto-Dauber: busca y marca automáticamente la celda en el cartón cuando sale la balota
+  useEffect(() => {
+    if (!isAutoDraw || !currentBall || winPattern) return
+
+    for (let r = 0; r < 5; r++) {
+      for (let c = 0; c < 5; c++) {
+        const cell = grid[r][c]
+        if (cell.number === currentBall.number && !cell.isMarked && !cell.isBlocked) {
+          const timer = setTimeout(() => {
+            markCell(r, c)
+            soundEngine.playStamp()
+          }, 450)
+          return () => clearTimeout(timer)
+        }
+      }
+    }
+  }, [currentBall, isAutoDraw, grid, markCell, winPattern])
+
+  // Detener modo automático y celebrar al completar patrón ganador
+  useEffect(() => {
+    if (winPattern && isAutoDraw) {
+      soundEngine.playVictory()
+      setIsAutoDraw(false)
+    }
+  }, [winPattern, isAutoDraw, setIsAutoDraw])
+
+  // Inject Ball from Remote Host
+  const injectBall = useCallback((ball: BingoBall) => {
+    setIsSpinning(true)
+    soundEngine.playRoll()
+
+    setTimeout(() => {
+      setDrawnBalls((prev) => [...prev, ball])
+      setIsSpinning(false)
+      soundEngine.playBallPop()
+    }, 900)
+  }, [])
 
   // Cast Potion
   const castPotion = useCallback(
