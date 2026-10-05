@@ -101,11 +101,12 @@ export const Balotera3D: React.FC<Balotera3DProps> = ({ currentBall, isSpinning 
     scene.add(base)
 
     let reqId: number
-    const clock = new THREE.Clock()
+    let lastTime = performance.now()
 
-    const animate = () => {
+    const animate = (currentTime: number) => {
       reqId = requestAnimationFrame(animate)
-      const delta = clock.getDelta()
+      const delta = Math.min((currentTime - lastTime) / 1000, 0.1)
+      lastTime = currentTime
 
       if (cageRef.current) {
         const speed = isSpinning ? 15 : 0.9
@@ -127,7 +128,7 @@ export const Balotera3D: React.FC<Balotera3DProps> = ({ currentBall, isSpinning 
       renderer.render(scene, camera)
     }
 
-    animate()
+    animate(performance.now())
 
     const handleResize = () => {
       if (!mount) return

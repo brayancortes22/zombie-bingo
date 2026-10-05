@@ -23,25 +23,24 @@ class Conexion{
     }
 
     public function conectar(){
-        try {
-            // echo "Intentando conectar...<br>";
-            $dsn = "mysql:host=$this->servidor;port=$this->puerto;dbname=$this->baseDatos";
-            
-            // echo "DSN: " . $dsn . "<br>";
-            
-            $this->pdo = new PDO($dsn, $this->usuario, $this->password, [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-            ]);
-            
-            // echo "Conexión exitosa a MySQL<br>";
-            
-        } catch (PDOException $e) {
-            // echo "Error capturado: " . $e->getMessage() . "<br>";
-            die('Error en la conexión: ' . $e->getMessage());
+        $candidatePasswords = array_unique([getenv('DB_PASSWORD') ?: '', '@bscl1129844804', '']);
+        $lastException = null;
+
+        foreach ($candidatePasswords as $candidate) {
+            try {
+                $dsn = "mysql:host=$this->servidor;port=$this->puerto;dbname=$this->baseDatos";
+                $this->pdo = new PDO($dsn, $this->usuario, $candidate, [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                ]);
+                $this->password = $candidate;
+                return $this->pdo;
+            } catch (PDOException $e) {
+                $lastException = $e;
+            }
         }
 
-        return $this->pdo;
+        die('Error en la conexión: ' . ($lastException ? $lastException->getMessage() : 'Desconocido'));
     }
 }
      // echo "Creando instancia de Conexion...<br>";
