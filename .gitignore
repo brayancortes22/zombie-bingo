@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+dist/
+.venv/
+
+# Environment and sensitive
+.env
+.env.local
+*.log
+
+# OS & Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
