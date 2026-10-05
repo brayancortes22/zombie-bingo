@@ -8,6 +8,7 @@ Videojuego de Bingo temático post-apocalíptico zombie remasterizado a tecnolog
 - **Core:** React 19, TypeScript (~6.0), Vite v8.
 - **Gráficos & Animación:** Three.js (Balotera 3D con iluminación dinámica y esferas numeradas), Web Audio API, Canvas Confetti.
 - **Estilos:** Tailwind CSS v4, Glassmorphism, animaciones aceleradas por GPU a 60 FPS, tipografía de terror (`Halloweek` / `Z-2`).
+- **Multijugador en Tiempo Real:** WebRTC Peer-to-Peer (DataChannels vía `peerjs`) con servidores STUN de Google para conectividad directa entre navegadores sin coste de servidor.
 - **Autenticación:**
   - Login y Registro de Supervivientes tradicional.
   - **Google Identity Services (GSI) / OAuth 2.0:** Botón oficial "Continuar con Google" con extracción de perfil (`name`, `email`, `avatar`) y fallback interactivo de desarrollo local.

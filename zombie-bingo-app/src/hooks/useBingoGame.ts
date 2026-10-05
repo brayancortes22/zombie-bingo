@@ -18,7 +18,8 @@ const RANGES = {
   O: { min: 61, max: 75 },
 }
 
-export function useBingoGame() {
+export function useBingoGame(options: { onBallDrawn?: (ball: BingoBall) => void } = {}) {
+  const { onBallDrawn } = options
   // Generate Fresh 5x5 Card
   const generateBoard = useCallback((): BoardCell[][] => {
     const letters: (keyof typeof RANGES)[] = ['B', 'I', 'N', 'G', 'O']
@@ -187,8 +188,9 @@ export function useBingoGame() {
       setDrawnBalls((prev) => [...prev, nextBall])
       setIsSpinning(false)
       soundEngine.playBallPop()
+      onBallDrawn?.(nextBall)
     }, 900)
-  }, [tumbler, isSpinning])
+  }, [tumbler, isSpinning, onBallDrawn])
 
   // Auto-draw loop
   useEffect(() => {
@@ -198,6 +200,18 @@ export function useBingoGame() {
     }, 3800)
     return () => clearInterval(interval)
   }, [isAutoDraw, winPattern, drawBall])
+
+  // Inject Ball from Remote Host
+  const injectBall = useCallback((ball: BingoBall) => {
+    setIsSpinning(true)
+    soundEngine.playRoll()
+
+    setTimeout(() => {
+      setDrawnBalls((prev) => [...prev, ball])
+      setIsSpinning(false)
+      soundEngine.playBallPop()
+    }, 900)
+  }, [])
 
   // Mark Cell
   const markCell = useCallback(
@@ -315,6 +329,7 @@ export function useBingoGame() {
     vertigoDuration,
     hasShield,
     drawBall,
+    injectBall,
     markCell,
     castPotion,
     receiveEnemyAttack,
