@@ -8,6 +8,8 @@ Repositorio oficial del proyecto **Zombie Bingo**, compuesto por una arquitectur
 
 ## 🚀 Enlaces de Producción
 - **Frontend en Vivo (GitHub Pages):** [https://brayancortes22.github.io/zombie-bingo/](https://brayancortes22.github.io/zombie-bingo/)
+- **Backend en Vivo (Render):** [https://zombie-bingo-backend.onrender.com](https://zombie-bingo-backend.onrender.com)
+- **Panel del Servicio en Render:** [https://dashboard.render.com/web/srv-db1jrn7avr4c73c9bb10](https://dashboard.render.com/web/srv-db1jrn7avr4c73c9bb10)
 - **Repositorio GitHub:** [https://github.com/brayancortes22/zombie-bingo](https://github.com/brayancortes22/zombie-bingo)
 
 ---
